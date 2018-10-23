@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">TestMe</string>
+    <string name="action_settings">Setting</string>
+    <string name="action_acercade">Info</string>
+    <string name="action_nueva">New Question</string>
+    <string name="action_atras">Back</string>
+    <string name="action_listado">Question List</string>
+    <string name="action_sinpreguntas">"Without question "</string>
+</resources>

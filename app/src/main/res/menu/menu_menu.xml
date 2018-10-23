@@ -1,0 +1,26 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.androrid.com/tools"
+    tools:context="com.example.xisko.testme.ResumenActivity.menuActivity">
+    <item
+        android:id="@+id/action_settings"
+        android:orderInCategory="99"
+        android:title="@string/action_settings"
+        app:showAsAction="never" />
+
+    <item android:id="@+id/action_acercade"
+        android:orderInCategory="100"
+        android:title="@string/action_acercade"
+        app:showAsAction="never" />
+
+    <item android:id="@+id/action_listado"
+        android:orderInCategory="2"
+        android:title="@string/action_listado"
+        app:showAsAction="never"/>
+
+    <item android:id="@+id/action_nueva"
+        android:orderInCategory="1"
+        android:title="@string/action_nueva"
+        app:showAsAction="never" />
+
+</menu>
