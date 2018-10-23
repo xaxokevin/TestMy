@@ -6,6 +6,6 @@
     <string name="action_nueva">Nueva Pregunta</string>
     <string name="action_atras">Atras</string>
     <string name="action_listado">Listado de Preguntas</string>
-    <string name="title_activity_listado">ListadoActivity</string>
+    <string name="title_activity_listado">Listado</string>
     <string name="action_sinpreguntas">No hay preguntas definidas</string>
 </resources>

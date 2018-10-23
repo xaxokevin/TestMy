@@ -40,6 +40,13 @@ public class ResumenActivity extends AppCompatActivity {
                 Intent myIntent = new Intent(ResumenActivity.this, AcercaDeActivity.class);
                 ResumenActivity.this.startActivity(myIntent);
                 return true;
+
+            case R.id.action_listado:
+                MyLog.i("ActionBar", "Listado");
+
+                myIntent = new Intent(ResumenActivity.this, ListadoActivity.class);
+                ResumenActivity.this.startActivity(myIntent);
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }

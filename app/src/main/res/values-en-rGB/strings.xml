@@ -7,4 +7,5 @@
     <string name="action_atras">Back</string>
     <string name="action_listado">Question List</string>
     <string name="action_sinpreguntas">"Without question "</string>
+    <string name="title_activity_listado">List</string>
 </resources>
