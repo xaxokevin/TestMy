@@ -25,10 +25,13 @@ public class ResumenActivity extends AppCompatActivity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
 
+        Intent myIntent;
 
         switch (item.getItemId()) {
             case R.id.action_nueva:
                 MyLog.i("ActionBar", "Nuevo!");
+                myIntent = new Intent(ResumenActivity.this, NuevaPreguntaActivity.class);
+                ResumenActivity.this.startActivity(myIntent);
                 return true;
             case R.id.action_settings:
                 MyLog.i("ActionBar", "Ajustes!");
@@ -37,7 +40,7 @@ public class ResumenActivity extends AppCompatActivity {
             case R.id.action_acercade:
                 MyLog.i("ActionBar", "Acerca de");
 
-                Intent myIntent = new Intent(ResumenActivity.this, AcercaDeActivity.class);
+                 myIntent = new Intent(ResumenActivity.this, AcercaDeActivity.class);
                 ResumenActivity.this.startActivity(myIntent);
                 return true;
 

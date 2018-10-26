@@ -8,4 +8,20 @@
     <string name="action_listado">Listado de Preguntas</string>
     <string name="title_activity_listado">Listado</string>
     <string name="action_sinpreguntas">No hay preguntas definidas</string>
+    <string name="titulopregunta">Enunciado</string>
+    <string name="pregunta">¿En que...</string>
+    <string name="correcta">Correcta</string>
+    <string name="falsa">Falsa</string>
+    <string name="correctainput">Esta es la correcta</string>
+    <string name="falsainput">Esta es falsa</string>
+
+    <string-array name="categorias">
+        <item>Java</item>
+        <item>PHP</item>
+        <item>Android</item>
+        <item>Redes</item>
+        <item>Fol</item>
+    </string-array>
+    <string name="categorias">Categorias</string>
+    <string name="boton_guardar_pregunta">Guardar</string>
 </resources>

@@ -1,5 +1,6 @@
 package com.example.xisko.testme;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -9,6 +10,8 @@ import android.view.View;
 
 public class ListadoActivity extends AppCompatActivity {
 
+    private static final String TAG = "ListadoActivity";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -16,14 +19,57 @@ public class ListadoActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.mas);
-        fab.setOnClickListener(new View.OnClickListener() {
+        FloatingActionButton mas = (FloatingActionButton) findViewById(R.id.mas);
+        mas.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+               Intent myIntent = new Intent(ListadoActivity.this, NuevaPreguntaActivity.class);
+                ListadoActivity.this.startActivity(myIntent);
             }
         });
+    }
+
+
+    @Override
+    protected void onStart() {
+        MyLog.d(TAG, "Iniciando OnStart");
+        super.onStart();
+        MyLog.d(TAG, "Finalizando OnStart");
+    }
+
+    @Override
+    protected void onResume() {
+        MyLog.d(TAG, "Iniciando OnResume");
+        super.onResume();
+        MyLog.d(TAG, "Finalizando OnResume");
+    }
+
+    @Override
+    protected void onPause() {
+        MyLog.d(TAG, "Iniciando OnPause");
+        super.onPause();
+        MyLog.d(TAG, "Finalizando OnPause");
+    }
+
+    @Override
+    protected void onStop() {
+        MyLog.d(TAG, "Iniciando OnStop");
+        super.onStop();
+        MyLog.d(TAG, "Finalizando OnStop");
+    }
+
+    @Override
+    protected void onRestart() {
+        MyLog.d(TAG, "Iniciando OnRestart");
+        super.onRestart();
+        MyLog.d(TAG, "Finalizando OnRestart");
+    }
+
+    @Override
+    protected void onDestroy() {
+        MyLog.d(TAG, "Iniciando OnDestroy");
+        super.onDestroy();
+        MyLog.d(TAG, "Finalizando OnDestroy");
     }
 
 }

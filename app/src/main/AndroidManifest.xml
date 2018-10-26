@@ -21,7 +21,8 @@
         <activity
             android:name=".ListadoActivity"
             android:label="@string/title_activity_listado"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".NuevaPreguntaActivity"></activity>
     </application>
 
 </manifest>

@@ -8,4 +8,12 @@
     <string name="action_listado">Question List</string>
     <string name="action_sinpreguntas">"Without question "</string>
     <string name="title_activity_listado">List</string>
+    <string name="titulopregunta">Title</string>
+    <string name="pregunta">What is...?</string>
+    <string name="correcta">Correct</string>
+    <string name="falsa">False</string>
+    <string name="correctainput">This is correct</string>
+    <string name="falsainput">This is false</string>
+    <string name="categorias">Category</string>
+    <string name="boton_guardar_pregunta">Save</string>
 </resources>
