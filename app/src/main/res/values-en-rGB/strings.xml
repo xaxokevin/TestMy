@@ -16,4 +16,8 @@
     <string name="falsainput">This is false</string>
     <string name="categorias">Category</string>
     <string name="boton_guardar_pregunta">Save</string>
+    <string name="write_permission_denied">Denied</string>
+    <string name="write_permission_granted">Allow</string>
+    <string name="write_permission_accepted">Acepted</string>
+    <string name="write_permission_not_accepted">Disable</string>
 </resources>
