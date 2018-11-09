@@ -1,7 +1,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.androrid.com/tools"
-    tools:context="com.example.xisko.testme.ResumenActivity.menuActivity">
+    tools:context="com.example.xisko.testme.Activity.ResumenActivity.menuActivity">
     <item
         android:id="@+id/action_settings"
         android:orderInCategory="99"

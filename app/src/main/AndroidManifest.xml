@@ -10,20 +10,20 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".LogoActivity">
+        <activity android:name=".Activity.LogoActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ResumenActivity" />
-        <activity android:name=".AcercaDeActivity" />
+        <activity android:name=".Activity.ResumenActivity" />
+        <activity android:name=".Activity.AcercaDeActivity" />
         <activity
-            android:name=".ListadoActivity"
+            android:name=".Activity.ListadoActivity"
             android:label="@string/title_activity_listado"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".NuevaPreguntaActivity"></activity>
+        <activity android:name=".Activity.CrearEditarPreguntaActivity"></activity>
     </application>
 
 </manifest>
