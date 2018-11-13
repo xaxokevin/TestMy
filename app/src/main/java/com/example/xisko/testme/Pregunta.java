@@ -2,69 +2,87 @@ package com.example.xisko.testme;
 
 public class Pregunta {
 
-    private int id;
+    private int codigo;
+    private String enunciado;
+    private String categoria;
+    private String respuestaCorrecta;
+    private String getRespuestaIncorrecta1;
+    private String getRespuestaIncorrecta2;
+    private String getRespuestaIncorrecta3;
 
-    private String nombre,correcta,incorrecta1,incorrecta2,incorrecta3;
 
-    public Pregunta(String nombre, String correcta, String incorrecta1, String incorrecta2, String incorrecta3) {
-        this.nombre = nombre;
-        this.correcta = correcta;
-        this.incorrecta1 = incorrecta1;
-        this.incorrecta2 = incorrecta2;
-        this.incorrecta3 = incorrecta3;
+    public Pregunta(String enunciado, String categoria, String respuestaCorrecta, String getRespuestaIncorrecta1, String getRespuestaIncorrecta2, String getRespuestaIncorrecta3) {
+        this.enunciado = enunciado;
+        this.categoria = categoria;
+        this.respuestaCorrecta = respuestaCorrecta;
+        this.getRespuestaIncorrecta1 = getRespuestaIncorrecta1;
+        this.getRespuestaIncorrecta2 = getRespuestaIncorrecta2;
+        this.getRespuestaIncorrecta3 = getRespuestaIncorrecta3;
+    }
+    public Pregunta(int codigo, String enunciado, String categoria, String respuestaCorrecta, String getRespuestaIncorrecta1, String getRespuestaIncorrecta2, String getRespuestaIncorrecta3) {
+        this.codigo = codigo;
+        this.enunciado = enunciado;
+        this.categoria = categoria;
+        this.respuestaCorrecta = respuestaCorrecta;
+        this.getRespuestaIncorrecta1 = getRespuestaIncorrecta1;
+        this.getRespuestaIncorrecta2 = getRespuestaIncorrecta2;
+        this.getRespuestaIncorrecta3 = getRespuestaIncorrecta3;
     }
 
-    public Pregunta(int id, String nombre, String correcta, String incorrecta1, String incorrecta2, String incorrecta3) {
-        this.id = id;
-        this.nombre = nombre;
-        this.correcta = correcta;
-        this.incorrecta1 = incorrecta1;
-        this.incorrecta2 = incorrecta2;
-        this.incorrecta3 = incorrecta3;
+    public int getCodigo() {
+        return codigo;
     }
 
-    public int getId() {
-        return id;
+    public void setCodigo(int codigo) {
+        this.codigo = codigo;
     }
 
-
-    public String getNombre() {
-        return nombre;
+    public String getEnunciado() {
+        return enunciado;
     }
 
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
+    public void setEnunciado(String enunciado) {
+        this.enunciado = enunciado;
     }
 
-    public String getCorrecta() {
-        return correcta;
+    public String getCategoria() {
+        return categoria;
     }
 
-    public void setCorrecta(String correcta) {
-        this.correcta = correcta;
+    public void setCategoria(String categoria) {
+        this.categoria = categoria;
     }
 
-    public String getIncorrecta1() {
-        return incorrecta1;
+    public String getRespuestaCorrecta() {
+        return respuestaCorrecta;
     }
 
-    public void setIncorrecta1(String incorrecta1) {
-        this.incorrecta1 = incorrecta1;
+    public void setRespuestaCorrecta(String respuestaCorrecta) {
+        this.respuestaCorrecta = respuestaCorrecta;
     }
 
-    public String getIncorrecta2() {
-        return incorrecta2;
+    public String getRespuestaIncorrecta1() {
+        return getRespuestaIncorrecta1;
     }
 
-    public void setIncorrecta2(String incorrecta2) {
-        this.incorrecta2 = incorrecta2;
+    public void setGetRespuestaIncorrecta1(String getRespuestaIncorrecta1) {
+        this.getRespuestaIncorrecta1 = getRespuestaIncorrecta1;
     }
 
-    public String getIncorrecta3() {
-        return incorrecta3;
+    public String getRespuestaIncorrecta2() {
+        return getRespuestaIncorrecta2;
     }
 
-    public void setIncorrecta3(String incorrecta3) {
-        this.incorrecta3 = incorrecta3;
+    public void setRespuestaIncorrecta2(String getRespuestaIncorrecta2) {
+        this.getRespuestaIncorrecta2 = getRespuestaIncorrecta2;
     }
+
+    public String getRespuestaIncorrecta3() {
+        return getRespuestaIncorrecta3;
+    }
+
+    public void setGetRespuestaIncorrecta3(String getRespuestaIncorrecta3) {
+        this.getRespuestaIncorrecta3 = getRespuestaIncorrecta3;
+    }
+
 }

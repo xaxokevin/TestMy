@@ -54,12 +54,13 @@ public class CrearEditarPreguntaActivity extends AppCompatActivity {
                final EditText incorrecta1 = findViewById(R.id.titulo3);
                final EditText incorrecta2 = findViewById(R.id.titulo4);
                final EditText incorrecta3 = findViewById(R.id.titulo5);
+               final String spinner = ((Spinner) findViewById(R.id.spinner)).getSelectedItem().toString();
 
                compruebaPermisos();
 
         if(compruebaPregunta(v, pregunta, correcta, incorrecta1, incorrecta2, incorrecta3)== true){
 
-            Pregunta mipregunta = new Pregunta(pregunta.getText().toString(), correcta.getText().toString(),
+            Pregunta mipregunta = new Pregunta(spinner,pregunta.getText().toString(), correcta.getText().toString(),
                     incorrecta1.getText().toString(), incorrecta2.getText().toString(),incorrecta3.getText().toString());
 
 
@@ -173,14 +174,14 @@ public class CrearEditarPreguntaActivity extends AppCompatActivity {
     }
 
     private boolean compruebaPregunta(View v, EditText pregunta, EditText correcta, EditText incorrecta1, EditText incorrecta2, EditText incorrecta3) {
-        if(pregunta.getText().toString().isEmpty()){
+        if(pregunta.getText().toString().isEmpty())  {
             pregunta.setBackgroundColor(Color.rgb(255,64,64));
 
             Snackbar.make(v, "Comprueba que todos los campos esten rellenos", Snackbar.LENGTH_LONG)
                     .show();
             return false;
 
-        }else
+        }
         if (correcta.getText().toString().isEmpty()){
 
             correcta.setBackgroundColor(Color.rgb(255,64,64));
@@ -190,16 +191,16 @@ public class CrearEditarPreguntaActivity extends AppCompatActivity {
             return false;
 
 
-        }else
+        }
         if (incorrecta1.getText().toString().isEmpty()){
 
-            incorrecta1.setBackgroundColor(Color.rgb(255,64,64));
+            incorrecta1.setBackgroundColor(Color.RED);
 
             Snackbar.make(v, "Comprueba que todos los campos esten rellenos", Snackbar.LENGTH_LONG)
                     .show();
             return false;
 
-        }else
+        }
         if (incorrecta2.getText().toString().isEmpty()){
 
             incorrecta2.setBackgroundColor(Color.rgb(255,64,64));
@@ -208,7 +209,7 @@ public class CrearEditarPreguntaActivity extends AppCompatActivity {
                     .show();
             return false;
 
-        }else
+        }
         if (incorrecta3.getText().toString().isEmpty()){
 
             incorrecta3.setBackgroundColor(Color.rgb(255,64,64));
@@ -226,6 +227,8 @@ public class CrearEditarPreguntaActivity extends AppCompatActivity {
             return true;
 
         }
+
+
     }
 
 //    @Override

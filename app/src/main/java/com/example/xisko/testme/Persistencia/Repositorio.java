@@ -2,28 +2,93 @@ package com.example.xisko.testme.Persistencia;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.example.xisko.testme.Log.MyLog;
 import com.example.xisko.testme.Pregunta;
+
+import java.util.ArrayList;
 
 public class Repositorio {
 
+    public Repositorio() {
+    }
 
-    public void insertar(Pregunta pregunta, Context Mycontext) {
-
-
-        //Abrimos la base de datos 'DBPreguntas' en modo escritura
-        BasedeDatos bd = new BasedeDatos(Mycontext, "preguntas", null, 1);
-
-        SQLiteDatabase db = bd.getWritableDatabase();
+    private ArrayList<Pregunta> misPreguntas;
 
 
-        ContentValues nuevoRegistro = new ContentValues();
-        nuevoRegistro.put("COLUMN_NOMBRE",pregunta.getNombre() );
-        nuevoRegistro.put("COLUMN_CORRECTA", pregunta.getCorrecta());
-        nuevoRegistro.put("COLUMN_INCORRECTA1", pregunta.getIncorrecta1());
-        nuevoRegistro.put("COLUMN_INCORRECTA2", pregunta.getIncorrecta2());
-        nuevoRegistro.put("COLUMN_INCORRECTA3", pregunta.getIncorrecta3());
-        db.insert("TABLE_NAME", null, nuevoRegistro);
+    public static boolean insertar(Pregunta p, Context contexto) {
+
+        boolean valor = true;
+
+        //Abrimos la base de datos 'DBUsuarios' en modo escritura
+        BasedeDatos usdbh =
+                new BasedeDatos(contexto, "DBPreguntas.db", null, 1);
+
+        SQLiteDatabase db = usdbh.getWritableDatabase();
+
+        //Si hemos abierto correctamente la base de datos
+        if (db != null) {
+            //Insertamos 5 usuarios de ejemplo
+
+            db.execSQL("INSERT INTO Preguntas (enunciado, categoria, respuestaCorrecta, respuestaIncorrecta1, respuestaIncorrecta2, respuestaIncorrecta3)"+
+                    "VALUES ('" + p.getEnunciado() + "', '" + p.getCategoria() + "', '"+ p.getRespuestaCorrecta()+"', '"+ p.getRespuestaIncorrecta1()+"', '"+p.getRespuestaIncorrecta2()+"', '"+p.getRespuestaIncorrecta3()+"')");
+            //db.execSQL("INSERT INTO Preguntas (enunciado, respuestaCorrecta, respuestaIncorrecta1, respuestaIncorrecta2, respuestaIncorrecta3)"+
+            //   "VALUES ('" + p.getEnunciado() + "','"+ p.getRespuestaCorrecta()+"', '"+ p.getRespuestaIncorrecta1()+"', '"+p.getRespuestaIncorrecta2()+"', '"+p.getRespuestaIncorrecta3()+"')");
+
+            //codigo, enunciado,categoria, respuestaCorrecta, respuestaIncorrecta1, respuestaIncorrecta2 , respuestaIncorrecta3
+            //Cerramos la base de datos
+            db.close();
+        } else {
+            valor = false;
+        }
+
+        return valor;
+    }
+
+
+    public void cargarPreguntas(Context contexto){
+
+        misPreguntas = new ArrayList<>();
+
+
+        BasedeDatos usdbh =
+                new BasedeDatos(contexto, "DBPreguntas", null, 1);
+
+        SQLiteDatabase db = usdbh.getWritableDatabase();
+
+        Cursor c = db.rawQuery("SELECT * FROM Preguntas", null);
+
+        //Nos aseguramos de que existe al menos un registro
+        if (c.moveToFirst()) {
+            //Recorremos el cursor hasta que no haya más registros
+            do {
+                String Enunciado= c.getString( c.getColumnIndex("enunciado"));
+                String Categoria = c.getString( c.getColumnIndex("categoria"));
+                String Correcta = c.getString( c.getColumnIndex("respuestaCorrecta"));
+                String Incorrecta1 = c.getString( c.getColumnIndex("respuestaIncorrecta1"));
+                String Incorrecta2 = c.getString( c.getColumnIndex("respuestaIncorrecta2"));
+                String Incorrecta3 = c.getString( c.getColumnIndex("respuestaIncorrecta3"));
+                Pregunta p = new Pregunta(Enunciado, Categoria,Correcta,Incorrecta1,Incorrecta2,Incorrecta3);
+                misPreguntas.add(p);
+                MyLog.d("Repositoriooooooooooooooooooo", p.getEnunciado());
+            } while(c.moveToNext());
+        }
+
+
+
+
+
+
+    }
+
+    public ArrayList<Pregunta> getMisPreguntas() {
+
+        return misPreguntas;
+    }
+
+    public void setMisPreguntas(ArrayList<Pregunta> misPreguntas) {
+        this.misPreguntas = misPreguntas;
     }
 }
