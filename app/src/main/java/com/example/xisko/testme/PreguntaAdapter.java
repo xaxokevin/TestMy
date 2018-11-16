@@ -1,6 +1,7 @@
 
 package com.example.xisko.testme;
 import android.support.annotation.NonNull;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,8 +26,10 @@ public class PreguntaAdapter
         extends RecyclerView.Adapter<PreguntaAdapter.AcontecimientoViewHolder>
         implements View.OnClickListener {
 
-    private ArrayList<Pregunta> items;
+    private static ArrayList<Pregunta> items;
     private View.OnClickListener listener;
+
+
 
     // Clase interna:
     // Se implementa el ViewHolder que se encargarÃ¡
@@ -34,24 +37,28 @@ public class PreguntaAdapter
     public static class AcontecimientoViewHolder
             extends RecyclerView.ViewHolder {
 
-        private TextView TextView_id;
+        private CardView cv;
+
+        private TextView TextView_categoria;
         private TextView TextView_nombre;
 
         public AcontecimientoViewHolder(View itemView) {
             super(itemView);
-            TextView_id = (TextView) itemView.findViewById(R.id.TextView_id);
+            cv = (CardView)itemView.findViewById(R.id.cv) ;
+            TextView_categoria = (TextView) itemView.findViewById(R.id.TextView_categoria);
             TextView_nombre = (TextView) itemView.findViewById(R.id.TextView_nombre);
         }
 
-        public void AcontecimientoBind(Pregunta item) {
-            TextView_id.setText(item.getEnunciado());
-            TextView_nombre.setText(item.getCategoria());
+        public void AcontecimientoBind(AcontecimientoViewHolder item, int i) {
+            item.TextView_categoria.setText(items.get(i).getCategoria());
+            //TextView_nombre.setText(item.getEnunciado());
+            //TextView_categoria.setText(item.getCategoria());
         }
     }
 
     // Contruye el objeto adaptador recibiendo la lista de datos
-    public PreguntaAdapter(@NonNull ArrayList<Pregunta> items) {
-        this.items = items;
+    public PreguntaAdapter(ArrayList<Pregunta> items){
+        this.items= items;
     }
 
     // Se encarga de crear los nuevos objetos ViewHolder necesarios
@@ -60,7 +67,7 @@ public class PreguntaAdapter
     @Override
     public AcontecimientoViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View row = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.row, parent, false);
+                .inflate(R.layout.card, parent, false);
         row.setOnClickListener(this);
 
         AcontecimientoViewHolder avh = new AcontecimientoViewHolder(row);
@@ -70,8 +77,11 @@ public class PreguntaAdapter
     // Se encarga de actualizar los datos de un ViewHolder ya existente.
     @Override
     public void onBindViewHolder(AcontecimientoViewHolder viewHolder, int position) {
-        Pregunta item = items.get(position);
-        viewHolder.AcontecimientoBind(item);
+
+
+        viewHolder.TextView_categoria.setText(items.get(position).getEnunciado());
+        viewHolder.TextView_nombre.setText(items.get(position).getCategoria());
+
     }
 
     // Indica el nÃºmero de elementos de la colecciÃ³n de datos.
@@ -83,6 +93,12 @@ public class PreguntaAdapter
     // Asigna un listener al elemento
     public void setOnClickListener(View.OnClickListener listener) {
         this.listener = listener;
+    }
+
+
+    @Override
+    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
+        super.onAttachedToRecyclerView(recyclerView);
     }
 
     @Override

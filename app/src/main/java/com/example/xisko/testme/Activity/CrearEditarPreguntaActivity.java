@@ -67,6 +67,8 @@ public class CrearEditarPreguntaActivity extends AppCompatActivity {
 
             mirepo.insertar(mipregunta,myContext);
 
+            finish();
+
 
         }
 

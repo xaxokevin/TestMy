@@ -54,7 +54,7 @@ public class Repositorio {
 
 
         BasedeDatos usdbh =
-                new BasedeDatos(contexto, "DBPreguntas", null, 1);
+                new BasedeDatos(contexto, "DBPreguntas.db", null, 1);
 
         SQLiteDatabase db = usdbh.getWritableDatabase();
 
