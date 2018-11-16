@@ -76,7 +76,7 @@ public class ListadoActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onResume() {
+    public  void onResume() {
         MyLog.d(TAG, "Iniciando OnResume");
         super.onResume();
         MyLog.d(TAG, "Finalizando OnResume");
@@ -96,6 +96,8 @@ public class ListadoActivity extends AppCompatActivity {
         //Swipe
         ItemTouchHelper itemTouchhelper = new ItemTouchHelper(swipeController);
         itemTouchhelper.attachToRecyclerView(rv);
+
+
 
 
         // Usar un administrador para LinearLayout
