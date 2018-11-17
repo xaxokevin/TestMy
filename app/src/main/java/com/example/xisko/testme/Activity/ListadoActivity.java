@@ -27,9 +27,11 @@ public class ListadoActivity extends AppCompatActivity {
 
     SwipeController swipeController = new SwipeController();
 
-    private RecyclerView.LayoutManager lManager;
+   public int pasaCodigo;
 
-
+    public int getPasaCodigo() {
+        return pasaCodigo;
+    }
 
     private static final String TAG = "ListadoActivity";
     private ArrayList<Pregunta> items;
@@ -43,23 +45,24 @@ public class ListadoActivity extends AppCompatActivity {
         myContext = ListadoActivity.this;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_listado);
+        //Creacion de una toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
+        //Creacion de un boton flotante
         FloatingActionButton mas = (FloatingActionButton) findViewById(R.id.mas);
         mas.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                Intent myIntent = new Intent(ListadoActivity.this, CrearEditarPreguntaActivity.class);
-                ListadoActivity.this.startActivity(myIntent);
+            public void onClick(View view) { Intent myIntent = new Intent(ListadoActivity.this, CrearEditarPreguntaActivity.class);
+            ListadoActivity.this.startActivity(myIntent);
             }
         });
+        mas.setImageResource(R.drawable.ic_loupe_grey600_48dp);
 
 
         // Crea una lista con los elementos a mostrar
-        items = new ArrayList<>();
-        miRepo.cargarPreguntas(myContext);
-        items = miRepo.getMisPreguntas();
+       // items = new ArrayList<>();
+        //miRepo.cargarPreguntas(myContext);
+       // items = miRepo.getMisPreguntas();
 
 
 
@@ -86,9 +89,10 @@ public class ListadoActivity extends AppCompatActivity {
         items = new ArrayList<>();
         miRepo.cargarPreguntas(myContext);
         items = miRepo.getMisPreguntas();
+
         Collections.reverse(items);
         // Inicializa el RecyclerView
-        // Inicializa el RecyclerView
+
         final RecyclerView rv = (RecyclerView)findViewById(R.id.recyclerView);
 
         rv.setHasFixedSize(true);
@@ -115,6 +119,15 @@ public class ListadoActivity extends AppCompatActivity {
                 int position = rv.getChildAdapterPosition(v);
                 Toast.makeText(ListadoActivity.this, "Posición: " + String.valueOf(position) + " Id: " + items.get(position).getEnunciado() + " Nombre: " + items.get(position).getCategoria(), Toast.LENGTH_SHORT)
                         .show();
+
+               // pasaCodigo= items.get(position).getCodigo();
+
+               // Intent myIntent = new Intent(ListadoActivity.this, CrearEditarPreguntaActivity.class);
+               // ListadoActivity.this.startActivity(myIntent);
+
+
+
+
             }
         });
 

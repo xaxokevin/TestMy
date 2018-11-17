@@ -50,7 +50,9 @@
             android:hint="@string/pregunta"
 
             tools:layout_editor_absoluteX="16dp"
-            tools:layout_editor_absoluteY="30dp" />
+            tools:layout_editor_absoluteY="30dp"
+            android:inputType=""
+            android:autofillHints="" />
 
         <EditText
             android:id="@+id/titulo3"
@@ -63,7 +65,8 @@
             android:hint="@string/falsainput"
 
             tools:layout_editor_absoluteX="22dp"
-            tools:layout_editor_absoluteY="240dp" />
+            tools:layout_editor_absoluteY="240dp"
+            android:inputType="" />
 
         <EditText
             android:id="@+id/titulo5"
@@ -76,7 +79,8 @@
             android:hint="@string/falsainput"
 
             tools:layout_editor_absoluteX="22dp"
-            tools:layout_editor_absoluteY="464dp" />
+            tools:layout_editor_absoluteY="464dp"
+            android:inputType="" />
 
         <EditText
             android:id="@+id/titulo4"
