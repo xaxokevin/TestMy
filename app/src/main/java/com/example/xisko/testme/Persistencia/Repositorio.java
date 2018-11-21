@@ -1,11 +1,10 @@
 package com.example.xisko.testme.Persistencia;
 
-
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.example.xisko.testme.Activity.ListadoActivity;
 import com.example.xisko.testme.Log.MyLog;
 import com.example.xisko.testme.Pregunta;
 
@@ -17,34 +16,6 @@ public class Repositorio {
     }
 
     private ArrayList<Pregunta> misPreguntas;
-
-    public Pregunta editaPregunta(int codigoPr, Context contexto){
-
-
-
-        //Abrimos la base de datos 'DBUsuarios' en modo escritura
-        BasedeDatos usdbh =
-                new BasedeDatos(contexto, "DBPreguntas.db", null, 1);
-
-        SQLiteDatabase db = usdbh.getWritableDatabase();
-
-        Cursor c = db.rawQuery("SELECT * FROM Preguntas WHERE codigo = codigoPr", null);
-
-        String Enunciado= c.getString( c.getColumnIndex("enunciado"));
-        String Categoria = c.getString( c.getColumnIndex("categoria"));
-        String Correcta = c.getString( c.getColumnIndex("respuestaCorrecta"));
-        String Incorrecta1 = c.getString( c.getColumnIndex("respuestaIncorrecta1"));
-        String Incorrecta2 = c.getString( c.getColumnIndex("respuestaIncorrecta2"));
-        String Incorrecta3 = c.getString( c.getColumnIndex("respuestaIncorrecta3"));
-        Pregunta p = new Pregunta(Enunciado, Categoria,Correcta,Incorrecta1,Incorrecta2,Incorrecta3);
-
-        MyLog.d("Edita pregunta","Que he creado el objeto putoooss");
-
-
-        return p;
-    }
-
-
 
 
     public static boolean insertar(Pregunta p, Context contexto) {
@@ -111,8 +82,6 @@ public class Repositorio {
 
 
     }
-
-
 
     public ArrayList<Pregunta> getMisPreguntas() {
 

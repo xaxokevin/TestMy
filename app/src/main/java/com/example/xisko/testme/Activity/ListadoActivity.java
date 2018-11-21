@@ -11,7 +11,6 @@ import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.View;
 import android.widget.Toast;
-
 import com.example.xisko.testme.Log.MyLog;
 import com.example.xisko.testme.Persistencia.Repositorio;
 import com.example.xisko.testme.Pregunta;
@@ -19,24 +18,14 @@ import com.example.xisko.testme.PreguntaAdapter;
 import com.example.xisko.testme.R;
 import com.example.xisko.testme.SwipeController;
 
-
 import java.util.ArrayList;
 import java.util.Collections;
 
 public class ListadoActivity extends AppCompatActivity {
 
     SwipeController swipeController = new SwipeController();
-
-   public int pasaCodigo;
-
-    public int getPasaCodigo() {
-        return pasaCodigo;
-    }
-
     private static final String TAG = "ListadoActivity";
     private ArrayList<Pregunta> items;
-    private PreguntaAdapter adapter = new PreguntaAdapter(items);
-
     private Repositorio miRepo = new Repositorio();
     private Context myContext;
 
@@ -45,30 +34,31 @@ public class ListadoActivity extends AppCompatActivity {
         myContext = ListadoActivity.this;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_listado);
-        //Creacion de una toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        //Creacion de un boton flotante
+
         FloatingActionButton mas = (FloatingActionButton) findViewById(R.id.mas);
+        mas.setImageResource(R.drawable.ic_loupe_grey600_48dp);
         mas.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) { Intent myIntent = new Intent(ListadoActivity.this, CrearEditarPreguntaActivity.class);
-            ListadoActivity.this.startActivity(myIntent);
+            public void onClick(View view) {
+               Intent myIntent = new Intent(ListadoActivity.this, CrearEditarPreguntaActivity.class);
+                ListadoActivity.this.startActivity(myIntent);
             }
         });
-        mas.setImageResource(R.drawable.ic_loupe_grey600_48dp);
+
+        // Inicializa el RecyclerView
+        final RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
+        recyclerView.setHasFixedSize(true);
+
+        //Swipe
+        ItemTouchHelper itemTouchhelper = new ItemTouchHelper(swipeController);
+        itemTouchhelper.attachToRecyclerView(recyclerView);
 
 
-        // Crea una lista con los elementos a mostrar
-       // items = new ArrayList<>();
-        //miRepo.cargarPreguntas(myContext);
-       // items = miRepo.getMisPreguntas();
+        }
+        
 
-
-
-
-
-    }
 
 
     @Override
@@ -79,34 +69,18 @@ public class ListadoActivity extends AppCompatActivity {
     }
 
     @Override
-    public  void onResume() {
+    protected void onResume() {
         MyLog.d(TAG, "Iniciando OnResume");
         super.onResume();
         MyLog.d(TAG, "Finalizando OnResume");
-
 
         // Crea una lista con los elementos a mostrar
         items = new ArrayList<>();
         miRepo.cargarPreguntas(myContext);
         items = miRepo.getMisPreguntas();
-
         Collections.reverse(items);
         // Inicializa el RecyclerView
-
-        final RecyclerView rv = (RecyclerView)findViewById(R.id.recyclerView);
-
-        rv.setHasFixedSize(true);
-
-        //Swipe
-        ItemTouchHelper itemTouchhelper = new ItemTouchHelper(swipeController);
-        itemTouchhelper.attachToRecyclerView(rv);
-
-
-
-
-        // Usar un administrador para LinearLayout
-        LinearLayoutManager llm = new LinearLayoutManager(myContext);
-        rv.setLayoutManager(llm);
+        final RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
 
         // Crea el Adaptador con los datos de la lista anterior
         PreguntaAdapter adaptador = new PreguntaAdapter(items);
@@ -115,27 +89,22 @@ public class ListadoActivity extends AppCompatActivity {
         adaptador.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 // Acción al pulsar el elemento
-                int position = rv.getChildAdapterPosition(v);
+                int position = recyclerView.getChildAdapterPosition(v);
                 Toast.makeText(ListadoActivity.this, "Posición: " + String.valueOf(position) + " Id: " + items.get(position).getEnunciado() + " Nombre: " + items.get(position).getCategoria(), Toast.LENGTH_SHORT)
                         .show();
-
-               // pasaCodigo= items.get(position).getCodigo();
-
-               // Intent myIntent = new Intent(ListadoActivity.this, CrearEditarPreguntaActivity.class);
-               // ListadoActivity.this.startActivity(myIntent);
-
-
-
-
             }
         });
 
         // Asocia el Adaptador al RecyclerView
-        rv.setAdapter(adaptador);
+        recyclerView.setAdapter(adaptador);
 
         // Muestra el RecyclerView en vertical
-        rv.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+
+
     }
 
     @Override

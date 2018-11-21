@@ -28,7 +28,6 @@ public class CrearEditarPreguntaActivity extends AppCompatActivity {
     private Context myContext;
      ConstraintLayout constraint;
      public Repositorio mirepo;
-     ListadoActivity milistado;
 
 
 
@@ -39,105 +38,114 @@ public class CrearEditarPreguntaActivity extends AppCompatActivity {
         myContext = CrearEditarPreguntaActivity.this;
         constraint = findViewById(R.id.constraint);
 
-      //  if(milistado.getPasaCodigo() != 0){
-
-           // mirepo.editaPregunta(milistado.getPasaCodigo(),myContext);
-       // }else {
 
 
-            Spinner spinner = (Spinner) findViewById(R.id.spinner);
-            String[] contenido = {"PHP", "Java", "Redes", "Sistemas", "Android"};
-            spinner.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, contenido));
+        Spinner spinner = (Spinner)findViewById(R.id.spinner);
+        String[] contenido ={"PHP","Java","Redes","Sistemas","Android"};
+        spinner.setAdapter(new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item,contenido));
 
-            final Button button = findViewById(R.id.button);
-            button.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+         final Button button = findViewById(R.id.button);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
-                    final EditText pregunta = findViewById(R.id.titulo);
-                    final EditText correcta = findViewById(R.id.titulo2);
-                    final EditText incorrecta1 = findViewById(R.id.titulo3);
-                    final EditText incorrecta2 = findViewById(R.id.titulo4);
-                    final EditText incorrecta3 = findViewById(R.id.titulo5);
-                    final String spinner = ((Spinner) findViewById(R.id.spinner)).getSelectedItem().toString();
+               final EditText  pregunta = findViewById(R.id.titulo);
+               final EditText correcta = findViewById(R.id.titulo2);
+               final EditText incorrecta1 = findViewById(R.id.titulo3);
+               final EditText incorrecta2 = findViewById(R.id.titulo4);
+               final EditText incorrecta3 = findViewById(R.id.titulo5);
+               final String spinner = ((Spinner) findViewById(R.id.spinner)).getSelectedItem().toString();
 
-                    compruebaPermisos();
+               compruebaPermisos();
 
-                    if (compruebaPregunta(v, pregunta, correcta, incorrecta1, incorrecta2, incorrecta3) == true) {
+        if(compruebaPregunta(v, pregunta, correcta, incorrecta1, incorrecta2, incorrecta3)== true){
 
-                        Pregunta mipregunta = new Pregunta(spinner, pregunta.getText().toString(), correcta.getText().toString(),
-                                incorrecta1.getText().toString(), incorrecta2.getText().toString(), incorrecta3.getText().toString());
-
-
-                        mirepo.insertar(mipregunta, myContext);
-
-                        finish();
+            Pregunta mipregunta = new Pregunta(spinner,pregunta.getText().toString(), correcta.getText().toString(),
+                    incorrecta1.getText().toString(), incorrecta2.getText().toString(),incorrecta3.getText().toString());
 
 
+
+            mirepo.insertar(mipregunta,myContext);
+
+            finish();
+
+
+        }
+
+
+
+
+
+                pregunta.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                    @Override
+                    public void onFocusChange(View view, boolean hasFocus) {
+                        if (hasFocus) {
+
+                            pregunta.setBackgroundColor(Color.rgb(250,250,250));
+
+                        }
                     }
+                });
 
+                correcta.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                    @Override
+                    public void onFocusChange(View view, boolean hasFocus) {
+                        if (hasFocus) {
 
-                    pregunta.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-                        @Override
-                        public void onFocusChange(View view, boolean hasFocus) {
-                            if (hasFocus) {
+                            correcta.setBackgroundColor(Color.rgb(250,250,250));
 
-                                pregunta.setBackgroundColor(Color.rgb(250, 250, 250));
-
-                            }
                         }
-                    });
+                    }
+                });
 
-                    correcta.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-                        @Override
-                        public void onFocusChange(View view, boolean hasFocus) {
-                            if (hasFocus) {
+                incorrecta1.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                    @Override
+                    public void onFocusChange(View view, boolean hasFocus) {
+                        if (hasFocus) {
 
-                                correcta.setBackgroundColor(Color.rgb(250, 250, 250));
+                            incorrecta1.setBackgroundColor(Color.rgb(250,250,250));
 
-                            }
                         }
-                    });
+                    }
+                });
 
-                    incorrecta1.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-                        @Override
-                        public void onFocusChange(View view, boolean hasFocus) {
-                            if (hasFocus) {
+                incorrecta2.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                    @Override
+                    public void onFocusChange(View view, boolean hasFocus) {
+                        if (hasFocus) {
 
-                                incorrecta1.setBackgroundColor(Color.rgb(250, 250, 250));
+                            incorrecta2.setBackgroundColor(Color.rgb(250,250,250));
 
-                            }
                         }
-                    });
+                    }
+                });
 
-                    incorrecta2.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-                        @Override
-                        public void onFocusChange(View view, boolean hasFocus) {
-                            if (hasFocus) {
+                incorrecta3.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                    @Override
+                    public void onFocusChange(View view, boolean hasFocus) {
+                        if (hasFocus) {
 
-                                incorrecta2.setBackgroundColor(Color.rgb(250, 250, 250));
+                            incorrecta3.setBackgroundColor(Color.rgb(250,250,250));
 
-                            }
                         }
-                    });
-
-                    incorrecta3.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-                        @Override
-                        public void onFocusChange(View view, boolean hasFocus) {
-                            if (hasFocus) {
-
-                                incorrecta3.setBackgroundColor(Color.rgb(250, 250, 250));
-
-                            }
-                        }
-                    });
+                    }
+                });
 
 
-                }
 
 
-            });
-       // }
+
+            }
+
+
+
+
+
+
+
+
+
+        });
 
 
 
