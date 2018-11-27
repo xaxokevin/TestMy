@@ -9,135 +9,146 @@
     tools:context=".Activity.CrearEditarPreguntaActivity">
 
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/textView8"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/titulopregunta"
-            android:layout_marginTop="5dp"
-            android:textSize="35sp"
-            />
+            android:orientation="vertical">
 
-        <EditText
-            android:id="@+id/titulo"
-            android:layout_width="367dp"
-            android:layout_height="wrap_content"
-            android:hint="@string/pregunta"
-            android:inputType=""
-            android:layout_marginTop="15dp"
-            android:layout_marginLeft="18dp"
-            android:textSize="25sp"
-            />
+            <TextView
+                android:id="@+id/textView8"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="@string/titulopregunta"
+                android:textSize="35sp" />
 
-
-        <TextView
-            android:id="@+id/textView9"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/correcta"
-            android:textSize="35sp"
-            android:layout_marginTop="15dp"/>
-
-        <EditText
-            android:id="@+id/titulo2"
-            android:layout_width="367dp"
-            android:layout_height="wrap_content"
-            android:hint="@string/correctainput"
-            android:inputType=""
-            android:layout_marginLeft="18dp"
-            android:textSize="25sp"
-            android:layout_marginTop="15dp"/>
-
-        <TextView
-            android:id="@+id/textView10"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/falsa"
-            android:textSize="35sp"
-            android:layout_marginTop="15dp"/>
-
-        <EditText
-            android:id="@+id/titulo4"
-            android:layout_width="367dp"
-            android:layout_height="wrap_content"
-            android:hint="@string/falsainput"
-            android:inputType=""
-            android:layout_marginLeft="18dp"
-            android:textSize="25sp"
-            android:layout_marginTop="15dp"/>
-
-        <TextView
-            android:id="@+id/textView3"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/falsa"
-            android:textSize="35sp"
-            android:layout_marginTop="15dp"
-            />
-
-        <EditText
-            android:id="@+id/titulo3"
-            android:layout_width="367dp"
-            android:layout_height="wrap_content"
-            android:hint="@string/falsainput"
-            android:inputType=""
-            android:layout_marginLeft="18dp"
-            android:textSize="25sp"
-            android:layout_marginTop="15dp"/>
-
-        <TextView
-            android:id="@+id/textView11"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/falsa"
-            android:textSize="35sp"
-            android:layout_marginTop="15dp"
-            />
-
-        <EditText
-            android:id="@+id/titulo5"
-            android:layout_width="367dp"
-            android:layout_height="wrap_content"
-            android:hint="@string/falsainput"
-            android:inputType=""
-            android:layout_marginLeft="18dp"
-            android:textSize="25sp"
-            android:layout_marginTop="15dp"/>
+            <EditText
+                android:id="@+id/titulo"
+                android:layout_width="367dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="18dp"
+                android:layout_marginTop="15dp"
+                android:hint="@string/pregunta"
+                android:inputType=""
+                android:textSize="25sp" />
 
 
+            <TextView
+                android:id="@+id/textView9"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:text="@string/correcta"
+                android:textSize="35sp" />
 
-        <TextView
-            android:id="@+id/textView4"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/categorias"
-            android:textSize="35sp"
-            android:layout_marginTop="15dp"/>
+            <EditText
+                android:id="@+id/titulo2"
+                android:layout_width="367dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="18dp"
+                android:layout_marginTop="15dp"
+                android:hint="@string/correctainput"
+                android:inputType=""
+                android:textSize="25sp" />
+
+            <TextView
+                android:id="@+id/textView10"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:text="@string/falsa"
+                android:textSize="35sp" />
+
+            <EditText
+                android:id="@+id/titulo4"
+                android:layout_width="367dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="18dp"
+                android:layout_marginTop="15dp"
+                android:hint="@string/falsainput"
+                android:inputType=""
+                android:textSize="25sp" />
+
+            <TextView
+                android:id="@+id/textView3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:text="@string/falsa"
+                android:textSize="35sp" />
+
+            <EditText
+                android:id="@+id/titulo3"
+                android:layout_width="367dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="18dp"
+                android:layout_marginTop="15dp"
+                android:hint="@string/falsainput"
+                android:inputType=""
+                android:textSize="25sp" />
+
+            <TextView
+                android:id="@+id/textView11"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:text="@string/falsa"
+                android:textSize="35sp" />
+
+            <EditText
+                android:id="@+id/titulo5"
+                android:layout_width="367dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="18dp"
+                android:layout_marginTop="15dp"
+                android:hint="@string/falsainput"
+                android:inputType=""
+                android:textSize="25sp" />
 
 
-        <Spinner
-            android:id="@+id/spinner"
-            android:layout_width="367dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:padding="5dip"
-            android:layout_marginLeft="18dp"
-            android:textSize="35dp" />
+            <TextView
+                android:id="@+id/textView4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:text="@string/categorias"
+                android:textSize="35sp" />
 
 
-        <Button
-            android:id="@+id/button"
-            android:layout_width="420dp"
-            android:layout_height="60dp"
-            android:layout_marginTop="60dp"
-            android:text="@string/boton_guardar_pregunta"
-            android:textSize="20sp" />
-    </LinearLayout>
+
+
+            <Spinner
+                android:id="@+id/spinner"
+                android:layout_width="367dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="18dp"
+                android:layout_marginTop="5dp"
+                android:padding="5dip"
+                android:textSize="35dp" />
+
+
+            <Button
+                android:id="@+id/mascategoria"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="155dp"
+                android:text="Añadir" />
+
+            <Button
+                android:id="@+id/guardar"
+                android:layout_width="420dp"
+                android:layout_height="60dp"
+                android:layout_marginTop="50dp"
+
+                android:text="@string/boton_guardar_pregunta"
+                android:textSize="20sp" />
+
+        </LinearLayout>
+    </ScrollView>
 
 
 </android.support.constraint.ConstraintLayout>

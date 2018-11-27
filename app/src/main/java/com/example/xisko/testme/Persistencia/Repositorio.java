@@ -17,6 +17,10 @@ public class Repositorio {
 
     private ArrayList<Pregunta> misPreguntas;
 
+    private static ArrayList<String> misCategorias;
+
+
+
 
     public static boolean insertar(Pregunta p, Context contexto) {
 
@@ -45,6 +49,37 @@ public class Repositorio {
         }
 
         return valor;
+    }
+
+
+    public static void cargarCategorias(Context context){
+
+
+       misCategorias= new ArrayList<>();
+
+
+        BasedeDatos usdbh =
+                new BasedeDatos(context, "DBPreguntas.db", null, 1);
+
+        SQLiteDatabase db = usdbh.getWritableDatabase();
+
+        Cursor c = db.rawQuery("SELECT DISTINCT categoria FROM Preguntas", null);
+
+        //Nos aseguramos de que existe al menos un registro
+        if (c.moveToFirst()) {
+            //Recorremos el cursor hasta que no haya más registros
+            do {
+
+                String Categoria = c.getString( c.getColumnIndex("categoria"));
+
+
+                misCategorias.add(Categoria);
+
+            } while(c.moveToNext());
+        }
+
+
+
     }
 
 
@@ -86,6 +121,11 @@ public class Repositorio {
     public ArrayList<Pregunta> getMisPreguntas() {
 
         return misPreguntas;
+    }
+
+    public static ArrayList<String>getMisCategorias(){
+
+        return misCategorias;
     }
 
     public void setMisPreguntas(ArrayList<Pregunta> misPreguntas) {

@@ -1,29 +1,32 @@
 package com.example.xisko.testme.Activity;
 
 import android.content.Context;
+
 import android.content.Intent;
 import android.os.Bundle;
+
 import android.support.design.widget.FloatingActionButton;
+
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.View;
+
 import android.widget.Toast;
 import com.example.xisko.testme.Log.MyLog;
 import com.example.xisko.testme.Persistencia.Repositorio;
 import com.example.xisko.testme.Pregunta;
 import com.example.xisko.testme.PreguntaAdapter;
 import com.example.xisko.testme.R;
-import com.example.xisko.testme.SwipeController;
 
 import java.util.ArrayList;
 import java.util.Collections;
 
 public class ListadoActivity extends AppCompatActivity {
 
-    SwipeController swipeController = new SwipeController();
+
     private static final String TAG = "ListadoActivity";
     private ArrayList<Pregunta> items;
     private Repositorio miRepo = new Repositorio();
@@ -42,7 +45,7 @@ public class ListadoActivity extends AppCompatActivity {
         mas.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-               Intent myIntent = new Intent(ListadoActivity.this, CrearEditarPreguntaActivity.class);
+                Intent myIntent = new Intent(ListadoActivity.this, CrearEditarPreguntaActivity.class);
                 ListadoActivity.this.startActivity(myIntent);
             }
         });
@@ -52,11 +55,56 @@ public class ListadoActivity extends AppCompatActivity {
         recyclerView.setHasFixedSize(true);
 
         //Swipe
-        ItemTouchHelper itemTouchhelper = new ItemTouchHelper(swipeController);
-        itemTouchhelper.attachToRecyclerView(recyclerView);
+        ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+            @Override
+            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(final RecyclerView.ViewHolder viewHolder, int direction) {
+                final int position = viewHolder.getAdapterPosition(); //get position which is swipe
+
+                if (direction == ItemTouchHelper.LEFT) { //if swipe left
 
 
-        }
+                    Intent editintent = new Intent(myContext, CrearEditarPreguntaActivity.class);
+
+                    Bundle bundle = new Bundle();
+
+                    bundle.putInt("Codigo",items.get(position).getCodigo());
+
+                    editintent.putExtras(bundle);
+
+                    startActivity(editintent);
+
+
+
+
+                    if (direction == ItemTouchHelper.RIGHT) { //if swipe right
+
+                        MyLog.d("deslizando a la derecha", "Weputa");
+
+                    }
+                }
+            }
+
+        };
+
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleCallback);
+        itemTouchHelper.attachToRecyclerView(recyclerView); //set swipe to recylcerview
+
+        // Muestra el RecyclerView en vertical
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        MyLog.d(TAG, "Finalizando OnResume");
+    }
+
+
+
+
+
+
+
         
 
 
@@ -97,18 +145,65 @@ public class ListadoActivity extends AppCompatActivity {
             }
         });
 
+
+
         // Asocia el Adaptador al RecyclerView
         recyclerView.setAdapter(adaptador);
+
+
+        //Swipe
+        ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+            @Override
+            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(final RecyclerView.ViewHolder viewHolder, int direction) {
+                final int position = viewHolder.getAdapterPosition(); //get position which is swipe
+
+                if (direction == ItemTouchHelper.LEFT) { //if swipe left
+
+                    MyLog.d("deslizando a la izquierda", "Weputa");
+
+
+                    if (direction == ItemTouchHelper.RIGHT) { //if swipe right
+
+                        MyLog.e("deslizando a la derecha", "Weputa");
+
+                    }
+                }
+            }
+
+        };
+
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleCallback);
+        itemTouchHelper.attachToRecyclerView(recyclerView); //set swipe to recylcerview
+
+        // Muestra el RecyclerView en vertical
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        MyLog.d(TAG, "Finalizando OnResume");
+
+
 
         // Muestra el RecyclerView en vertical
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
 
 
+
+
+
     }
 
     @Override
-    protected void onPause() {
+    protected void onPause(
+
+
+
+
+
+    ) {
         MyLog.d(TAG, "Iniciando OnPause");
         super.onPause();
         MyLog.d(TAG, "Finalizando OnPause");

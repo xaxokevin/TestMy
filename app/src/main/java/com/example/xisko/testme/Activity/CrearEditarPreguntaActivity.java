@@ -1,7 +1,9 @@
 package com.example.xisko.testme.Activity;
 
 import android.Manifest;
+import android.content.ContentValues;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Build;
@@ -9,18 +11,23 @@ import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
-
+import android.database.sqlite.SQLiteDatabase;
 import com.example.xisko.testme.Log.MyLog;
+import com.example.xisko.testme.Persistencia.BasedeDatos;
 import com.example.xisko.testme.Persistencia.Repositorio;
 import com.example.xisko.testme.Pregunta;
 import com.example.xisko.testme.R;
+
+import java.util.ArrayList;
 
 public class CrearEditarPreguntaActivity extends AppCompatActivity {
 
@@ -28,23 +35,77 @@ public class CrearEditarPreguntaActivity extends AppCompatActivity {
     private Context myContext;
      ConstraintLayout constraint;
      public Repositorio mirepo;
+    private ArrayAdapter<String>adapter;
+    private Spinner spinner;
 
 
 
-    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nueva_pregunta);
-        myContext = CrearEditarPreguntaActivity.this;
+        myContext = this;
         constraint = findViewById(R.id.constraint);
 
+    //Obtenemos las categorías y las añadimos al Spinner
+        ArrayList<String> items=new ArrayList<String>();
+
+        Repositorio.cargarCategorias(myContext);
+
+        items = Repositorio.getMisCategorias();
+
+        adapter=new ArrayAdapter<String>(this,R.layout.support_simple_spinner_dropdown_item,items);
+        adapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
+
+        spinner=(Spinner)findViewById(R.id.spinner);
+        spinner.setAdapter(adapter);
+
+        Button cat=(Button)findViewById(R.id.buttonayadircategoria);
+        cat.setOnClickListener(new View.OnClickListener(){
+            @Override
+                    public void onClick(View view){
+
+            //Recuperación de la vista del AlertDialog a partir del layout de la Actividad
+                LayoutInflater layoutActivity=LayoutInflater.from(myContext);
+                View viewAlertDialog=layoutActivity.inflate(R.layout.alert_dialog,null);
+
+            //Definición del AlertDialog
+                AlertDialog.Builder alertDialog=new AlertDialog.Builder(myContext);
+
+                //Asignación del AlertDialog a su vista
+                alertDialog.setView(viewAlertDialog);
+
+            //Recuperación del EditTextdel AlertDialog
+                final EditText dialogInput=(EditText)viewAlertDialog.findViewById(R.id.dialogInput);
+
+                //Configuración del AlertDialog
+                alertDialog
+                        .setCancelable(false)
+                //BotónAñadir
+                        .setPositiveButton(getResources().getString(R.string.add),
+                                new DialogInterface.OnClickListener(){
+                    public void onClick(DialogInterface dialogBox,int id){
+                        adapter.add(dialogInput.getText().toString());
+                        spinner Categoria.setSelection(adapter.getPosition(dialogInput.getText().toString()));
+                    }
+                })
+                //BotónCancelar
+.setNegativeButton(getResources().getString(R.string.cancel),
+                        new DialogInterface.OnClickListener(){
+                    public void onClick(DialogInterface dialogBox,int id){
+                        dialogBox.cancel();
+                    }
+                }).create()
+                        .show();
+            }
+        });
 
 
-        Spinner spinner = (Spinner)findViewById(R.id.spinner);
-        String[] contenido ={"PHP","Java","Redes","Sistemas","Android"};
-        spinner.setAdapter(new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item,contenido));
 
-         final Button button = findViewById(R.id.button);
+
+
+
+
+        final Button button = findViewById(R.id.guardar);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -60,7 +121,7 @@ public class CrearEditarPreguntaActivity extends AppCompatActivity {
 
         if(compruebaPregunta(v, pregunta, correcta, incorrecta1, incorrecta2, incorrecta3)== true){
 
-            Pregunta mipregunta = new Pregunta(spinner,pregunta.getText().toString(), correcta.getText().toString(),
+            Pregunta mipregunta = new Pregunta(pregunta.getText().toString(),spinner, correcta.getText().toString(),
                     incorrecta1.getText().toString(), incorrecta2.getText().toString(),incorrecta3.getText().toString());
 
 
@@ -71,10 +132,6 @@ public class CrearEditarPreguntaActivity extends AppCompatActivity {
 
 
         }
-
-
-
-
 
                 pregunta.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                     @Override
@@ -131,24 +188,9 @@ public class CrearEditarPreguntaActivity extends AppCompatActivity {
                     }
                 });
 
-
-
-
-
             }
 
-
-
-
-
-
-
-
-
         });
-
-
-
 
     }
 
@@ -231,6 +273,44 @@ public class CrearEditarPreguntaActivity extends AppCompatActivity {
         }
 
 
+    }
+
+
+
+    public static boolean actualizarPregunta(Pregunta p,Context contexto){
+
+        boolean valor=true;
+
+//Abrimoslabasededatos'DBPreguntas'enmodoescritura
+        BasedeDatos sdbh=
+                new BasedeDatos(contexto,"DBPreguntas.db",null,1);
+
+        SQLiteDatabase db= sdbh.getWritableDatabase();
+
+//Sihemosabiertocorrectamentelabasededatos
+        if(db!=null)
+        {
+
+//Establecemosloscampos-valoresaactualizar
+            ContentValues valores=new ContentValues();
+//valores.put("codigo",p.getCodigo());
+            valores.put("enunciado",p.getEnunciado());
+            valores.put("categoria",p.getCategoria());
+            valores.put("respuestacorrecta",p.getRespuestaCorrecta());
+            valores.put("respuestaincorrecta1",p.getRespuestaIncorrecta1());
+            valores.put("respuestaincorrecta2",p.getRespuestaIncorrecta2());
+            valores.put("respuestaincorrecta3",p.getRespuestaIncorrecta3());
+
+//Actualizamoselregistroenlabasededatos
+            String[]args=new String[]{Integer.toString(p.getCodigo())};
+            db.update("Preguntas",valores,"codigo=?",args);
+
+//Cerramoslabasededatos
+            db.close();
+        }
+        else{valor=false;}
+
+        return valor;
     }
 
 //    @Override
