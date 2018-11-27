@@ -20,4 +20,8 @@
     <string name="write_permission_granted">Allow</string>
     <string name="write_permission_accepted">Acepted</string>
     <string name="write_permission_not_accepted">Disable</string>
+    <string name="your_option">Your category</string>
+    <string name="add_new_option">New Category</string>
+    <string name="add">Add</string>
+    <string name="cancel">Cancel</string>
 </resources>

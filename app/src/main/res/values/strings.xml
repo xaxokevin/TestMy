@@ -21,4 +21,9 @@
     <string name="write_permission_granted">Aceptados</string>
     <string name="write_permission_accepted">Aceptado</string>
     <string name="write_permission_not_accepted">Denegado</string>
+    <string name="your_option">Tu categoria</string>
+    <string name="add_new_option">Nueva opcion</string>
+    <string name="add">Añadir</string>
+    <string name="cancel">Cancelar</string>
+
 </resources>

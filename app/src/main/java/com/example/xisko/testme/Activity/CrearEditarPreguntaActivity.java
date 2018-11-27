@@ -33,8 +33,8 @@ public class CrearEditarPreguntaActivity extends AppCompatActivity {
 
     final private int CODE_WRITE_EXTERNAL_STORAGE_PERMISSION = 123;
     private Context myContext;
-     ConstraintLayout constraint;
-     public Repositorio mirepo;
+    ConstraintLayout constraint;
+    public Repositorio mirepo;
     private ArrayAdapter<String>adapter;
     private Spinner spinner;
 
@@ -59,7 +59,7 @@ public class CrearEditarPreguntaActivity extends AppCompatActivity {
         spinner=(Spinner)findViewById(R.id.spinner);
         spinner.setAdapter(adapter);
 
-        Button cat=(Button)findViewById(R.id.buttonayadircategoria);
+        Button cat=(Button)findViewById(R.id.mascategoria);
         cat.setOnClickListener(new View.OnClickListener(){
             @Override
                     public void onClick(View view){
@@ -85,7 +85,7 @@ public class CrearEditarPreguntaActivity extends AppCompatActivity {
                                 new DialogInterface.OnClickListener(){
                     public void onClick(DialogInterface dialogBox,int id){
                         adapter.add(dialogInput.getText().toString());
-                        spinner Categoria.setSelection(adapter.getPosition(dialogInput.getText().toString()));
+                        spinner.setSelection(adapter.getPosition(dialogInput.getText().toString()));
                     }
                 })
                 //BotónCancelar
