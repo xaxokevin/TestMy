@@ -138,17 +138,27 @@
                 android:layout_marginLeft="155dp"
                 android:text="Añadir" />
 
-            <Button
-                android:id="@+id/guardar"
-                android:layout_width="420dp"
-                android:layout_height="60dp"
-                android:layout_marginTop="50dp"
 
-                android:text="@string/boton_guardar_pregunta"
-                android:textSize="20sp" />
 
         </LinearLayout>
     </ScrollView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="bottom|right"
+        android:orientation="horizontal">
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/guardar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/fab_margin"
+            android:clickable="true"
+            app:backgroundTint="@color/colorPrimary"
+            app:layout_anchor="@+id/include"
+            app:layout_anchorGravity="right|bottom" />
+    </LinearLayout>
 
 
 </android.support.constraint.ConstraintLayout>

@@ -7,6 +7,9 @@
     tools:context=".Activity.AcercaDeActivity">
 
 
-
-
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="wrap_content"
+        android:layout_height="689dp"
+        app:srcCompat="@drawable/ies" />
 </android.support.constraint.ConstraintLayout>
