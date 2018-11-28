@@ -1,5 +1,5 @@
 
-package com.example.xisko.testme;
+package com.example.xisko.testme.Pregunta;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -7,16 +7,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.example.xisko.testme.R;
+
 import java.util.ArrayList;
 
-/**
+/*
  * Clase para almacenar el adaptador con los datos
- * de los acontecimientos que va a mostrar
+ * de las preguntas  que va a mostrar
  * el RecyclerView
- *
- * Hay que aÃ±adir al proyecto la siguiente
- * dependencia en el archivo /app/build.gradle
- * 'com.android.support:recyclerview-v7:+
  */
 
 public class PreguntaAdapter
@@ -72,7 +70,7 @@ public class PreguntaAdapter
         viewHolder.PreguntaBind(item);
     }
 
-    // Indica el nÃºmero de elementos de la colecciÃ³n de datos.
+    // Indica el numero de elementos de la coleccion de datos.
     @Override
     public int getItemCount() {
         return items.size();

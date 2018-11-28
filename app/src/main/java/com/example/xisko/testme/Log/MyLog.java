@@ -1,9 +1,11 @@
 package com.example.xisko.testme.Log;
 
+import static com.example.xisko.testme.Constantes.DEBUG;
+
 public class MyLog {
 
 
-        static final boolean DEBUG = true;
+
 
         public static void i(String tag, String string) {
             if (DEBUG) android.util.Log.i(tag, string);

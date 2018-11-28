@@ -17,8 +17,8 @@ import android.view.View;
 import android.widget.Toast;
 import com.example.xisko.testme.Log.MyLog;
 import com.example.xisko.testme.Persistencia.Repositorio;
-import com.example.xisko.testme.Pregunta;
-import com.example.xisko.testme.PreguntaAdapter;
+import com.example.xisko.testme.Pregunta.Pregunta;
+import com.example.xisko.testme.Pregunta.PreguntaAdapter;
 import com.example.xisko.testme.R;
 
 import java.util.ArrayList;
@@ -68,7 +68,7 @@ public class ListadoActivity extends AppCompatActivity {
                 if (direction == ItemTouchHelper.LEFT) { //if swipe left
 
 
-                    Intent editintent = new Intent(myContext, CrearEditarPreguntaActivity.class);
+                    Intent editintent = new Intent(ListadoActivity.this, CrearEditarPreguntaActivity.class);
 
                     Bundle bundle = new Bundle();
 

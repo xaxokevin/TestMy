@@ -1,4 +1,4 @@
-package com.example.xisko.testme;
+package com.example.xisko.testme.Pregunta;
 
 public class Pregunta {
 
@@ -19,8 +19,8 @@ public class Pregunta {
         this.getRespuestaIncorrecta2 = getRespuestaIncorrecta2;
         this.getRespuestaIncorrecta3 = getRespuestaIncorrecta3;
     }
-    public Pregunta(int codigo, String enunciado, String categoria, String respuestaCorrecta, String getRespuestaIncorrecta1, String getRespuestaIncorrecta2, String getRespuestaIncorrecta3) {
-        this.codigo = codigo;
+    public Pregunta(String codigo, String enunciado, String categoria, String respuestaCorrecta, String getRespuestaIncorrecta1, String getRespuestaIncorrecta2, String getRespuestaIncorrecta3) {
+        this.codigo = Integer.parseInt(codigo);
         this.enunciado = enunciado;
         this.categoria = categoria;
         this.respuestaCorrecta = respuestaCorrecta;

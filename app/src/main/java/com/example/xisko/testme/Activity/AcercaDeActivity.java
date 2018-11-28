@@ -23,7 +23,7 @@ public class AcercaDeActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
+        // añade al menu un item
         getMenuInflater().inflate(R.menu.acercade_menu, menu);
         return true;
     }
@@ -31,9 +31,8 @@ public class AcercaDeActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
+        //Se crea la accion que se va a realizar al pulsar en el boton atras tanto de la interfaz
+        //como de los botones del terminal
 
         switch (item.getItemId()) {
             // Respond to the action bar's Up/Home button

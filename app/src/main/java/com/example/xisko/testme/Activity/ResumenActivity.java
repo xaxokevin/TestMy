@@ -1,6 +1,14 @@
 package com.example.xisko.testme.Activity;
 
+import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
+import android.support.constraint.ConstraintLayout;
+import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -9,7 +17,12 @@ import android.view.MenuItem;
 import com.example.xisko.testme.Log.MyLog;
 import com.example.xisko.testme.R;
 
+import static com.example.xisko.testme.Constantes.CODE_WRITE_EXTERNAL_STORAGE_PERMISSION;
+
 public class ResumenActivity extends AppCompatActivity {
+
+    Context myContext;
+    ConstraintLayout constraint;
 
 
     private static final String TAG = "ResumenActivity";
@@ -66,6 +79,9 @@ public class ResumenActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_resumen);
+        myContext = this;
+        constraint = findViewById(R.id.constraint);
+        compruebaPermisos();
     }
 
 
@@ -109,5 +125,52 @@ public class ResumenActivity extends AppCompatActivity {
         MyLog.d(TAG, "Iniciando OnDestroy");
         super.onDestroy();
         MyLog.d(TAG, "Finalizando OnDestroy");
+    }
+
+    // A partir de Marshmallow (6.0) se pide aceptar o rechazar el permiso en tiempo de ejecución
+    // En las versiones anteriores no es posible hacerlo
+    // Una vez que se pide aceptar o rechazar el permiso se ejecuta el método "onRequestPermissionsResult" para manejar la respuesta
+    // Si el usuario marca "No preguntar más" no se volverá a mostrar este diálogo
+    private void compruebaPermisos() {
+        int WriteExternalStoragePermission = ContextCompat.checkSelfPermission(myContext, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        MyLog.d("MainActivity", "WRITE_EXTERNAL_STORAGE Permission: " + WriteExternalStoragePermission);
+
+        if (WriteExternalStoragePermission != PackageManager.PERMISSION_GRANTED) {
+
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+                ActivityCompat.requestPermissions(ResumenActivity.this, new String[] {Manifest.permission.WRITE_EXTERNAL_STORAGE}, CODE_WRITE_EXTERNAL_STORAGE_PERMISSION);
+
+            } else {
+
+                MyLog.e("Permisos: ","Rechazados");
+
+            }
+        } else {
+
+            MyLog.e("Permisos: ","Rechazados");
+        }
+    }
+
+
+//Maneja la respuesta del compruebaPermisos
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        switch (requestCode) {
+            case CODE_WRITE_EXTERNAL_STORAGE_PERMISSION:
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+
+
+                } else {
+
+                    MyLog.e("Permisos: ","Rechazados");
+
+                }
+
+                break;
+            default:
+                super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
     }
 }
