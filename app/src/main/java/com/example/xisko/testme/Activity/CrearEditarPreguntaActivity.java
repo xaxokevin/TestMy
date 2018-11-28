@@ -41,14 +41,29 @@ public class CrearEditarPreguntaActivity extends AppCompatActivity implements Vi
     private ArrayAdapter<String> adapter;
     private Spinner spinnerCategoria;
 
-    private int codigoPregunta;
 
+    private int codigoPregunta =-1;
+
+    public int getCodigoPregunta() {
+        return codigoPregunta;
+    }
+
+    public void setCodigoPregunta(int codigoPregunta) {
+        this.codigoPregunta = codigoPregunta;
+    }
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nueva_pregunta);
         myContext = this;
         constraint = findViewById(R.id.constraint);
+        final EditText pregunta = findViewById(R.id.titulo);
+        final EditText correcta = findViewById(R.id.titulo2);
+        final EditText incorrecta1 = findViewById(R.id.titulo3);
+        final EditText incorrecta2 = findViewById(R.id.titulo4);
+        final EditText incorrecta3 = findViewById(R.id.titulo5);
+
+
 
 
         //Obtenemos las categorías y las añadimos al Spinner
@@ -78,10 +93,25 @@ public class CrearEditarPreguntaActivity extends AppCompatActivity implements Vi
 
         //Construimos el mensaje a mostrar
             codigoPregunta = bundle.getInt("Codigo");
+            setCodigoPregunta(codigoPregunta);
 
 
 
             MyLog.i("Codigo pregunta pasada: ",Integer.toString(codigoPregunta));
+
+
+            Pregunta p= Repositorio.buscarPregunta(codigoPregunta,myContext);
+
+            pregunta.setText(p.getEnunciado());
+            correcta.setText(p.getRespuestaCorrecta());
+            incorrecta1.setText(p.getRespuestaIncorrecta1());
+            incorrecta2.setText(p.getRespuestaIncorrecta2());
+            incorrecta3.setText(p.getRespuestaIncorrecta3());
+
+
+
+
+
 
         }
 
@@ -194,11 +224,29 @@ public class CrearEditarPreguntaActivity extends AppCompatActivity implements Vi
 
                 if (compruebaPregunta(v, pregunta, correcta, incorrecta1, incorrecta2, incorrecta3) == true) {
 
-                    Pregunta mipregunta = new Pregunta(pregunta.getText().toString(), spinner, correcta.getText().toString(),
-                            incorrecta1.getText().toString(), incorrecta2.getText().toString(), incorrecta3.getText().toString());
 
 
-                    mirepo.insertar(mipregunta, myContext);
+
+
+                    if(getCodigoPregunta()!=-1){
+
+                        Pregunta actualizaPregunta = new Pregunta(Integer.toString(getCodigoPregunta()),pregunta.getText().toString(), spinner, correcta.getText().toString(),
+                                incorrecta1.getText().toString(), incorrecta2.getText().toString(), incorrecta3.getText().toString());
+
+                        Repositorio.actualizarPregunta(actualizaPregunta,myContext);
+                        MyLog.i("Pregunta", "Actualizada");
+                    }else{
+
+                        Pregunta mipregunta = new Pregunta(pregunta.getText().toString(), spinner, correcta.getText().toString(),
+                                incorrecta1.getText().toString(), incorrecta2.getText().toString(), incorrecta3.getText().toString());
+
+                        mirepo.insertar(mipregunta, myContext);
+
+                        MyLog.i("Pregunta", "Creada");
+                    }
+
+
+                        //mirepo.insertar(mipregunta, myContext);
 
                     finish();
 

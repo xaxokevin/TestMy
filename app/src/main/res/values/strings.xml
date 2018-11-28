@@ -25,5 +25,6 @@
     <string name="add_new_option">Nueva opcion</string>
     <string name="add">Añadir</string>
     <string name="cancel">Cancelar</string>
+    <string name="numero_preguntas">Numero de preguntas:</string>
 
 </resources>

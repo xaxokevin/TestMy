@@ -24,4 +24,5 @@
     <string name="add_new_option">New Category</string>
     <string name="add">Add</string>
     <string name="cancel">Cancel</string>
+    <string name="numero_preguntas">Number of questions:</string>
 </resources>

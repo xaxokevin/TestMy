@@ -3,6 +3,7 @@ package com.example.xisko.testme.Persistencia;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.example.xisko.testme.Log.MyLog;
@@ -20,6 +21,8 @@ public class Repositorio {
     private ArrayList<Pregunta> misPreguntas;
 
     private static ArrayList<String> misCategorias;
+
+    private String cantidadPreguntas;
 
 
 
@@ -139,14 +142,15 @@ public class Repositorio {
 
             valores.put("enunciado",p.getEnunciado());
             valores.put("categoria",p.getCategoria());
-            valores.put("respuestacorrecta",p.getRespuestaCorrecta());
-            valores.put("respuestaincorrecta1",p.getRespuestaIncorrecta1());
-            valores.put("respuestaincorrecta2",p.getRespuestaIncorrecta2());
-            valores.put("respuestaincorrecta3",p.getRespuestaIncorrecta3());
+            valores.put("respuestaCorrecta",p.getRespuestaCorrecta());
+            valores.put("respuestaIncorrecta1",p.getRespuestaIncorrecta1());
+            valores.put("respuestaIncorrecta2",p.getRespuestaIncorrecta2());
+            valores.put("respuestaIncorrecta3",p.getRespuestaIncorrecta3());
 
             //Actualizamoselregistroenlabasededatos
-            String[]args=new String[]{Integer.toString(p.getCodigo())};
-            db.update("Preguntas",valores,"codigo=?",args);
+            //String[]args=new String[]{Integer.toString(p.getCodigo())};
+            MyLog.e("Valor del codigo de actualizar",Integer.toString(p.getCodigo()));
+            db.update("Preguntas",valores,"codigo='"+p.getCodigo()+"'",null);
 
             //Cerramoslabasededatos
             db.close();
@@ -155,6 +159,40 @@ public class Repositorio {
 
         return valor;
     }
+
+    public static Pregunta buscarPregunta(int codi, Context context){
+
+        Pregunta p = null;
+
+
+
+        BasedeDatos usdbh =
+                new BasedeDatos(context, basedeDatos, null, 1);
+
+        SQLiteDatabase db = usdbh.getWritableDatabase();
+
+        Cursor c = db.rawQuery("SELECT * FROM Preguntas WHERE codigo='"+codi+"'", null);
+
+
+
+        if (c.moveToFirst()) {
+            String Enunciado = c.getString(c.getColumnIndex("enunciado"));
+            String Categoria = c.getString(c.getColumnIndex("categoria"));
+            String Correcta = c.getString(c.getColumnIndex("respuestaCorrecta"));
+            String Incorrecta1 = c.getString(c.getColumnIndex("respuestaIncorrecta1"));
+            String Incorrecta2 = c.getString(c.getColumnIndex("respuestaIncorrecta2"));
+            String Incorrecta3 = c.getString(c.getColumnIndex("respuestaIncorrecta3"));
+            p = new Pregunta(Enunciado, Categoria, Correcta, Incorrecta1, Incorrecta2, Incorrecta3);
+            MyLog.d("Pregunta encontrada", p.getEnunciado());
+
+
+        }
+
+        return p;
+
+    }
+
+
 
 
 
@@ -167,8 +205,30 @@ public class Repositorio {
 
         return misCategorias;
     }
-
-    public void setMisPreguntas(ArrayList<Pregunta> misPreguntas) {
-        this.misPreguntas = misPreguntas;
+/*
+    public String getCantidadPreguntas() {
+        return cantidadPreguntas;
     }
+
+    public void setCantidadPreguntas(Context context) {
+
+        String numero;
+
+        BasedeDatos sdbh =
+                new BasedeDatos(context, basedeDatos, null, 1);
+        SQLiteDatabase db= sdbh.getWritableDatabase();
+
+        String countQuery = "SELECT  * FROM " + "Preguntas";
+
+        Cursor cursor = db.rawQuery(countQuery, null);
+        int count = cursor.getCount();
+        cursor.close();
+        numero= Integer.toString(count);
+
+
+
+
+        this.cantidadPreguntas = numero;
+    }
+    */
 }

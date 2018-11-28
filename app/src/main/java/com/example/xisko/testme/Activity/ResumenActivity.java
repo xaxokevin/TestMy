@@ -13,8 +13,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 import com.example.xisko.testme.Log.MyLog;
+import com.example.xisko.testme.Persistencia.Repositorio;
 import com.example.xisko.testme.R;
 
 import static com.example.xisko.testme.Constantes.CODE_WRITE_EXTERNAL_STORAGE_PERMISSION;
@@ -23,6 +25,7 @@ public class ResumenActivity extends AppCompatActivity {
 
     Context myContext;
     ConstraintLayout constraint;
+    Repositorio miRepo;
 
 
     private static final String TAG = "ResumenActivity";
@@ -82,6 +85,15 @@ public class ResumenActivity extends AppCompatActivity {
         myContext = this;
         constraint = findViewById(R.id.constraint);
         compruebaPermisos();
+
+        final TextView pregunta = findViewById(R.id.numero_preguntas);
+        //miRepo.setCantidadPreguntas(myContext);
+
+        //String cantidadPreguntas;
+
+        //cantidadPreguntas = miRepo.getCantidadPreguntas();
+
+        //pregunta.setText("Hay un total de: "+cantidadPreguntas);
     }
 
 
