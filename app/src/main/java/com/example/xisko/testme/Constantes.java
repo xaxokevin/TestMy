@@ -7,7 +7,10 @@ public class Constantes {
 
 
     //Base de datos
-    public static String basedeDatos = "DBPreguntas.db";
+    public static final String basedeDatos = "DBPreguntas.db";
+    public static final int DB_VERSION = 1;
+    public static final String Preguntas = "Preguntas";
+
 
 
     //My log

@@ -22,11 +22,12 @@ public class Repositorio {
 
     private static ArrayList<String> misCategorias;
 
-    private String cantidadPreguntas;
 
 
 
 
+
+    //Metodo que inserta registros en la BD
     public static boolean insertar(Pregunta p, Context contexto) {
 
         boolean valor = true;
@@ -54,6 +55,8 @@ public class Repositorio {
     }
 
 
+    //Metodo que saca unicamente las categorias que tenemos almacenadas en la BD.
+    //Luego seran cargadas en un spinner
     public static void cargarCategorias(Context context){
 
 
@@ -85,6 +88,7 @@ public class Repositorio {
     }
 
 
+    //Metodo que guardaa las preguntas de la base de datos en un array
     public void cargarPreguntas(Context contexto){
 
         misPreguntas = new ArrayList<Pregunta>();
@@ -123,6 +127,7 @@ public class Repositorio {
 
     }
 
+    //Actualiza la pregunta seleccionada en el recyclerView
     public static boolean actualizarPregunta(Pregunta p,Context contexto){
 
         boolean valor=true;
@@ -160,6 +165,7 @@ public class Repositorio {
         return valor;
     }
 
+    //Nos devuelva la pregunta que quermos actualizar
     public static Pregunta buscarPregunta(int codi, Context context){
 
         Pregunta p = null;
@@ -205,12 +211,10 @@ public class Repositorio {
 
         return misCategorias;
     }
-/*
-    public String getCantidadPreguntas() {
-        return cantidadPreguntas;
-    }
 
-    public void setCantidadPreguntas(Context context) {
+
+    //Nos devuelve la cantidad de preguntas que tenemos almacenadas
+    public String setCantidadPreguntas(Context context) {
 
         String numero;
 
@@ -228,7 +232,7 @@ public class Repositorio {
 
 
 
-        this.cantidadPreguntas = numero;
+        return numero;
     }
-    */
+
 }

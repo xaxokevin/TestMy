@@ -87,13 +87,13 @@ public class ResumenActivity extends AppCompatActivity {
         compruebaPermisos();
 
         final TextView pregunta = findViewById(R.id.numero_preguntas);
-        //miRepo.setCantidadPreguntas(myContext);
 
-        //String cantidadPreguntas;
 
-        //cantidadPreguntas = miRepo.getCantidadPreguntas();
+        //String cantidadPreguntas =  miRepo.setCantidadPreguntas(myContext);
 
-        //pregunta.setText("Hay un total de: "+cantidadPreguntas);
+
+
+        //pregunta.setText(R.id.numero_preguntas+cantidadPreguntas);
     }
 
 

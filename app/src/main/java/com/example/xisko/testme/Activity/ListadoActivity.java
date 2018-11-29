@@ -37,9 +37,10 @@ public class ListadoActivity extends AppCompatActivity {
         myContext = ListadoActivity.this;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_listado);
+        //Añade un toolbar a la actividad
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
+        //Añade un boton flotante
         FloatingActionButton mas = (FloatingActionButton) findViewById(R.id.mas);
         mas.setImageResource(R.drawable.ic_loupe_grey600_48dp);
         mas.setOnClickListener(new View.OnClickListener() {
@@ -54,7 +55,7 @@ public class ListadoActivity extends AppCompatActivity {
         final RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         recyclerView.setHasFixedSize(true);
 
-        //Swipe
+        //Hace el Swipe para el recyvler
         ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
             @Override
             public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
@@ -63,9 +64,8 @@ public class ListadoActivity extends AppCompatActivity {
 
             @Override
             public void onSwiped(final RecyclerView.ViewHolder viewHolder, int direction) {
-                final int position = viewHolder.getAdapterPosition(); //get position which is swipe
-
-                if (direction == ItemTouchHelper.LEFT) { //if swipe left
+                final int position = viewHolder.getAdapterPosition(); //Obtiene la posicion la hacer swipe
+                if (direction == ItemTouchHelper.LEFT) {
 
 
                     Intent editintent = new Intent(ListadoActivity.this, CrearEditarPreguntaActivity.class);
@@ -96,7 +96,7 @@ public class ListadoActivity extends AppCompatActivity {
 
         // Muestra el RecyclerView en vertical
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        MyLog.d(TAG, "Finalizando OnResume");
+        MyLog.d(TAG, "Finalizando OnCreate");
     }
 
 
@@ -122,12 +122,12 @@ public class ListadoActivity extends AppCompatActivity {
         super.onResume();
         MyLog.d(TAG, "Finalizando OnResume");
 
-        // Crea una lista con los elementos a mostrar
+        //
         items = new ArrayList<>();
         miRepo.cargarPreguntas(myContext);
         items = miRepo.getMisPreguntas();
         Collections.reverse(items);
-        // Inicializa el RecyclerView
+
         final RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
 
         // Crea el Adaptador con los datos de la lista anterior
@@ -229,5 +229,7 @@ public class ListadoActivity extends AppCompatActivity {
         super.onDestroy();
         MyLog.d(TAG, "Finalizando OnDestroy");
     }
+
+
 
 }
