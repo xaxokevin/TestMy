@@ -1,7 +1,6 @@
 package com.example.xisko.testme.Activity;
 
 import android.Manifest;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
@@ -21,9 +20,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.database.sqlite.SQLiteDatabase;
 import com.example.xisko.testme.Log.MyLog;
-import com.example.xisko.testme.Persistencia.BasedeDatos;
 import com.example.xisko.testme.Persistencia.Repositorio;
 import com.example.xisko.testme.Pregunta.Pregunta;
 import com.example.xisko.testme.R;
@@ -34,14 +31,11 @@ import static com.example.xisko.testme.Constantes.CODE_WRITE_EXTERNAL_STORAGE_PE
 
 public class CrearEditarPreguntaActivity extends AppCompatActivity implements View.OnClickListener {
 
-    //final private int CODE_WRITE_EXTERNAL_STORAGE_PERMISSION = 123;
     private Context myContext;
     ConstraintLayout constraint;
     public Repositorio mirepo;
     private ArrayAdapter<String> adapter;
     private Spinner spinnerCategoria;
-
-
     private int codigoPregunta =-1;
 
     public int getCodigoPregunta() {
@@ -87,6 +81,7 @@ public class CrearEditarPreguntaActivity extends AppCompatActivity implements Vi
         guardar.setImageResource(R.drawable.ic_loupe_grey600_48dp);
         guardar.setOnClickListener(this);
 
+        //Si al abrir el activity de crear/editar el bundle no viene vacio se hace este if
         if(this.getIntent().getExtras()!=null) {
         //Recuperamos la información pasada en el intent
             Bundle bundle = this.getIntent().getExtras();
@@ -95,13 +90,11 @@ public class CrearEditarPreguntaActivity extends AppCompatActivity implements Vi
             codigoPregunta = bundle.getInt("Codigo");
             setCodigoPregunta(codigoPregunta);
 
-
-
             MyLog.i("Codigo pregunta pasada: ",Integer.toString(codigoPregunta));
 
-
+        //Llamams a la funcion buscar pregunta, pasandole el codigo de la pregunta y el context
+            // al recuperarla rellenamos todos los campos mostrados en pantalla con los valores de la pregunta.
             Pregunta p= Repositorio.buscarPregunta(codigoPregunta,myContext);
-
             pregunta.setText(p.getEnunciado());
             correcta.setText(p.getRespuestaCorrecta());
             incorrecta1.setText(p.getRespuestaIncorrecta1());
@@ -109,13 +102,7 @@ public class CrearEditarPreguntaActivity extends AppCompatActivity implements Vi
             incorrecta3.setText(p.getRespuestaIncorrecta3());
 
 
-
-
-
-
         }
-
-
 
 
         }
@@ -148,6 +135,7 @@ public class CrearEditarPreguntaActivity extends AppCompatActivity implements Vi
 
     //Comprueba que todos los campos de la pregunta este relleno,
     // no permite que guardes hasta que este todo completo
+    //rellena de rojo los campos que estan vacios si se pulsa guardar
     private boolean compruebaPregunta(View v, EditText pregunta, EditText correcta, EditText incorrecta1, EditText incorrecta2, EditText incorrecta3) {
         if (pregunta.getText().toString().isEmpty()) {
             pregunta.setBackgroundColor(Color.rgb(255, 64, 64));
@@ -204,6 +192,7 @@ public class CrearEditarPreguntaActivity extends AppCompatActivity implements Vi
 
 
     //Administra los botones del crear / editar pregunta
+    //al pulsarlos hara la funcion especificada para cada uno de ellos
     @Override
     public void onClick(View v) {
 

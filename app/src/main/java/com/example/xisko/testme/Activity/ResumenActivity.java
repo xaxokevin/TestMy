@@ -89,11 +89,11 @@ public class ResumenActivity extends AppCompatActivity {
         final TextView pregunta = findViewById(R.id.numero_preguntas);
 
 
-        //String cantidadPreguntas =  miRepo.setCantidadPreguntas(myContext);
+       // String cantidadPreguntas =  miRepo.getCantidadPreguntas(myContext);
 
 
 
-        //pregunta.setText(R.id.numero_preguntas+cantidadPreguntas);
+       // pregunta.setText(R.id.numero_preguntas+cantidadPreguntas);
     }
 
 

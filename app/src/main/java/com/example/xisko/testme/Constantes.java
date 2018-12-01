@@ -10,6 +10,12 @@ public class Constantes {
     public static final String basedeDatos = "DBPreguntas.db";
     public static final int DB_VERSION = 1;
     public static final String Preguntas = "Preguntas";
+    public static final String enunciado = "enunciado";
+    public static final String categoria = "categoria";
+    public static final String respuestaCorrecta ="respuestaCorrecta";
+    public static final String respuestaIncorrecta1="respuestaIncorrecta1";
+    public static final String respuestaIncorrecta2="respuestaIncorrecta2";
+    public static final String respuestaIncorrecta3="respuestaIncorrecta3";
 
 
 

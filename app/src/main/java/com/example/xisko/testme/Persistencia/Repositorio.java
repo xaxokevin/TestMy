@@ -11,7 +11,9 @@ import com.example.xisko.testme.Pregunta.Pregunta;
 
 import java.util.ArrayList;
 
+import static com.example.xisko.testme.Constantes.Preguntas;
 import static com.example.xisko.testme.Constantes.basedeDatos;
+
 
 public class Repositorio {
 
@@ -40,9 +42,8 @@ public class Repositorio {
 
         //Si hemos abierto correctamente la base de datos
         if (db != null) {
-            //Insertamos 5 usuarios de ejemplo
 
-            db.execSQL("INSERT INTO Preguntas (enunciado, categoria, respuestaCorrecta, respuestaIncorrecta1, respuestaIncorrecta2, respuestaIncorrecta3)"+
+            db.execSQL("INSERT INTO '"+Preguntas+"' (enunciado, categoria, respuestaCorrecta, respuestaIncorrecta1, respuestaIncorrecta2, respuestaIncorrecta3)"+
                     "VALUES ('" + p.getEnunciado() + "', '" + p.getCategoria() + "', '"+ p.getRespuestaCorrecta()+"', '"+ p.getRespuestaIncorrecta1()+"', '"+p.getRespuestaIncorrecta2()+"', '"+p.getRespuestaIncorrecta3()+"')");
 
             //Cerramos la base de datos
@@ -165,6 +166,33 @@ public class Repositorio {
         return valor;
     }
 
+
+    public static void eliminaPregunta(Pregunta p, Context context){
+
+        //Abrimos la basededatos en modo escritura
+        BasedeDatos sdbh=
+                new BasedeDatos(context,basedeDatos,null,1);
+
+        SQLiteDatabase db= sdbh.getWritableDatabase();
+
+        //Si hemos abierto correctamente la base de datos
+        if(db!=null)
+        {
+
+
+            MyLog.e("Valor del codigo a eliminar",Integer.toString(p.getCodigo()));
+            db.execSQL("DELETE FROM '"+Preguntas+"' WHERE codigo='"+p.getCodigo()+"' ");
+            //Cerramoslabasededatos
+            db.close();
+        }
+        else{
+
+            MyLog.v("Error al eliminar","Codigo de pregunta: '"+Integer.toString(p.getCodigo()));
+        }
+
+
+    }
+
     //Nos devuelva la pregunta que quermos actualizar
     public static Pregunta buscarPregunta(int codi, Context context){
 
@@ -193,7 +221,7 @@ public class Repositorio {
 
 
         }
-
+        c.close();
         return p;
 
     }
@@ -214,23 +242,23 @@ public class Repositorio {
 
 
     //Nos devuelve la cantidad de preguntas que tenemos almacenadas
-    public String setCantidadPreguntas(Context context) {
+    public String getCantidadPreguntas(Context context) {
 
-        String numero;
+        String numero = "";
 
         BasedeDatos sdbh =
                 new BasedeDatos(context, basedeDatos, null, 1);
         SQLiteDatabase db= sdbh.getWritableDatabase();
 
-        String countQuery = "SELECT  * FROM " + "Preguntas";
+        String countQuery = "SELECT COUNT(codigo)  FROM "+ Preguntas;
 
-        Cursor cursor = db.rawQuery(countQuery, null);
-        int count = cursor.getCount();
-        cursor.close();
-        numero= Integer.toString(count);
+        Cursor c = db.rawQuery(countQuery, null);
 
+        if (c.moveToFirst()) {
+            numero = c.getString(0);
+        }
 
-
+        c.close();
 
         return numero;
     }
