@@ -27,5 +27,6 @@
     <string name="cancel">Cancelar</string>
     <string name="numero_preguntas">Numero de preguntas:</string>
     <string name="eliminarPregunta">Esta acción no se puede deshacer, ¿Quiere eliminar?</string>
+    <string name="delete">eliminar</string>
 
 </resources>

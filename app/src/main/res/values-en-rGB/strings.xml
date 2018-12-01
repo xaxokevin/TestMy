@@ -26,4 +26,5 @@
     <string name="cancel">Cancel</string>
     <string name="numero_preguntas">Number of questions:</string>
     <string name="eliminarPregunta">¿Really you want to delete?</string>
+    <string name="delete">delete</string>
 </resources>

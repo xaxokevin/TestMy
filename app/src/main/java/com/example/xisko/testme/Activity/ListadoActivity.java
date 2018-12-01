@@ -2,18 +2,22 @@ package com.example.xisko.testme.Activity;
 
 import android.content.Context;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 
 import android.support.design.widget.FloatingActionButton;
 
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.view.LayoutInflater;
 import android.view.View;
 
+import android.widget.EditText;
 import android.widget.Toast;
 import com.example.xisko.testme.Log.MyLog;
 import com.example.xisko.testme.Persistencia.Repositorio;
@@ -31,6 +35,7 @@ public class ListadoActivity extends AppCompatActivity {
     private ArrayList<Pregunta> items;
     private Repositorio miRepo = new Repositorio();
     private Context myContext;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,9 +116,10 @@ public class ListadoActivity extends AppCompatActivity {
 
             @Override
             public void onSwiped(final RecyclerView.ViewHolder viewHolder, int direction) {
-                final int position = viewHolder.getAdapterPosition(); //get position which is swipe
+                final int position = viewHolder.getAdapterPosition(); //obtiene la posicion 
 
-                if (direction == ItemTouchHelper.LEFT) { //if swipe left
+                if (direction == ItemTouchHelper.LEFT) {
+                    //si deslizamos a la izquierda vamos a editar la pregunta
 
                     Intent editintent = new Intent(ListadoActivity.this, CrearEditarPreguntaActivity.class);
 
@@ -130,22 +136,58 @@ public class ListadoActivity extends AppCompatActivity {
                 }
 
 
-                    if (direction == ItemTouchHelper.RIGHT) { //if swipe right
+                    if (direction == ItemTouchHelper.RIGHT) {
+                    //si deslizamos a la derecha vamos a eliminar la pregunta,
+                    // pero antes debemos confirmar esta accion
 
-                   String codigo = Integer.toString(items.get(position).getCodigo());
-                   String enunciado =items.get(position).getEnunciado();
-                   String Categoria =items.get(position).getCategoria();
-                   String rC =items.get(position).getRespuestaCorrecta();
-                   String rI1 =items.get(position).getRespuestaIncorrecta1();
-                   String rI2 =items.get(position).getRespuestaIncorrecta2();
-                   String rI3 =items.get(position).getRespuestaIncorrecta3();
 
-                   Pregunta borrar = new Pregunta(codigo,enunciado,Categoria,rC,rI1,rI2,rI3);
 
-                   Repositorio.eliminaPregunta(borrar,myContext);
-                   onResume();
+                        //Recuperación de la vista del AlertDialog a partir del layout de la Actividad
+                        LayoutInflater layoutActivity = LayoutInflater.from(myContext);
+                        View viewAlertDialog = layoutActivity.inflate(R.layout.eliminar_dialog, null);
 
-                        MyLog.e("deslizando a la derecha", "Weputa");
+                        //Definición del AlertDialog
+                        AlertDialog.Builder alertDialog = new AlertDialog.Builder(myContext);
+
+                        //Asignación del AlertDialog a su vista
+                        alertDialog.setView(viewAlertDialog);
+
+
+                        //Configuración del AlertDialog
+                        alertDialog
+                                .setCancelable(false)
+                                //BotónAñadir
+                                .setPositiveButton(getResources().getString(R.string.delete),
+                                        new DialogInterface.OnClickListener() {
+                                            public void onClick(DialogInterface dialogBox, int id) {
+
+                                                String codigo = Integer.toString(items.get(position).getCodigo());
+                                                String enunciado =items.get(position).getEnunciado();
+                                                String Categoria =items.get(position).getCategoria();
+                                                String rC =items.get(position).getRespuestaCorrecta();
+                                                String rI1 =items.get(position).getRespuestaIncorrecta1();
+                                                String rI2 =items.get(position).getRespuestaIncorrecta2();
+                                                String rI3 =items.get(position).getRespuestaIncorrecta3();
+
+                                                Pregunta borrar = new Pregunta(codigo,enunciado,Categoria,rC,rI1,rI2,rI3);
+
+                                                Repositorio.eliminaPregunta(borrar,myContext);
+
+                                                onResume();
+
+                                            }
+                                        })
+                                                 //BotónCancelar
+                                .setNegativeButton(getResources().getString(R.string.cancel),
+                                        new DialogInterface.OnClickListener() {
+                                            public void onClick(DialogInterface dialogBox, int id) {
+                                                dialogBox.cancel();
+                                               onResume();
+                                            }
+                                        }).create()
+                                .show();
+
+
 
 
                     }
