@@ -8,6 +8,7 @@ import android.os.Bundle;
 import com.example.xisko.testme.Log.MyLog;
 import com.example.xisko.testme.R;
 
+
 public class LogoActivity extends AppCompatActivity {
     //VARIABLES PARA CAMBIAR EL SPLAHSCREEN POR LA PANTALLA DE INICIO
     private static final String TAG = "LogoActivity";

@@ -116,7 +116,7 @@ public class ListadoActivity extends AppCompatActivity {
 
             @Override
             public void onSwiped(final RecyclerView.ViewHolder viewHolder, int direction) {
-                final int position = viewHolder.getAdapterPosition(); //obtiene la posicion 
+                final int position = viewHolder.getAdapterPosition(); //obtiene la posicion
 
                 if (direction == ItemTouchHelper.LEFT) {
                     //si deslizamos a la izquierda vamos a editar la pregunta
