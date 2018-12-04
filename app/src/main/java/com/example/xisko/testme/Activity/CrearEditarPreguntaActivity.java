@@ -3,7 +3,6 @@ package com.example.xisko.testme.Activity;
 import android.Manifest;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Build;
@@ -15,7 +14,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -42,7 +40,6 @@ public class CrearEditarPreguntaActivity extends AppCompatActivity implements Vi
     private Spinner spinnerCategoria;
     private int codigoPregunta =-1;
 
-
     public int getCodigoPregunta() {
         return codigoPregunta;
     }
@@ -56,12 +53,10 @@ public class CrearEditarPreguntaActivity extends AppCompatActivity implements Vi
         setContentView(R.layout.activity_nueva_pregunta);
         myContext = this;
         constraint = findViewById(R.id.constraint);
-        //Toolbar con boton atras
 
+        //toolbar
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-
-
         final EditText pregunta = findViewById(R.id.titulo);
         final EditText correcta = findViewById(R.id.titulo2);
         final EditText incorrecta1 = findViewById(R.id.titulo3);
@@ -94,16 +89,16 @@ public class CrearEditarPreguntaActivity extends AppCompatActivity implements Vi
 
         //Si al abrir el activity de crear/editar el bundle no viene vacio se hace este if
         if(this.getIntent().getExtras()!=null) {
-        //Recuperamos la información pasada en el intent
+            //Recuperamos la información pasada en el intent
             Bundle bundle = this.getIntent().getExtras();
 
-        //Construimos el mensaje a mostrar
+            //Construimos el mensaje a mostrar
             codigoPregunta = bundle.getInt("Codigo");
             setCodigoPregunta(codigoPregunta);
 
             MyLog.i("Codigo pregunta pasada: ",Integer.toString(codigoPregunta));
 
-        //Llamams a la funcion buscar pregunta, pasandole el codigo de la pregunta y el context
+            //Llamams a la funcion buscar pregunta, pasandole el codigo de la pregunta y el context
             // al recuperarla rellenamos todos los campos mostrados en pantalla con los valores de la pregunta.
             Pregunta p= Repositorio.buscarPregunta(codigoPregunta,myContext);
             pregunta.setText(p.getEnunciado());
@@ -117,7 +112,7 @@ public class CrearEditarPreguntaActivity extends AppCompatActivity implements Vi
         }
 
 
-        }
+    }
 
 
     // A partir de Marshmallow (6.0) se pide aceptar o rechazar el permiso en tiempo de ejecución
@@ -213,13 +208,20 @@ public class CrearEditarPreguntaActivity extends AppCompatActivity implements Vi
 
             case R.id.guardar:
 
-
+                ArrayList categorias =Repositorio.getMisCategorias();
                 final EditText pregunta = findViewById(R.id.titulo);
                 final EditText correcta = findViewById(R.id.titulo2);
                 final EditText incorrecta1 = findViewById(R.id.titulo3);
                 final EditText incorrecta2 = findViewById(R.id.titulo4);
                 final EditText incorrecta3 = findViewById(R.id.titulo5);
-                final String spinner = ((Spinner) findViewById(R.id.spinner)).getSelectedItem().toString();
+                final String spinner;
+                if(categorias.isEmpty()){
+
+                    break;
+                }else{
+                   spinner = ((Spinner) findViewById(R.id.spinner)).getSelectedItem().toString();
+                }
+
 
                 compruebaPermisos();
 
@@ -247,7 +249,7 @@ public class CrearEditarPreguntaActivity extends AppCompatActivity implements Vi
                     }
 
 
-                        //mirepo.insertar(mipregunta, myContext);
+                    //mirepo.insertar(mipregunta, myContext);
 
                     finish();
 
@@ -388,13 +390,10 @@ public class CrearEditarPreguntaActivity extends AppCompatActivity implements Vi
         getMenuInflater().inflate(R.menu.crear_menu, menu);
         return true;
     }
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
         //Se crea la accion que se va a realizar al pulsar en el boton atras tanto de la interfaz
         //como de los botones del terminal
-
         switch (item.getItemId()) {
             // Respond to the action bar's Up/Home button
             case android.R.id.home:
@@ -402,24 +401,15 @@ public class CrearEditarPreguntaActivity extends AppCompatActivity implements Vi
                 onNavigateUp();
                 return true;
         }
-
         return super.onOptionsItemSelected(item);
-
     }
     @Override
     public void onBackPressed(){
-
         finish();
     }
-
     @Override
     public boolean onNavigateUp(){
-
         finish();
         return true;
     }
-
-
 }
-
-
