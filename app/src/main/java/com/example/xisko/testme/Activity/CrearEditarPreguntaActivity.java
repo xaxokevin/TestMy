@@ -217,6 +217,9 @@ public class CrearEditarPreguntaActivity extends AppCompatActivity implements Vi
                 final String spinner;
                 if(categorias.isEmpty()){
 
+                    Snackbar.make(constraint, getResources().getString(R.string.anadir_spinner), Snackbar.LENGTH_LONG)
+                            .show();
+
                     break;
                 }else{
                    spinner = ((Spinner) findViewById(R.id.spinner)).getSelectedItem().toString();
