@@ -15,9 +15,12 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 import com.example.xisko.testme.Log.MyLog;
 import com.example.xisko.testme.Persistencia.Repositorio;
@@ -35,6 +38,7 @@ public class ListadoActivity extends AppCompatActivity {
     private ArrayList<Pregunta> items;
     private Repositorio miRepo = new Repositorio();
     private Context myContext;
+    private TextView textView;
 
 
     @Override
@@ -43,9 +47,13 @@ public class ListadoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_listado);
 
+        textView =  findViewById(R.id.no_preguntas);
+
         //Añade un toolbar a la actividad
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         //Añade un boton flotante
         FloatingActionButton mas = (FloatingActionButton) findViewById(R.id.mas);
@@ -79,67 +87,69 @@ public class ListadoActivity extends AppCompatActivity {
         items = new ArrayList<>();
         miRepo.cargarPreguntas(myContext);
         items = miRepo.getMisPreguntas();
-        //Damos la vuelta al arraylist para que se muestre la ultima entrada la primera
-        Collections.reverse(items);
 
-        //creamos el recyvlerView
-        final RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
-        recyclerView.setHasFixedSize(true);
+        if(!items.isEmpty()) {
+            textView.setVisibility(View.INVISIBLE);
 
-        // Crea el Adaptador con los datos de la lista anterior
-        PreguntaAdapter adaptador = new PreguntaAdapter(items);
+            //Damos la vuelta al arraylist para que se muestre la ultima entrada la primera
+            Collections.reverse(items);
 
-        // Asocia el elemento de la lista con una acción al ser pulsado
-        adaptador.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+            //creamos el recyvlerView
+            final RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
+            recyclerView.setHasFixedSize(true);
 
-                // Acción al pulsar el elemento
-                int position = recyclerView.getChildAdapterPosition(v);
-                Toast.makeText(ListadoActivity.this, "Posición: " + String.valueOf(position) + " Id: " + items.get(position).getEnunciado() + " Nombre: " + items.get(position).getCategoria(), Toast.LENGTH_SHORT)
-                        .show();
-            }
-        });
+            // Crea el Adaptador con los datos de la lista anterior
+            PreguntaAdapter adaptador = new PreguntaAdapter(items);
 
+            // Asocia el elemento de la lista con una acción al ser pulsado
+            adaptador.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
 
-
-        // Asocia el Adaptador al RecyclerView
-        recyclerView.setAdapter(adaptador);
-
-
-        //Le asignamos movimiento a los cards, conocido como Swipe
-        ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
-            @Override
-            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
-                return false;
-            }
-
-            @Override
-            public void onSwiped(final RecyclerView.ViewHolder viewHolder, int direction) {
-                final int position = viewHolder.getAdapterPosition(); //obtiene la posicion
-
-                if (direction == ItemTouchHelper.LEFT) {
-                    //si deslizamos a la izquierda vamos a editar la pregunta
-
-                    Intent editintent = new Intent(ListadoActivity.this, CrearEditarPreguntaActivity.class);
-
-                    Bundle bundle = new Bundle();
-
-                    bundle.putInt("Codigo", items.get(position).getCodigo());
-
-                    editintent.putExtras(bundle);
-
-                    startActivity(editintent);
-
-                    MyLog.d("deslizando a la izquierda", "Weputa");
-
+                    // Acción al pulsar el elemento
+                    int position = recyclerView.getChildAdapterPosition(v);
+                    Toast.makeText(ListadoActivity.this, "Desliza a la izquierda para editar " + " o " + " Desliza a la derecha para eliminar", Toast.LENGTH_SHORT)
+                            .show();
                 }
+            });
+
+
+            // Asocia el Adaptador al RecyclerView
+            recyclerView.setAdapter(adaptador);
+
+
+            //Le asignamos movimiento a los cards, conocido como Swipe
+            ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+                @Override
+                public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+                    return false;
+                }
+
+                @Override
+                public void onSwiped(final RecyclerView.ViewHolder viewHolder, int direction) {
+                    final int position = viewHolder.getAdapterPosition(); //obtiene la posicion
+
+                    if (direction == ItemTouchHelper.LEFT) {
+                        //si deslizamos a la izquierda vamos a editar la pregunta
+
+                        Intent editintent = new Intent(ListadoActivity.this, CrearEditarPreguntaActivity.class);
+
+                        Bundle bundle = new Bundle();
+
+                        bundle.putInt("Codigo", items.get(position).getCodigo());
+
+                        editintent.putExtras(bundle);
+
+                        startActivity(editintent);
+
+                        MyLog.d("deslizando a la izquierda", "Weputa");
+
+                    }
 
 
                     if (direction == ItemTouchHelper.RIGHT) {
-                    //si deslizamos a la derecha vamos a eliminar la pregunta,
-                    // pero antes debemos confirmar esta accion
-
+                        //si deslizamos a la derecha vamos a eliminar la pregunta,
+                        // pero antes debemos confirmar esta accion
 
 
                         //Recuperación de la vista del AlertDialog a partir del layout de la Actividad
@@ -162,50 +172,55 @@ public class ListadoActivity extends AppCompatActivity {
                                             public void onClick(DialogInterface dialogBox, int id) {
 
                                                 String codigo = Integer.toString(items.get(position).getCodigo());
-                                                String enunciado =items.get(position).getEnunciado();
-                                                String Categoria =items.get(position).getCategoria();
-                                                String rC =items.get(position).getRespuestaCorrecta();
-                                                String rI1 =items.get(position).getRespuestaIncorrecta1();
-                                                String rI2 =items.get(position).getRespuestaIncorrecta2();
-                                                String rI3 =items.get(position).getRespuestaIncorrecta3();
+                                                String enunciado = items.get(position).getEnunciado();
+                                                String Categoria = items.get(position).getCategoria();
+                                                String rC = items.get(position).getRespuestaCorrecta();
+                                                String rI1 = items.get(position).getRespuestaIncorrecta1();
+                                                String rI2 = items.get(position).getRespuestaIncorrecta2();
+                                                String rI3 = items.get(position).getRespuestaIncorrecta3();
 
-                                                Pregunta borrar = new Pregunta(codigo,enunciado,Categoria,rC,rI1,rI2,rI3);
+                                                Pregunta borrar = new Pregunta(codigo, enunciado, Categoria, rC, rI1, rI2, rI3);
 
-                                                Repositorio.eliminaPregunta(borrar,myContext);
+                                                Repositorio.eliminaPregunta(borrar, myContext);
 
                                                 onResume();
 
                                             }
                                         })
-                                                 //BotónCancelar
+                                //BotónCancelar
                                 .setNegativeButton(getResources().getString(R.string.cancel),
                                         new DialogInterface.OnClickListener() {
                                             public void onClick(DialogInterface dialogBox, int id) {
                                                 dialogBox.cancel();
-                                               onResume();
+                                                onResume();
                                             }
                                         }).create()
                                 .show();
 
 
-
-
                     }
 
-            }
+                }
 
-        };
+            };
 
-        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleCallback);
-        itemTouchHelper.attachToRecyclerView(recyclerView); //establecemos el movimiento al recycler
+            ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleCallback);
+            itemTouchHelper.attachToRecyclerView(recyclerView); //establecemos el movimiento al recycler
 
-        // Muestra el RecyclerView en vertical
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+            // Muestra el RecyclerView en vertical
+            recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        // Muestra el RecyclerView en vertical
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+            // Muestra el RecyclerView en vertical
+            recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        }else{
 
-        MyLog.d(TAG, "Finalizando OnResume");
+            textView.setVisibility(View.VISIBLE);
+
+        }
+
+        MyLog.d(
+
+                TAG, "Finalizando OnResume");
 
     }
 
@@ -241,6 +256,44 @@ public class ListadoActivity extends AppCompatActivity {
         MyLog.d(TAG, "Iniciando OnDestroy");
         super.onDestroy();
         MyLog.d(TAG, "Finalizando OnDestroy");
+    }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // añade al menu un item
+        getMenuInflater().inflate(R.menu.listado_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        //Se crea la accion que se va a realizar al pulsar en el boton atras tanto de la interfaz
+        //como de los botones del terminal
+
+        switch (item.getItemId()) {
+            // Respond to the action bar's Up/Home button
+            case android.R.id.home:
+                onBackPressed();
+                onNavigateUp();
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+
+    }
+    @Override
+    public void onBackPressed(){
+
+        finish();
+    }
+
+    @Override
+    public boolean onNavigateUp(){
+
+        finish();
+        return true;
     }
 
 

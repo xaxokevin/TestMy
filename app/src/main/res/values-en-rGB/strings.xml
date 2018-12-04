@@ -27,4 +27,6 @@
     <string name="numero_preguntas">Number of questions:</string>
     <string name="eliminarPregunta">¿Really you want to delete?</string>
     <string name="delete">delete</string>
+    <string name="alumno_de_desarrollo_de_aplicaciones_multiplataformas">Students of multiplatform application develop</string>
+    <string name="no_preguntas">DB is empty or can not read</string>
 </resources>

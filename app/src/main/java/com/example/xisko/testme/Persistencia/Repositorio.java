@@ -242,25 +242,26 @@ public class Repositorio {
 
 
     //Nos devuelve la cantidad de preguntas que tenemos almacenadas
-    public String getCantidadPreguntas(Context context) {
+    public static String getCantidadPreguntas(Context context) {
 
-        String numero = "";
+
 
         BasedeDatos sdbh =
                 new BasedeDatos(context, basedeDatos, null, 1);
         SQLiteDatabase db= sdbh.getWritableDatabase();
 
-        String countQuery = "SELECT COUNT(codigo)  FROM "+ Preguntas;
 
-        Cursor c = db.rawQuery(countQuery, null);
+
+        Cursor c = db.rawQuery("SELECT count(distinct codigo) FROM '"+Preguntas+"';", null);
+        String cantidaP="";
 
         if (c.moveToFirst()) {
-            numero = c.getString(0);
+            cantidaP = c.getString(0);
         }
 
         c.close();
 
-        return numero;
+        return cantidaP;
     }
 
 }

@@ -28,5 +28,7 @@
     <string name="numero_preguntas">Numero de preguntas:</string>
     <string name="eliminarPregunta">Esta acción no se puede deshacer, ¿Quiere eliminar?</string>
     <string name="delete">eliminar</string>
+    <string name="alumno_de_desarrollo_de_aplicaciones_multiplataformas">Alumno de Desarrollo de aplicaciones multiplataformas</string>
+    <string name="no_preguntas">No hay preguntas en la base de datos</string>
 
 </resources>

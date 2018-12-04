@@ -32,6 +32,7 @@
         android:clickable="true"
         app:backgroundTint="@color/colorPrimary"
         app:layout_anchor="@+id/include"
-        app:layout_anchorGravity="right|bottom" />
+        app:layout_anchorGravity="right|bottom"
+        android:focusable="true" />
 
 </android.support.design.widget.CoordinatorLayout>

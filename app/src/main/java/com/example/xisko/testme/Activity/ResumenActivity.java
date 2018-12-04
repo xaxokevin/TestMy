@@ -86,14 +86,11 @@ public class ResumenActivity extends AppCompatActivity {
         constraint = findViewById(R.id.constraint);
         compruebaPermisos();
 
-        final TextView pregunta = findViewById(R.id.numero_preguntas);
-
-
-       // String cantidadPreguntas =  miRepo.getCantidadPreguntas(myContext);
+         TextView pregunta = findViewById(R.id.numero_preguntas);
+        pregunta.setText("Hay un total de: "+Repositorio.getCantidadPreguntas(myContext)+" preguntas almacenadas en la base de datos.");
 
 
 
-       // pregunta.setText(R.id.numero_preguntas+cantidadPreguntas);
     }
 
 
@@ -108,6 +105,8 @@ public class ResumenActivity extends AppCompatActivity {
     protected void onResume() {
         MyLog.d(TAG, "Iniciando OnResume");
         super.onResume();
+        TextView pregunta = findViewById(R.id.numero_preguntas);
+        pregunta.setText("Hay un total de: "+Repositorio.getCantidadPreguntas(myContext)+" preguntas almacenadas en la base de datos.");
         MyLog.d(TAG, "Finalizando OnResume");
     }
 

@@ -3,6 +3,7 @@ package com.example.xisko.testme.Activity;
 import android.Manifest;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Build;
@@ -14,7 +15,10 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -38,6 +42,7 @@ public class CrearEditarPreguntaActivity extends AppCompatActivity implements Vi
     private Spinner spinnerCategoria;
     private int codigoPregunta =-1;
 
+
     public int getCodigoPregunta() {
         return codigoPregunta;
     }
@@ -51,6 +56,12 @@ public class CrearEditarPreguntaActivity extends AppCompatActivity implements Vi
         setContentView(R.layout.activity_nueva_pregunta);
         myContext = this;
         constraint = findViewById(R.id.constraint);
+        //Toolbar con boton atras
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+
+
         final EditText pregunta = findViewById(R.id.titulo);
         final EditText correcta = findViewById(R.id.titulo2);
         final EditText incorrecta1 = findViewById(R.id.titulo3);
@@ -100,6 +111,7 @@ public class CrearEditarPreguntaActivity extends AppCompatActivity implements Vi
             incorrecta1.setText(p.getRespuestaIncorrecta1());
             incorrecta2.setText(p.getRespuestaIncorrecta2());
             incorrecta3.setText(p.getRespuestaIncorrecta3());
+            spinnerCategoria.setSelection(Repositorio.getMisCategorias().indexOf(p.getCategoria()));
 
 
         }
@@ -369,6 +381,45 @@ public class CrearEditarPreguntaActivity extends AppCompatActivity implements Vi
                 super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         }
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // añade al menu un item
+        getMenuInflater().inflate(R.menu.crear_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        //Se crea la accion que se va a realizar al pulsar en el boton atras tanto de la interfaz
+        //como de los botones del terminal
+
+        switch (item.getItemId()) {
+            // Respond to the action bar's Up/Home button
+            case android.R.id.home:
+                onBackPressed();
+                onNavigateUp();
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+
+    }
+    @Override
+    public void onBackPressed(){
+
+        finish();
+    }
+
+    @Override
+    public boolean onNavigateUp(){
+
+        finish();
+        return true;
+    }
+
+
 }
 
 
