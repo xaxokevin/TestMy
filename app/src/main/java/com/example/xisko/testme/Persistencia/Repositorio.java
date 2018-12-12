@@ -154,9 +154,9 @@ public class Repositorio {
             valores.put("respuestaIncorrecta3",p.getRespuestaIncorrecta3());
 
             //Actualizamoselregistroenlabasededatos
-            //String[]args=new String[]{Integer.toString(p.getCodigo())};
+            String[]args=new String[]{Integer.toString(p.getCodigo())};
             MyLog.e("Valor del codigo de actualizar",Integer.toString(p.getCodigo()));
-            db.update("Preguntas",valores,"codigo='"+p.getCodigo()+"'",null);
+            db.update("Preguntas",valores,"codigo=?",args);
 
             //Cerramoslabasededatos
             db.close();

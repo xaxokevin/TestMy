@@ -210,8 +210,7 @@ public class ListadoActivity extends AppCompatActivity {
             // Muestra el RecyclerView en vertical
             recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-            // Muestra el RecyclerView en vertical
-            recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
         }else{
 
             textView.setVisibility(View.VISIBLE);
