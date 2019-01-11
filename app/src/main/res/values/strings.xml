@@ -31,5 +31,7 @@
     <string name="alumno_de_desarrollo_de_aplicaciones_multiplataformas">Alumno de Desarrollo de aplicaciones multiplataformas</string>
     <string name="no_preguntas">No hay preguntas en la base de datos</string>
     <string name="anadir_spinner">Añada una categoria al spinner</string>
+    <string name="choose_picture">Imagen de la galeria</string>
+    <string name="error_files">error en imagen</string>
 
 </resources>

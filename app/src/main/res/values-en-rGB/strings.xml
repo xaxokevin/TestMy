@@ -29,4 +29,6 @@
     <string name="delete">delete</string>
     <string name="alumno_de_desarrollo_de_aplicaciones_multiplataformas">Students of multiplatform application develop</string>
     <string name="no_preguntas">DB is empty or can not read</string>
+    <string name="choose_picture">Imagen de la galeria</string>
+    <string name="error_files">error en imagen</string>
 </resources>

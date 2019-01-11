@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.xisko.testme.R;
@@ -32,16 +33,19 @@ public class PreguntaAdapter
 
         private TextView TextView_categoria;
         private TextView TextView_nombre;
+        private ImageView Photo;
 
         public PreguntaViewHolder(View itemView) {
             super(itemView);
             TextView_categoria = (TextView) itemView.findViewById(R.id.TextView_categoria);
             TextView_nombre = (TextView) itemView.findViewById(R.id.TextView_nombre);
+            Photo = (ImageView)itemView.findViewById(R.id.photo);
         }
 
         public void PreguntaBind(Pregunta item) {
             TextView_categoria.setText(item.getEnunciado());
             TextView_nombre.setText(item.getCategoria());
+
         }
     }
 

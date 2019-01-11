@@ -143,7 +143,7 @@ public class Repositorio {
         if(db!=null)
         {
 
-            //Establecemosloscampos-valoresaactualizar
+            //Establecemos los campos-valores a actualizar
             ContentValues valores=new ContentValues();
 
             valores.put("enunciado",p.getEnunciado());
@@ -216,7 +216,8 @@ public class Repositorio {
             String Incorrecta1 = c.getString(c.getColumnIndex("respuestaIncorrecta1"));
             String Incorrecta2 = c.getString(c.getColumnIndex("respuestaIncorrecta2"));
             String Incorrecta3 = c.getString(c.getColumnIndex("respuestaIncorrecta3"));
-            p = new Pregunta(Enunciado, Categoria, Correcta, Incorrecta1, Incorrecta2, Incorrecta3);
+            String foto = "foto";
+            p = new Pregunta(Enunciado, Categoria, Correcta, Incorrecta1, Incorrecta2, Incorrecta3, foto);
             MyLog.d("Pregunta encontrada", p.getEnunciado());
 
 

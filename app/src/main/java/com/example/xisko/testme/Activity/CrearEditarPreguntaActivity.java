@@ -1,12 +1,21 @@
 package com.example.xisko.testme.Activity;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Build;
+import android.os.Environment;
+import android.os.StrictMode;
+import android.provider.MediaStore;
 import android.support.constraint.ConstraintLayout;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
@@ -14,6 +23,8 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Base64;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -21,13 +32,22 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import com.example.xisko.testme.Log.MyLog;
 import com.example.xisko.testme.Persistencia.Repositorio;
 import com.example.xisko.testme.Pregunta.Pregunta;
 import com.example.xisko.testme.R;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import static com.example.xisko.testme.Constantes.CODE_WRITE_EXTERNAL_STORAGE_PERMISSION;
 
@@ -39,6 +59,12 @@ public class CrearEditarPreguntaActivity extends AppCompatActivity implements Vi
     private ArrayAdapter<String> adapter;
     private Spinner spinnerCategoria;
     private int codigoPregunta =-1;
+    private static final int REQUEST_CAPTURE_IMAGE = 200;
+    private static final int REQUEST_SELECT_IMAGE = 201;
+    final String pathFotos = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/demoAndroid/";
+    private Uri uri;
+
+
 
     public int getCodigoPregunta() {
         return codigoPregunta;
@@ -53,7 +79,6 @@ public class CrearEditarPreguntaActivity extends AppCompatActivity implements Vi
         setContentView(R.layout.activity_nueva_pregunta);
         myContext = this;
         constraint = findViewById(R.id.constraint);
-
         //toolbar
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
@@ -86,6 +111,13 @@ public class CrearEditarPreguntaActivity extends AppCompatActivity implements Vi
         FloatingActionButton guardar = (FloatingActionButton) findViewById(R.id.guardar);
         guardar.setImageResource(R.drawable.ic_loupe_grey600_48dp);
         guardar.setOnClickListener(this);
+
+        ImageView camara = (ImageView) findViewById(R.id.camara);
+        camara.setOnClickListener(this);
+
+        Button galeria = (Button) findViewById(R.id.galeria);
+        galeria.setOnClickListener(this);
+
 
         //Si al abrir el activity de crear/editar el bundle no viene vacio se hace este if
         if(this.getIntent().getExtras()!=null) {
@@ -214,6 +246,15 @@ public class CrearEditarPreguntaActivity extends AppCompatActivity implements Vi
                 final EditText incorrecta1 = findViewById(R.id.titulo3);
                 final EditText incorrecta2 = findViewById(R.id.titulo4);
                 final EditText incorrecta3 = findViewById(R.id.titulo5);
+                final ImageView photo = findViewById(R.id.camara);
+
+                Bitmap bm = BitmapFactory.decodeFile(pathFotos);
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                bm.compress(Bitmap.CompressFormat.JPEG, 100, baos); //bm is the bitmap object
+                byte[] b = baos.toByteArray();
+                String encodedImage = Base64.encodeToString(b, Base64.DEFAULT);
+
+
                 final String spinner;
                 if(categorias.isEmpty()){
 
@@ -237,14 +278,15 @@ public class CrearEditarPreguntaActivity extends AppCompatActivity implements Vi
                     if(getCodigoPregunta()!=-1){
 
                         Pregunta actualizaPregunta = new Pregunta(Integer.toString(getCodigoPregunta()),pregunta.getText().toString(), spinner, correcta.getText().toString(),
-                                incorrecta1.getText().toString(), incorrecta2.getText().toString(), incorrecta3.getText().toString());
+                                incorrecta1.getText().toString(), incorrecta2.getText().toString(), incorrecta3.getText().toString()
+                        );
 
                         Repositorio.actualizarPregunta(actualizaPregunta,myContext);
                         MyLog.i("Pregunta", "Actualizada");
                     }else{
 
                         Pregunta mipregunta = new Pregunta(pregunta.getText().toString(), spinner, correcta.getText().toString(),
-                                incorrecta1.getText().toString(), incorrecta2.getText().toString(), incorrecta3.getText().toString());
+                                incorrecta1.getText().toString(), incorrecta2.getText().toString(), incorrecta3.getText().toString(), encodedImage);
 
                         mirepo.insertar(mipregunta, myContext);
 
@@ -357,6 +399,22 @@ public class CrearEditarPreguntaActivity extends AppCompatActivity implements Vi
                 break;
 
 
+            case R.id.camara:
+
+                takePicture();
+
+
+                break;
+
+
+            case R.id.galeria:
+
+
+                selectPicture();
+
+                break;
+
+
             default:
                 break;
         }
@@ -384,6 +442,111 @@ public class CrearEditarPreguntaActivity extends AppCompatActivity implements Vi
                 break;
             default:
                 super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
+    }
+
+
+    private void takePicture() {
+        try {
+            // Se crea el directorio para las fotografías
+            File dirFotos = new File(pathFotos);
+            dirFotos.mkdirs();
+
+            // Se crea el archivo para almacenar la fotografía
+            File fileFoto = File.createTempFile(getFileCode(),".jpg", dirFotos);
+
+            // Se crea el objeto Uri a partir del archivo
+            // A partir de la API 24 se debe utilizar FileProvider para proteger
+            // con permisos los archivos creados
+            // Con estas funciones podemos evitarlo
+            // https://stackoverflow.com/questions/42251634/android-os-fileuriexposedexception-file-jpg-exposed-beyond-app-through-clipdata
+            StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
+            StrictMode.setVmPolicy(builder.build());
+            uri = Uri.fromFile(fileFoto);
+            Log.d("foto hecha", uri.getPath().toString());
+
+            // Se crea la comunicación con la cámara
+            Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            // Se le indica dónde almacenar la fotografía
+            cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
+            // Se lanza la cámara y se espera su resultado
+            startActivityForResult(cameraIntent, REQUEST_CAPTURE_IMAGE);
+
+        } catch (IOException ex) {
+
+            Log.d("foto no hecha", "Error: " + ex);
+            CoordinatorLayout coordinatorLayout = findViewById(R.id.constraint);
+            Snackbar snackbar = Snackbar
+                    .make(coordinatorLayout, getResources().getString(R.string.error_files), Snackbar.LENGTH_LONG);
+            snackbar.show();
+        }
+    }
+
+    private void selectPicture(){
+        // Se le pide al sistema una imagen del dispositivo
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(
+                Intent.createChooser(intent, getResources().getString(R.string.choose_picture)),
+                REQUEST_SELECT_IMAGE);
+    }
+
+    private String getFileCode()
+    {
+        // Se crea un código a partir de la fecha y hora
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyymmddhhmmss", java.util.Locale.getDefault());
+        String date = dateFormat.format(new Date());
+        // Se devuelve el código
+        return "pic_" + date;
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode) {
+
+            case (REQUEST_CAPTURE_IMAGE):
+                if(resultCode == Activity.RESULT_OK){
+                    // Se carga la imagen desde un objeto URI al imageView
+                    ImageView imageView = findViewById(R.id.camara);
+                    imageView.setImageURI(uri);
+
+                    // Se le envía un broadcast a la Galería para que se actualice
+                    Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+                    mediaScanIntent.setData(uri);
+                    sendBroadcast(mediaScanIntent);
+                } else if (resultCode == Activity.RESULT_CANCELED) {
+                    // Se borra el archivo temporal
+                    File file = new File(uri.getPath());
+                    file.delete();
+                }
+                break;
+
+            case (REQUEST_SELECT_IMAGE):
+                if (resultCode == Activity.RESULT_OK) {
+                    // Se carga la imagen desde un objeto Bitmap
+                    Uri selectedImage = data.getData();
+                    String selectedPath = selectedImage.getPath();
+
+                    if (selectedPath != null) {
+                        // Se leen los bytes de la imagen
+                        InputStream imageStream = null;
+                        try {
+                            imageStream = getContentResolver().openInputStream(selectedImage);
+                        } catch (FileNotFoundException e) {
+                            e.printStackTrace();
+                        }
+
+                        // Se transformam los bytes de la imagen a un Bitmap
+                        Bitmap bmp = BitmapFactory.decodeStream(imageStream);
+
+                        // Se carga el Bitmap en el ImageView
+                        ImageView imageView = findViewById(R.id.camara);
+                        imageView.setImageBitmap(bmp);
+                    }
+                }
+                break;
         }
     }
 

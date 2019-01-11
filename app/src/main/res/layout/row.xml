@@ -19,6 +19,15 @@
             android:layout_height="match_parent"
             android:padding="2dp">
 
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/photo"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginRight="16dp"
+                />
+
             <TextView
                 android:id="@+id/TextView_nombre"
                 android:layout_width="wrap_content"
