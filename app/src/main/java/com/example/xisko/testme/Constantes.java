@@ -8,7 +8,7 @@ public class Constantes {
 
     //Base de datos
     public static final String basedeDatos = "DBPreguntas.db";
-    public static final int DB_VERSION = 1;
+    public static final int DB_VERSION = 2;
     public static final String Preguntas = "Preguntas";
     public static final String enunciado = "enunciado";
     public static final String categoria = "categoria";

@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
 
 import com.example.xisko.testme.R;
 
@@ -43,6 +44,15 @@ public class AcercaDeActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+
+
 
     }
     @Override

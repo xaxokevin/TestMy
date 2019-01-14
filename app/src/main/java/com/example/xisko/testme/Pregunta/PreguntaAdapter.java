@@ -1,7 +1,10 @@
 
 package com.example.xisko.testme.Pregunta;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,6 +48,9 @@ public class PreguntaAdapter
         public void PreguntaBind(Pregunta item) {
             TextView_categoria.setText(item.getEnunciado());
             TextView_nombre.setText(item.getCategoria());
+            byte[] decodedString = Base64.decode(item.getPhoto(), Base64.DEFAULT);
+            Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+            Photo.setImageBitmap(decodedByte);
 
         }
     }

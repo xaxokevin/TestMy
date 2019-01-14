@@ -63,6 +63,7 @@ public class CrearEditarPreguntaActivity extends AppCompatActivity implements Vi
     private static final int REQUEST_SELECT_IMAGE = 201;
     final String pathFotos = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/demoAndroid/";
     private Uri uri;
+    String encodedImage;
 
 
 
@@ -87,6 +88,7 @@ public class CrearEditarPreguntaActivity extends AppCompatActivity implements Vi
         final EditText incorrecta1 = findViewById(R.id.titulo3);
         final EditText incorrecta2 = findViewById(R.id.titulo4);
         final EditText incorrecta3 = findViewById(R.id.titulo5);
+        final ImageView photo = findViewById(R.id.photo);
 
 
 
@@ -139,6 +141,8 @@ public class CrearEditarPreguntaActivity extends AppCompatActivity implements Vi
             incorrecta2.setText(p.getRespuestaIncorrecta2());
             incorrecta3.setText(p.getRespuestaIncorrecta3());
             spinnerCategoria.setSelection(Repositorio.getMisCategorias().indexOf(p.getCategoria()));
+            //photo.setImageURI(Uri.parse(p.getPhoto()));
+
 
 
         }
@@ -246,13 +250,15 @@ public class CrearEditarPreguntaActivity extends AppCompatActivity implements Vi
                 final EditText incorrecta1 = findViewById(R.id.titulo3);
                 final EditText incorrecta2 = findViewById(R.id.titulo4);
                 final EditText incorrecta3 = findViewById(R.id.titulo5);
-                final ImageView photo = findViewById(R.id.camara);
 
-                Bitmap bm = BitmapFactory.decodeFile(pathFotos);
-                ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                bm.compress(Bitmap.CompressFormat.JPEG, 100, baos); //bm is the bitmap object
-                byte[] b = baos.toByteArray();
-                String encodedImage = Base64.encodeToString(b, Base64.DEFAULT);
+                if(uri != null) {
+                    Bitmap bm = BitmapFactory.decodeFile(uri.getPath());
+                    Bitmap  resized= Bitmap.createScaledBitmap(bm, 500, 500, true);
+                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                    resized.compress(Bitmap.CompressFormat.JPEG, 100, baos); //bm is the bitmap object
+                    byte[] b = baos.toByteArray();
+                    encodedImage = Base64.encodeToString(b, Base64.DEFAULT);
+                }
 
 
                 final String spinner;
@@ -275,22 +281,54 @@ public class CrearEditarPreguntaActivity extends AppCompatActivity implements Vi
 
 
 
-                    if(getCodigoPregunta()!=-1){
+                    if(getCodigoPregunta()!=-1 && uri != null){
+
+                        Pregunta actualizaPregunta = new Pregunta(Integer.toString(getCodigoPregunta()),pregunta.getText().toString(), spinner, correcta.getText().toString(),
+                                incorrecta1.getText().toString(), incorrecta2.getText().toString(), incorrecta3.getText().toString(),encodedImage
+                        );
+
+                        Repositorio.actualizarPregunta(actualizaPregunta,myContext);
+                        uri= null;
+                        MyLog.i("Pregunta", "Actualizada");
+                    }else if(getCodigoPregunta()!=-1 && uri == null){
 
                         Pregunta actualizaPregunta = new Pregunta(Integer.toString(getCodigoPregunta()),pregunta.getText().toString(), spinner, correcta.getText().toString(),
                                 incorrecta1.getText().toString(), incorrecta2.getText().toString(), incorrecta3.getText().toString()
                         );
 
+
+
                         Repositorio.actualizarPregunta(actualizaPregunta,myContext);
+                        uri= null;
                         MyLog.i("Pregunta", "Actualizada");
-                    }else{
+
+
+
+
+                    }else if(uri != null){
 
                         Pregunta mipregunta = new Pregunta(pregunta.getText().toString(), spinner, correcta.getText().toString(),
                                 incorrecta1.getText().toString(), incorrecta2.getText().toString(), incorrecta3.getText().toString(), encodedImage);
 
-                        mirepo.insertar(mipregunta, myContext);
+                        mirepo.insertarF(mipregunta, myContext);
+
+                        uri= null;
 
                         MyLog.i("Pregunta", "Creada");
+
+
+                    }else if(uri == null){
+
+                        Pregunta mipregunta = new Pregunta(pregunta.getText().toString(), spinner, correcta.getText().toString(),
+                                incorrecta1.getText().toString(), incorrecta2.getText().toString(), incorrecta3.getText().toString());
+
+                        mirepo.insertarF(mipregunta, myContext);
+
+                        uri= null;
+
+                        MyLog.i("Pregunta", "Creada");
+
+
                     }
 
 

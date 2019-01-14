@@ -9,32 +9,46 @@ public class Pregunta {
     private String enunciado;
     private String categoria;
     private String respuestaCorrecta;
-    private String getRespuestaIncorrecta1;
-    private String getRespuestaIncorrecta2;
-    private String getRespuestaIncorrecta3;
+    private String RespuestaIncorrecta1;
+    private String RespuestaIncorrecta2;
+    private String RespuestaIncorrecta3;
     private String photo;
 
 
-    //Se crean 2 Constructores uno para el insert y uno para el select de la base de datos
-    public Pregunta(String enunciado, String categoria, String respuestaCorrecta, String getRespuestaIncorrecta1, String getRespuestaIncorrecta2, String getRespuestaIncorrecta3, String photo) {
+    //Se crean 3 Constructores uno para el insert sin imange, uno para el insert con imagen y uno para el select de la base de datos
+    public Pregunta(String enunciado, String categoria, String respuestaCorrecta, String RespuestaIncorrecta1, String RespuestaIncorrecta2, String RespuestaIncorrecta3, String photo) {
         this.enunciado = enunciado;
         this.categoria = categoria;
         this.respuestaCorrecta = respuestaCorrecta;
-        this.getRespuestaIncorrecta1 = getRespuestaIncorrecta1;
-        this.getRespuestaIncorrecta2 = getRespuestaIncorrecta2;
-        this.getRespuestaIncorrecta3 = getRespuestaIncorrecta3;
+        this.RespuestaIncorrecta1 = RespuestaIncorrecta1;
+        this.RespuestaIncorrecta2 = RespuestaIncorrecta2;
+        this.RespuestaIncorrecta3 = RespuestaIncorrecta3;
         this.photo = photo;
+
     }
-    public Pregunta(String codigo, String enunciado, String categoria, String respuestaCorrecta, String getRespuestaIncorrecta1, String getRespuestaIncorrecta2, String getRespuestaIncorrecta3, String photo) {
+    public Pregunta(String codigo, String enunciado, String categoria, String respuestaCorrecta, String RespuestaIncorrecta1, String RespuestaIncorrecta2, String RespuestaIncorrecta3, String photo) {
         this.codigo = Integer.parseInt(codigo);
         this.enunciado = enunciado;
         this.categoria = categoria;
         this.respuestaCorrecta = respuestaCorrecta;
-        this.getRespuestaIncorrecta1 = getRespuestaIncorrecta1;
-        this.getRespuestaIncorrecta2 = getRespuestaIncorrecta2;
-        this.getRespuestaIncorrecta3 = getRespuestaIncorrecta3;
+        this.RespuestaIncorrecta1 = RespuestaIncorrecta1;
+        this.RespuestaIncorrecta2 = RespuestaIncorrecta2;
+        this.RespuestaIncorrecta3 = RespuestaIncorrecta3;
         this.photo = photo;
     }
+
+
+    public Pregunta(String enunciado, String categoria, String respuestaCorrecta, String RespuestaIncorrecta1, String RespuestaIncorrecta2, String RespuestaIncorrecta3) {
+        this.enunciado = enunciado;
+        this.categoria = categoria;
+        this.respuestaCorrecta = respuestaCorrecta;
+        this.RespuestaIncorrecta1 = RespuestaIncorrecta1;
+        this.RespuestaIncorrecta2 = RespuestaIncorrecta2;
+        this.RespuestaIncorrecta3 = RespuestaIncorrecta3;
+
+    }
+
+
 
     //Metodos geters de la clase
     public int getCodigo() {
@@ -62,22 +76,26 @@ public class Pregunta {
 
 
     public String getRespuestaIncorrecta1() {
-        return getRespuestaIncorrecta1;
+        return RespuestaIncorrecta1;
     }
 
 
 
     public String getRespuestaIncorrecta2() {
-        return getRespuestaIncorrecta2;
+        return RespuestaIncorrecta2;
     }
 
 
 
     public String getRespuestaIncorrecta3() {
-        return getRespuestaIncorrecta3;
+        return RespuestaIncorrecta3;
     }
 
     public String getPhoto() {
         return photo;
+    }
+
+    public void setPhoto(String photo){
+        this.photo=photo;
     }
 }

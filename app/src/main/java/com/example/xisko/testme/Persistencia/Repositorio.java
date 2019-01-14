@@ -11,6 +11,7 @@ import com.example.xisko.testme.Pregunta.Pregunta;
 
 import java.util.ArrayList;
 
+import static com.example.xisko.testme.Constantes.DB_VERSION;
 import static com.example.xisko.testme.Constantes.Preguntas;
 import static com.example.xisko.testme.Constantes.basedeDatos;
 
@@ -29,14 +30,14 @@ public class Repositorio {
 
 
 
-    //Metodo que inserta registros en la BD
+    //Metodo que inserta registros en la BD sin imagen
     public static boolean insertar(Pregunta p, Context contexto) {
 
         boolean valor = true;
 
         //Abrimos la base de datos 'DBUsuarios' en modo escritura
         BasedeDatos usdbh =
-                new BasedeDatos(contexto, basedeDatos, null, 1);
+                new BasedeDatos(contexto, basedeDatos, null, DB_VERSION);
 
         SQLiteDatabase db = usdbh.getWritableDatabase();
 
@@ -45,6 +46,32 @@ public class Repositorio {
 
             db.execSQL("INSERT INTO '"+Preguntas+"' (enunciado, categoria, respuestaCorrecta, respuestaIncorrecta1, respuestaIncorrecta2, respuestaIncorrecta3)"+
                     "VALUES ('" + p.getEnunciado() + "', '" + p.getCategoria() + "', '"+ p.getRespuestaCorrecta()+"', '"+ p.getRespuestaIncorrecta1()+"', '"+p.getRespuestaIncorrecta2()+"', '"+p.getRespuestaIncorrecta3()+"')");
+
+            //Cerramos la base de datos
+            db.close();
+        } else {
+            valor = false;
+        }
+
+        return valor;
+    }
+
+    //Metodo que inserta registros en la BD con imagen
+    public static boolean insertarF(Pregunta p, Context contexto) {
+
+        boolean valor = true;
+
+        //Abrimos la base de datos 'DBUsuarios' en modo escritura
+        BasedeDatos usdbh =
+                new BasedeDatos(contexto, basedeDatos, null, DB_VERSION);
+
+        SQLiteDatabase db = usdbh.getWritableDatabase();
+
+        //Si hemos abierto correctamente la base de datos
+        if (db != null) {
+
+            db.execSQL("INSERT INTO '"+Preguntas+"' (enunciado, categoria, respuestaCorrecta, respuestaIncorrecta1, respuestaIncorrecta2, respuestaIncorrecta3, photo)"+
+                    "VALUES ('" + p.getEnunciado() + "', '" + p.getCategoria() + "', '"+ p.getRespuestaCorrecta()+"', '"+ p.getRespuestaIncorrecta1()+"', '"+p.getRespuestaIncorrecta2()+"', '"+p.getRespuestaIncorrecta3()+"','"+p.getPhoto()+"')");
 
             //Cerramos la base de datos
             db.close();
@@ -65,11 +92,11 @@ public class Repositorio {
 
 
         BasedeDatos usdbh =
-                new BasedeDatos(context, basedeDatos, null, 1);
+                new BasedeDatos(context, basedeDatos, null, DB_VERSION);
 
         SQLiteDatabase db = usdbh.getWritableDatabase();
 
-        Cursor c = db.rawQuery("SELECT DISTINCT categoria FROM Preguntas", null);
+        Cursor c = db.rawQuery("SELECT DISTINCT categoria FROM '"+Preguntas+"'", null);
 
         //Nos aseguramos de que existe al menos un registro
         if (c.moveToFirst()) {
@@ -82,6 +109,9 @@ public class Repositorio {
                 misCategorias.add(Categoria);
 
             } while(c.moveToNext());
+
+            c.close();
+            db.close();
         }
 
 
@@ -95,15 +125,16 @@ public class Repositorio {
         misPreguntas = new ArrayList<Pregunta>();
 
 
-        BasedeDatos usdbh =
-                new BasedeDatos(contexto, basedeDatos, null, 1);
+        BasedeDatos sdbh =
+                new BasedeDatos(contexto, basedeDatos, null, DB_VERSION);
+        SQLiteDatabase db= sdbh.getWritableDatabase();
 
-        SQLiteDatabase db = usdbh.getWritableDatabase();
-
-        Cursor c = db.rawQuery("SELECT * FROM Preguntas", null);
+        Cursor c = db.rawQuery("SELECT * FROM '"+Preguntas+"'", null);
 
         //Nos aseguramos de que existe al menos un registro
         if (c.moveToFirst()) {
+
+
             //Recorremos el cursor hasta que no haya más registros
             do {
                 String codigo=c.getString( c.getColumnIndex("codigo"));
@@ -113,13 +144,19 @@ public class Repositorio {
                 String Incorrecta1 = c.getString( c.getColumnIndex("respuestaIncorrecta1"));
                 String Incorrecta2 = c.getString( c.getColumnIndex("respuestaIncorrecta2"));
                 String Incorrecta3 = c.getString( c.getColumnIndex("respuestaIncorrecta3"));
-                Pregunta p = new Pregunta(codigo,Enunciado, Categoria,Correcta,Incorrecta1,Incorrecta2,Incorrecta3);
+                String photo = c.getString(c.getColumnIndex("photo"));
+
+
+                Pregunta p = new Pregunta(codigo,Enunciado, Categoria,Correcta,Incorrecta1,Incorrecta2,Incorrecta3,photo);
                 misPreguntas.add(p);
                 MyLog.d("Repositoriooooooooooooooooooo", p.getEnunciado());
                 MyLog.i("Codigo preguntasss",Integer.toString(p.getCodigo()));
             } while(c.moveToNext());
 
+            c.close();
+
         }
+        db.close();
 
 
 
@@ -135,7 +172,7 @@ public class Repositorio {
 
         //Abrimos la basededatos en modo escritura
         BasedeDatos sdbh=
-                new BasedeDatos(contexto,basedeDatos,null,1);
+                new BasedeDatos(contexto,basedeDatos,null,DB_VERSION);
 
         SQLiteDatabase db= sdbh.getWritableDatabase();
 
@@ -171,7 +208,7 @@ public class Repositorio {
 
         //Abrimos la basededatos en modo escritura
         BasedeDatos sdbh=
-                new BasedeDatos(context,basedeDatos,null,1);
+                new BasedeDatos(context,basedeDatos,null,DB_VERSION);
 
         SQLiteDatabase db= sdbh.getWritableDatabase();
 
@@ -201,7 +238,7 @@ public class Repositorio {
 
 
         BasedeDatos usdbh =
-                new BasedeDatos(context, basedeDatos, null, 1);
+                new BasedeDatos(context, basedeDatos, null, DB_VERSION);
 
         SQLiteDatabase db = usdbh.getWritableDatabase();
 
@@ -223,7 +260,11 @@ public class Repositorio {
 
         }
         c.close();
+
+        db.close();
         return p;
+
+
 
     }
 
@@ -248,7 +289,7 @@ public class Repositorio {
 
 
         BasedeDatos sdbh =
-                new BasedeDatos(context, basedeDatos, null, 1);
+                new BasedeDatos(context, basedeDatos, null, DB_VERSION);
         SQLiteDatabase db= sdbh.getWritableDatabase();
 
 
@@ -261,6 +302,8 @@ public class Repositorio {
         }
 
         c.close();
+
+        db.close();
 
         return cantidaP;
     }

@@ -14,7 +14,7 @@ public class BasedeDatos extends SQLiteOpenHelper {
 
         //Sentencia SQL para crear la tabla de Preguntas
 
-        String sqlCreate = "CREATE TABLE '"+Preguntas+"' (codigo INTEGER PRIMARY KEY AUTOINCREMENT, enunciado TEXT,categoria TEXT, respuestaCorrecta TEXT, respuestaIncorrecta1 TEXT, respuestaIncorrecta2 TEXT, respuestaIncorrecta3 TEXT)";
+        String sqlCreate = "CREATE TABLE '"+Preguntas+"' (codigo INTEGER PRIMARY KEY AUTOINCREMENT, enunciado TEXT,categoria TEXT, respuestaCorrecta TEXT, respuestaIncorrecta1 TEXT, respuestaIncorrecta2 TEXT, respuestaIncorrecta3 TEXT, photo TEXT)";
 
     public BasedeDatos(Context contexto, String nombre, CursorFactory factory, int version){
         super(contexto, basedeDatos, factory, DB_VERSION);
