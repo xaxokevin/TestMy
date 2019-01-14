@@ -88,7 +88,7 @@ public class CrearEditarPreguntaActivity extends AppCompatActivity implements Vi
         final EditText incorrecta1 = findViewById(R.id.titulo3);
         final EditText incorrecta2 = findViewById(R.id.titulo4);
         final EditText incorrecta3 = findViewById(R.id.titulo5);
-        final ImageView photo = findViewById(R.id.photo);
+        final ImageView photo = (ImageView)findViewById(R.id.camara);
 
 
 
@@ -141,7 +141,10 @@ public class CrearEditarPreguntaActivity extends AppCompatActivity implements Vi
             incorrecta2.setText(p.getRespuestaIncorrecta2());
             incorrecta3.setText(p.getRespuestaIncorrecta3());
             spinnerCategoria.setSelection(Repositorio.getMisCategorias().indexOf(p.getCategoria()));
-            //photo.setImageURI(Uri.parse(p.getPhoto()));
+            MyLog.d("nombre foto: ", p.getPhoto());
+            byte[] decodedString = Base64.decode(p.getPhoto(), Base64.DEFAULT);
+            Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+            photo.setImageBitmap(decodedByte);
 
 
 

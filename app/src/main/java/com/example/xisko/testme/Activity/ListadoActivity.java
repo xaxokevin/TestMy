@@ -178,8 +178,9 @@ public class ListadoActivity extends AppCompatActivity {
                                                 String rI1 = items.get(position).getRespuestaIncorrecta1();
                                                 String rI2 = items.get(position).getRespuestaIncorrecta2();
                                                 String rI3 = items.get(position).getRespuestaIncorrecta3();
+                                                String photo = items.get(position).getPhoto();
 
-                                                Pregunta borrar = new Pregunta(codigo, enunciado, Categoria, rC, rI1, rI2, rI3);
+                                                Pregunta borrar = new Pregunta(codigo, enunciado, Categoria, rC, rI1, rI2, rI3,photo);
 
                                                 Repositorio.eliminaPregunta(borrar, myContext);
 

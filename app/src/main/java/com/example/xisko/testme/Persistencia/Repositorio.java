@@ -253,7 +253,7 @@ public class Repositorio {
             String Incorrecta1 = c.getString(c.getColumnIndex("respuestaIncorrecta1"));
             String Incorrecta2 = c.getString(c.getColumnIndex("respuestaIncorrecta2"));
             String Incorrecta3 = c.getString(c.getColumnIndex("respuestaIncorrecta3"));
-            String foto = "foto";
+            String foto = c.getString(c.getColumnIndex("photo"));
             p = new Pregunta(Enunciado, Categoria, Correcta, Incorrecta1, Incorrecta2, Incorrecta3, foto);
             MyLog.d("Pregunta encontrada", p.getEnunciado());
 
