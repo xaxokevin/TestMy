@@ -9,6 +9,8 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
@@ -49,6 +51,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
+import static com.example.xisko.testme.Constantes.CODE_CAMERA_PERMISSION;
 import static com.example.xisko.testme.Constantes.CODE_WRITE_EXTERNAL_STORAGE_PERMISSION;
 
 public class CrearEditarPreguntaActivity extends AppCompatActivity implements View.OnClickListener {
@@ -63,7 +66,7 @@ public class CrearEditarPreguntaActivity extends AppCompatActivity implements Vi
     private static final int REQUEST_SELECT_IMAGE = 201;
     final String pathFotos = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/demoAndroid/";
     private Uri uri;
-    String encodedImage;
+    private Bitmap bitmap;
 
 
 
@@ -89,6 +92,7 @@ public class CrearEditarPreguntaActivity extends AppCompatActivity implements Vi
         final EditText incorrecta2 = findViewById(R.id.titulo4);
         final EditText incorrecta3 = findViewById(R.id.titulo5);
         final ImageView photo = (ImageView)findViewById(R.id.camara);
+
 
 
 
@@ -119,6 +123,9 @@ public class CrearEditarPreguntaActivity extends AppCompatActivity implements Vi
 
         Button galeria = (Button) findViewById(R.id.galeria);
         galeria.setOnClickListener(this);
+
+        Button eliminar = (Button) findViewById(R.id.eliminar);
+        eliminar.setOnClickListener(this);
 
 
         //Si al abrir el activity de crear/editar el bundle no viene vacio se hace este if
@@ -154,30 +161,7 @@ public class CrearEditarPreguntaActivity extends AppCompatActivity implements Vi
     }
 
 
-    // A partir de Marshmallow (6.0) se pide aceptar o rechazar el permiso en tiempo de ejecución
-    // En las versiones anteriores no es posible hacerlo
-    // Una vez que se pide aceptar o rechazar el permiso se ejecuta el método "onRequestPermissionsResult" para manejar la respuesta
-    // Si el usuario marca "No preguntar más" no se volverá a mostrar este diálogo
-    private void compruebaPermisos() {
-        int WriteExternalStoragePermission = ContextCompat.checkSelfPermission(myContext, Manifest.permission.WRITE_EXTERNAL_STORAGE);
-        MyLog.d("MainActivity", "WRITE_EXTERNAL_STORAGE Permission: " + WriteExternalStoragePermission);
 
-        if (WriteExternalStoragePermission != PackageManager.PERMISSION_GRANTED) {
-
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                ActivityCompat.requestPermissions(CrearEditarPreguntaActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, CODE_WRITE_EXTERNAL_STORAGE_PERMISSION);
-
-            } else {
-                Snackbar.make(constraint, getResources().getString(R.string.write_permission_denied), Snackbar.LENGTH_LONG)
-                        .show();
-            }
-        } else {
-            // Permiso aceptado
-            Snackbar.make(constraint, getResources().getString(R.string.write_permission_granted), Snackbar.LENGTH_LONG)
-                    .show();
-        }
-    }
 
     //Comprueba que todos los campos de la pregunta este relleno,
     // no permite que guardes hasta que este todo completo
@@ -254,14 +238,6 @@ public class CrearEditarPreguntaActivity extends AppCompatActivity implements Vi
                 final EditText incorrecta2 = findViewById(R.id.titulo4);
                 final EditText incorrecta3 = findViewById(R.id.titulo5);
 
-                if(uri != null) {
-                    Bitmap bm = BitmapFactory.decodeFile(uri.getPath());
-                    Bitmap  resized= Bitmap.createScaledBitmap(bm, 500, 500, true);
-                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                    resized.compress(Bitmap.CompressFormat.JPEG, 100, baos); //bm is the bitmap object
-                    byte[] b = baos.toByteArray();
-                    encodedImage = Base64.encodeToString(b, Base64.DEFAULT);
-                }
 
 
                 final String spinner;
@@ -276,7 +252,8 @@ public class CrearEditarPreguntaActivity extends AppCompatActivity implements Vi
                 }
 
 
-                compruebaPermisos();
+                compruebaPermisosEscritura();
+                compruebaPermisosCamera();
 
                 if (compruebaPregunta(v, pregunta, correcta, incorrecta1, incorrecta2, incorrecta3) == true) {
 
@@ -284,46 +261,28 @@ public class CrearEditarPreguntaActivity extends AppCompatActivity implements Vi
 
 
 
-                    if(getCodigoPregunta()!=-1 && uri != null){
+                    if(getCodigoPregunta()!=-1 ){
+
+                        //Creamos el Bitmap desde el ImageView
+                        ImageView imageView= findViewById(R.id.camara);
+                        BitmapDrawable drawable = (BitmapDrawable) imageView.getDrawable();
+                        if(drawable!= null){
+                            bitmap = drawable.getBitmap();
+                        }else{
+                            bitmap=null;
+                        }
 
                         Pregunta actualizaPregunta = new Pregunta(Integer.toString(getCodigoPregunta()),pregunta.getText().toString(), spinner, correcta.getText().toString(),
-                                incorrecta1.getText().toString(), incorrecta2.getText().toString(), incorrecta3.getText().toString(),encodedImage
+                                incorrecta1.getText().toString(), incorrecta2.getText().toString(), incorrecta3.getText().toString(),conversoraImagen64(bitmap)
                         );
 
                         Repositorio.actualizarPregunta(actualizaPregunta,myContext);
                         uri= null;
                         MyLog.i("Pregunta", "Actualizada");
-                    }else if(getCodigoPregunta()!=-1 && uri == null){
-
-                        Pregunta actualizaPregunta = new Pregunta(Integer.toString(getCodigoPregunta()),pregunta.getText().toString(), spinner, correcta.getText().toString(),
-                                incorrecta1.getText().toString(), incorrecta2.getText().toString(), incorrecta3.getText().toString()
-                        );
-
-
-
-                        Repositorio.actualizarPregunta(actualizaPregunta,myContext);
-                        uri= null;
-                        MyLog.i("Pregunta", "Actualizada");
-
-
-
-
-                    }else if(uri != null){
+                    }else{
 
                         Pregunta mipregunta = new Pregunta(pregunta.getText().toString(), spinner, correcta.getText().toString(),
-                                incorrecta1.getText().toString(), incorrecta2.getText().toString(), incorrecta3.getText().toString(), encodedImage);
-
-                        mirepo.insertarF(mipregunta, myContext);
-
-                        uri= null;
-
-                        MyLog.i("Pregunta", "Creada");
-
-
-                    }else if(uri == null){
-
-                        Pregunta mipregunta = new Pregunta(pregunta.getText().toString(), spinner, correcta.getText().toString(),
-                                incorrecta1.getText().toString(), incorrecta2.getText().toString(), incorrecta3.getText().toString());
+                                incorrecta1.getText().toString(), incorrecta2.getText().toString(), incorrecta3.getText().toString(), conversoraImagen64(bitmap));
 
                         mirepo.insertarF(mipregunta, myContext);
 
@@ -333,7 +292,6 @@ public class CrearEditarPreguntaActivity extends AppCompatActivity implements Vi
 
 
                     }
-
 
                     //mirepo.insertar(mipregunta, myContext);
 
@@ -455,6 +413,18 @@ public class CrearEditarPreguntaActivity extends AppCompatActivity implements Vi
 
                 break;
 
+            case R.id.eliminar:
+
+                ImageView imageView= findViewById(R.id.camara);
+
+                imageView.setImageDrawable(Drawable.createFromPath("@android:drawable/ic_menu_camera"));
+
+                bitmap= null;
+
+
+
+                break;
+
 
             default:
                 break;
@@ -462,21 +432,85 @@ public class CrearEditarPreguntaActivity extends AppCompatActivity implements Vi
 
     }
 
-    //Maneja la respuesta del comprueba permisos
+    // A partir de Marshmallow (6.0) se pide aceptar o rechazar el permiso en tiempo de ejecución
+    // En las versiones anteriores no es posible hacerlo
+    // Una vez que se pide aceptar o rechazar el permiso se ejecuta el método "onRequestPermissionsResult" para manejar la respuesta
+    // Si el usuario marca "No preguntar más" no se volverá a mostrar este diálogo
+    private void compruebaPermisosEscritura() {
+        int WriteExternalStoragePermission = ContextCompat.checkSelfPermission(myContext, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+
+        MyLog.d("Crear editar", "WRITE_EXTERNAL_STORAGE Permission: " + WriteExternalStoragePermission);
+
+
+        if (WriteExternalStoragePermission != PackageManager.PERMISSION_GRANTED ) {
+
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+                ActivityCompat.requestPermissions(CrearEditarPreguntaActivity.this, new String[] {Manifest.permission.WRITE_EXTERNAL_STORAGE}, CODE_WRITE_EXTERNAL_STORAGE_PERMISSION);
+
+
+            } else {
+
+                MyLog.e("Permisos: ","Rechazados");
+
+            }
+        } else {
+
+            MyLog.e("Permisos: ","Rechazados");
+        }
+    }
+
+    private void compruebaPermisosCamera(){
+        int CameraPermission = ContextCompat.checkSelfPermission(myContext, Manifest.permission.CAMERA);
+        MyLog.d("Crear editar", "WRITE_EXTERNAL_STORAGE Permission: " + CameraPermission);
+
+
+        if (CameraPermission != PackageManager.PERMISSION_GRANTED) {
+
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+
+                ActivityCompat.requestPermissions(CrearEditarPreguntaActivity.this, new String[] {Manifest.permission.CAMERA}, CODE_CAMERA_PERMISSION);
+
+            } else {
+
+                MyLog.e("Permisos: ","Rechazados");
+
+            }
+        } else {
+
+            MyLog.e("Permisos: ","Rechazados");
+        }
+
+    }
+
+
+    //Maneja la respuesta del compruebaPermisos
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         switch (requestCode) {
             case CODE_WRITE_EXTERNAL_STORAGE_PERMISSION:
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    // Permiso aceptado
-                    Snackbar.make(constraint, getResources().getString(R.string.write_permission_accepted), Snackbar.LENGTH_LONG)
-                            .show();
+
+
 
                 } else {
-                    // Permiso rechazado
-                    Snackbar.make(constraint, getResources().getString(R.string.write_permission_not_accepted), Snackbar.LENGTH_LONG)
-                            .show();
 
+                    MyLog.e("Permisos: ","Rechazados");
+
+                }
+
+                break;
+
+
+            case CODE_CAMERA_PERMISSION:
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+
+
+                } else {
+
+                    MyLog.e("Permisos: ","Rechazados");
 
                 }
 
@@ -488,7 +522,9 @@ public class CrearEditarPreguntaActivity extends AppCompatActivity implements Vi
 
 
     private void takePicture() {
+        compruebaPermisosCamera();
         try {
+
             // Se crea el directorio para las fotografías
             File dirFotos = new File(pathFotos);
             dirFotos.mkdirs();
@@ -543,15 +579,20 @@ public class CrearEditarPreguntaActivity extends AppCompatActivity implements Vi
     }
 
 
-    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode) {
 
             case (REQUEST_CAPTURE_IMAGE):
+
                 if(resultCode == Activity.RESULT_OK){
                     // Se carga la imagen desde un objeto URI al imageView
                     ImageView imageView = findViewById(R.id.camara);
                     imageView.setImageURI(uri);
+                    imageView.setRotation(90);
+
+                    //Creamos el Bitmap desde el ImageView
+                    BitmapDrawable drawable = (BitmapDrawable) imageView.getDrawable();
+                    bitmap = drawable.getBitmap();
 
                     // Se le envía un broadcast a la Galería para que se actualice
                     Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
@@ -585,10 +626,29 @@ public class CrearEditarPreguntaActivity extends AppCompatActivity implements Vi
                         // Se carga el Bitmap en el ImageView
                         ImageView imageView = findViewById(R.id.camara);
                         imageView.setImageBitmap(bmp);
+
+                        //Creamos el Bitmap desde el ImageView
+                        BitmapDrawable drawable = (BitmapDrawable) imageView.getDrawable();
+                        bitmap = drawable.getBitmap();
                     }
                 }
                 break;
         }
+    }
+
+    public static String conversoraImagen64(Bitmap bm){
+        String encodedImage="";
+        if(bm!=null) {
+            Bitmap resized = Bitmap.createScaledBitmap(bm, 500, 500, true);
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            resized.compress(Bitmap.CompressFormat.JPEG, 100, baos);//bmisthebitmapobject
+            byte[] b = baos.toByteArray();
+            encodedImage = Base64.encodeToString(b, Base64.DEFAULT);
+            return encodedImage;
+        }else{
+            return encodedImage;
+        }
+
     }
 
     @Override

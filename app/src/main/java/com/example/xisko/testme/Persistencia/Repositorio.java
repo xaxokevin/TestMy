@@ -189,6 +189,7 @@ public class Repositorio {
             valores.put("respuestaIncorrecta1",p.getRespuestaIncorrecta1());
             valores.put("respuestaIncorrecta2",p.getRespuestaIncorrecta2());
             valores.put("respuestaIncorrecta3",p.getRespuestaIncorrecta3());
+            valores.put("photo",p.getPhoto());
 
             //Actualizamoselregistroenlabasededatos
             String[]args=new String[]{Integer.toString(p.getCodigo())};
@@ -307,5 +308,13 @@ public class Repositorio {
 
         return cantidaP;
     }
+
+
+
+    ////////////////////////////////////PERMISOS///////////////////////////////
+
+
+
+
 
 }

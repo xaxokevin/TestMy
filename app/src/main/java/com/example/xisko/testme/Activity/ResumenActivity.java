@@ -19,6 +19,7 @@ import com.example.xisko.testme.Log.MyLog;
 import com.example.xisko.testme.Persistencia.Repositorio;
 import com.example.xisko.testme.R;
 
+import static com.example.xisko.testme.Constantes.CODE_CAMERA_PERMISSION;
 import static com.example.xisko.testme.Constantes.CODE_WRITE_EXTERNAL_STORAGE_PERMISSION;
 
 public class ResumenActivity extends AppCompatActivity {
@@ -84,7 +85,8 @@ public class ResumenActivity extends AppCompatActivity {
         setContentView(R.layout.activity_resumen);
         myContext = this;
         constraint = findViewById(R.id.constraint);
-        compruebaPermisos();
+        compruebaPermisosEscritura();
+        compruebaPermisosCamera();
 
          TextView pregunta = findViewById(R.id.numero_preguntas);
         pregunta.setText("Hay un total de: "+Repositorio.getCantidadPreguntas(myContext)+" preguntas almacenadas en la base de datos.");
@@ -142,15 +144,18 @@ public class ResumenActivity extends AppCompatActivity {
     // En las versiones anteriores no es posible hacerlo
     // Una vez que se pide aceptar o rechazar el permiso se ejecuta el método "onRequestPermissionsResult" para manejar la respuesta
     // Si el usuario marca "No preguntar más" no se volverá a mostrar este diálogo
-    private void compruebaPermisos() {
+    private void compruebaPermisosEscritura() {
         int WriteExternalStoragePermission = ContextCompat.checkSelfPermission(myContext, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+
         MyLog.d("MainActivity", "WRITE_EXTERNAL_STORAGE Permission: " + WriteExternalStoragePermission);
 
-        if (WriteExternalStoragePermission != PackageManager.PERMISSION_GRANTED) {
+
+        if (WriteExternalStoragePermission != PackageManager.PERMISSION_GRANTED ) {
 
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
                 ActivityCompat.requestPermissions(ResumenActivity.this, new String[] {Manifest.permission.WRITE_EXTERNAL_STORAGE}, CODE_WRITE_EXTERNAL_STORAGE_PERMISSION);
+
 
             } else {
 
@@ -163,12 +168,50 @@ public class ResumenActivity extends AppCompatActivity {
         }
     }
 
+    private void compruebaPermisosCamera(){
+        int CameraPermission = ContextCompat.checkSelfPermission(myContext, Manifest.permission.CAMERA);
+        MyLog.d("MainActivity", "WRITE_EXTERNAL_STORAGE Permission: " + CameraPermission);
+
+
+        if (CameraPermission != PackageManager.PERMISSION_GRANTED) {
+
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+
+                ActivityCompat.requestPermissions(ResumenActivity.this, new String[] {Manifest.permission.CAMERA}, CODE_CAMERA_PERMISSION);
+
+            } else {
+
+                MyLog.e("Permisos: ","Rechazados");
+
+            }
+        } else {
+
+            MyLog.e("Permisos: ","Rechazados");
+        }
+
+    }
+
 
 //Maneja la respuesta del compruebaPermisos
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         switch (requestCode) {
             case CODE_WRITE_EXTERNAL_STORAGE_PERMISSION:
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+
+
+                } else {
+
+                    MyLog.e("Permisos: ","Rechazados");
+
+                }
+
+                break;
+
+
+            case CODE_CAMERA_PERMISSION:
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 
 

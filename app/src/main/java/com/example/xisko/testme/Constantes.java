@@ -4,6 +4,7 @@ public class Constantes {
 
     //Permisos
     public static final int CODE_WRITE_EXTERNAL_STORAGE_PERMISSION = 123;
+    public static final int CODE_CAMERA_PERMISSION= 1234;
 
 
     //Base de datos
