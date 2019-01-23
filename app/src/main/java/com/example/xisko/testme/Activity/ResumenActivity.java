@@ -63,7 +63,7 @@ public class ResumenActivity extends AppCompatActivity {
                 return true;
             case R.id.action_settings:
 
-                
+
                 MyLog.i("ActionBar", "Ajustes!");
 
                 return true;
@@ -81,9 +81,10 @@ public class ResumenActivity extends AppCompatActivity {
                 ResumenActivity.this.startActivity(myIntent);
                 return true;
             case R.id.action_exportar:
-
+                Repositorio.cargarPreguntas(myContext);
                 exportarXML();
                 MyLog.i("ActionBar", "Exportar");
+
 
                 return true;
             default:
@@ -107,7 +108,7 @@ public class ResumenActivity extends AppCompatActivity {
          TextView pregunta = findViewById(R.id.numero_preguntas);
         pregunta.setText("Hay un total de: "+Repositorio.getCantidadPreguntas(myContext)+" preguntas almacenadas en la base de datos.");
 
-        Repositorio.cargarPreguntas(myContext);
+
 
 
 

@@ -19,9 +19,9 @@
         app:showAsAction="never"/>
 
     <item android:id="@+id/action_exportar"
-        android:orderInCategory="4"
-        android:title="@string/action_exportar"
-        app:showAsAction="never"/>
+        android:orderInCategory="1"
+        android:title="@string/exportar"
+        app:showAsAction="never" />
 
     <item android:id="@+id/action_nueva"
         android:orderInCategory="1"
