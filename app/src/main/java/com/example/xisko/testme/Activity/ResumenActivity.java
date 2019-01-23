@@ -80,6 +80,12 @@ public class ResumenActivity extends AppCompatActivity {
                 myIntent = new Intent(ResumenActivity.this, ListadoActivity.class);
                 ResumenActivity.this.startActivity(myIntent);
                 return true;
+            case R.id.action_exportar:
+
+                exportarXML();
+                MyLog.i("ActionBar", "Exportar");
+
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }

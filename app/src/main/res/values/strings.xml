@@ -33,5 +33,6 @@
     <string name="anadir_spinner">Añada una categoria al spinner</string>
     <string name="choose_picture">Imagen de la galeria</string>
     <string name="error_files">error en imagen</string>
+    <string name="action_exportar">Exportar</string>
 
 </resources>
