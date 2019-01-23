@@ -63,7 +63,7 @@ public class ResumenActivity extends AppCompatActivity {
                 return true;
             case R.id.action_settings:
 
-                exportarXML();
+                
                 MyLog.i("ActionBar", "Ajustes!");
 
                 return true;

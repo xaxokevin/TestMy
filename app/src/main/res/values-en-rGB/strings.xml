@@ -32,4 +32,5 @@
     <string name="choose_picture">Imagen de la galeria</string>
     <string name="error_files">error en imagen</string>
     <string name="anadir_spinner">First add a new Category</string>
+    <string name="action_exportar">Export</string>
 </resources>
