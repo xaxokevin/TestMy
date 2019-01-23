@@ -4,7 +4,9 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Build;
+import android.os.Environment;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
@@ -18,6 +20,12 @@ import android.widget.TextView;
 import com.example.xisko.testme.Log.MyLog;
 import com.example.xisko.testme.Persistencia.Repositorio;
 import com.example.xisko.testme.R;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
 
 import static com.example.xisko.testme.Constantes.CODE_CAMERA_PERMISSION;
 import static com.example.xisko.testme.Constantes.CODE_WRITE_EXTERNAL_STORAGE_PERMISSION;
@@ -54,6 +62,8 @@ public class ResumenActivity extends AppCompatActivity {
                 ResumenActivity.this.startActivity(myIntent);
                 return true;
             case R.id.action_settings:
+
+                exportarXML();
                 MyLog.i("ActionBar", "Ajustes!");
 
                 return true;
@@ -91,6 +101,8 @@ public class ResumenActivity extends AppCompatActivity {
          TextView pregunta = findViewById(R.id.numero_preguntas);
         pregunta.setText("Hay un total de: "+Repositorio.getCantidadPreguntas(myContext)+" preguntas almacenadas en la base de datos.");
 
+        Repositorio.cargarPreguntas(myContext);
+
 
 
     }
@@ -105,6 +117,9 @@ public class ResumenActivity extends AppCompatActivity {
 
     @Override
     protected void onResume() {
+
+
+
         MyLog.d(TAG, "Iniciando OnResume");
         super.onResume();
         TextView pregunta = findViewById(R.id.numero_preguntas);
@@ -227,4 +242,56 @@ public class ResumenActivity extends AppCompatActivity {
                 super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         }
     }
+
+
+    private void exportarXML(){
+        String root = Environment.getExternalStorageDirectory().toString();
+        File myDir = new File(root + "/preguntasExportar");
+        String fname = "preguntas.xml";
+        File file = new File (myDir, fname);
+        try
+        {
+
+
+            if (!myDir.exists()) {
+                myDir.mkdirs();
+
+            }
+            if (file.exists ())
+                file.delete ();
+
+
+            FileWriter fw=new FileWriter(file);
+            //Escribimos en el fichero un String
+            MyLog.d("aqui estoy",Repositorio.CreateXMLString() );
+            fw.write(Repositorio.CreateXMLString());
+
+
+            //Cierro el stream
+            fw.close();
+
+
+
+        }
+        catch (Exception ex)
+        {
+            MyLog.e("Ficheros", "Error al escribir fichero a memoria interna");
+        }
+
+
+
+
+
+        String cadena = myDir.getAbsolutePath()+"/"+fname;
+        Uri path = Uri.parse("file://"+cadena);
+
+        Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts(
+                "mailto","abc@gmail.com", null));
+        emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Preguntas para Moodle");
+        emailIntent.putExtra(Intent.EXTRA_TEXT, "Adjunto el archivo para importarlas a Moodle");
+        emailIntent .putExtra(Intent.EXTRA_STREAM, path);
+        startActivity(Intent.createChooser(emailIntent, "Send email..."));
+    }
+
+
 }

@@ -28,6 +28,8 @@ import com.example.xisko.testme.Pregunta.Pregunta;
 import com.example.xisko.testme.Pregunta.PreguntaAdapter;
 import com.example.xisko.testme.R;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -67,6 +69,8 @@ public class ListadoActivity extends AppCompatActivity {
         });
 
         MyLog.d(TAG, "Finalizando OnCreate");
+
+
     }
 
 
@@ -223,6 +227,9 @@ public class ListadoActivity extends AppCompatActivity {
                 TAG, "Finalizando OnResume");
 
     }
+
+
+
 
     @Override
     protected void onPause(
