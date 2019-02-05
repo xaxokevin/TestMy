@@ -1,6 +1,6 @@
 package com.example.xisko.testme.Activity;
-
 import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -8,7 +8,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.support.constraint.ConstraintLayout;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -16,16 +15,24 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
-
 import com.example.xisko.testme.Log.MyLog;
 import com.example.xisko.testme.Persistencia.Repositorio;
+import com.example.xisko.testme.Pregunta.Pregunta;
 import com.example.xisko.testme.R;
 
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserException;
+import org.xmlpull.v1.XmlPullParserFactory;
+
 import java.io.File;
-import java.io.FileOutputStream;
+import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
+import java.io.InputStream;
+import java.io.ObjectInputStream;
+import java.io.StringReader;
+import java.sql.SQLOutput;
+
 
 import static com.example.xisko.testme.Constantes.CODE_CAMERA_PERMISSION;
 import static com.example.xisko.testme.Constantes.CODE_WRITE_EXTERNAL_STORAGE_PERMISSION;
@@ -104,15 +111,98 @@ public class ResumenActivity extends AppCompatActivity {
         constraint = findViewById(R.id.constraint);
         compruebaPermisosEscritura();
         compruebaPermisosCamera();
-
-         TextView pregunta = findViewById(R.id.numero_preguntas);
+        TextView pregunta = findViewById(R.id.numero_preguntas);
+        TextView compartido = findViewById(R.id.compartir);
         pregunta.setText("Hay un total de: "+Repositorio.getCantidadPreguntas(myContext)+" preguntas almacenadas en la base de datos.");
 
+        //Recibimos el intent
+        Intent receivedIntent = getIntent();
 
+        //Si el intent es distinto de null
+        if(receivedIntent != null) {
+            //Recogemos la accion del intent
+            String receivedAction = receivedIntent.getAction();
+
+            //Si la accion del inten es igual a android.intent.action.SEND
+            //Se ejecutará la lectura del archivo
+           if(receivedAction == "android.intent.action.SEND"){
+
+               Uri data = receivedIntent.getParcelableExtra(Intent.EXTRA_STREAM);
+
+               try {
+
+                   InputStream fis = getContentResolver().openInputStream(data);
+                   XmlPullParserFactory xppf = XmlPullParserFactory.newInstance();
+                   xppf.setNamespaceAware(false);
+                   XmlPullParser xpp = xppf.newPullParser();
+                   xpp.setInput(fis, null);
+
+                   int evenType = xpp.getEventType();
+
+                   while (evenType != XmlPullParser.END_DOCUMENT) {
+                       String name;
+                       Pregunta p;
+
+                       switch (evenType) {
+
+                           case XmlPullParser.START_DOCUMENT:
+
+                               MyLog.d(TAG,"Start Document");
+
+                               break;
+
+                           case XmlPullParser.START_TAG:
+
+                               //Falta desarrollar
+                               //Aqui es donde debemos leer las preguntas
+                               System.out.println(xpp.getName());
+
+                               name = xpp.getName();
+                               if (name.equalsIgnoreCase("question")) {
+
+                                   if (name.equalsIgnoreCase("name")) {
+
+                                       String titulo = xpp.nextText();
+
+
+                                   } else if (name.equalsIgnoreCase("file")) {
+                                       String foto =xpp.nextText();
+
+                                   }
+
+
+                               }
+
+
+
+                               break;
+                       }
+
+                       evenType = xpp.next();
+
+                   }
+
+                   fis.close();
+               } catch (IOException e) {
+                   e.printStackTrace();
+               } catch (XmlPullParserException e) {
+                   e.printStackTrace();
+               }
+         }
+     }
 
 
 
     }
+
+
+
+
+
+
+
+
+
 
 
     @Override

@@ -19,8 +19,16 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
         </activity>
-        <activity android:name=".Activity.ResumenActivity" />
+        <activity android:name=".Activity.ResumenActivity" >
+        <intent-filter>
+            <action android:name="android.intent.action.SEND" />
+            <category android:name="android.intent.category.DEFAULT" />
+            <data android:mimeType="text/*" />
+        </intent-filter>
+        </activity>
+
         <activity android:name=".Activity.AcercaDeActivity" />
         <activity
             android:name=".Activity.ListadoActivity"
