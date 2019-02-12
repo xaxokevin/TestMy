@@ -42,6 +42,8 @@ public class ResumenActivity extends AppCompatActivity {
     Context myContext;
     ConstraintLayout constraint;
     Repositorio miRepo;
+    private String text;
+    private int contador = 0;
 
 
     private static final String TAG = "ResumenActivity";
@@ -113,84 +115,9 @@ public class ResumenActivity extends AppCompatActivity {
         compruebaPermisosCamera();
         TextView pregunta = findViewById(R.id.numero_preguntas);
         TextView compartido = findViewById(R.id.compartir);
-        pregunta.setText("Hay un total de: "+Repositorio.getCantidadPreguntas(myContext)+" preguntas almacenadas en la base de datos.");
+        pregunta.setText("Hay un total de: " + Repositorio.getCantidadPreguntas(myContext) + " preguntas almacenadas en la base de datos.");
 
-        //Recibimos el intent
-        Intent receivedIntent = getIntent();
-
-        //Si el intent es distinto de null
-        if(receivedIntent != null) {
-            //Recogemos la accion del intent
-            String receivedAction = receivedIntent.getAction();
-
-            //Si la accion del inten es igual a android.intent.action.SEND
-            //Se ejecutará la lectura del archivo
-           if(receivedAction == "android.intent.action.SEND"){
-
-               Uri data = receivedIntent.getParcelableExtra(Intent.EXTRA_STREAM);
-
-               try {
-
-                   InputStream fis = getContentResolver().openInputStream(data);
-                   XmlPullParserFactory xppf = XmlPullParserFactory.newInstance();
-                   xppf.setNamespaceAware(false);
-                   XmlPullParser xpp = xppf.newPullParser();
-                   xpp.setInput(fis, null);
-
-                   int evenType = xpp.getEventType();
-
-                   while (evenType != XmlPullParser.END_DOCUMENT) {
-                       String name;
-                       Pregunta p;
-
-                       switch (evenType) {
-
-                           case XmlPullParser.START_DOCUMENT:
-
-                               MyLog.d(TAG,"Start Document");
-
-                               break;
-
-                           case XmlPullParser.START_TAG:
-
-                               //Falta desarrollar
-                               //Aqui es donde debemos leer las preguntas
-                               System.out.println(xpp.getName());
-
-                               name = xpp.getName();
-                               if (name.equalsIgnoreCase("question")) {
-
-                                   if (name.equalsIgnoreCase("name")) {
-
-                                       String titulo = xpp.nextText();
-
-
-                                   } else if (name.equalsIgnoreCase("file")) {
-                                       String foto =xpp.nextText();
-
-                                   }
-
-
-                               }
-
-
-
-                               break;
-                       }
-
-                       evenType = xpp.next();
-
-                   }
-
-                   fis.close();
-               } catch (IOException e) {
-                   e.printStackTrace();
-               } catch (XmlPullParserException e) {
-                   e.printStackTrace();
-               }
-         }
-     }
-
+        this.importarXML();
 
 
     }
@@ -388,6 +315,141 @@ public class ResumenActivity extends AppCompatActivity {
         emailIntent.putExtra(Intent.EXTRA_TEXT, "Adjunto el archivo para importarlas a Moodle");
         emailIntent .putExtra(Intent.EXTRA_STREAM, path);
         startActivity(Intent.createChooser(emailIntent, "Send email..."));
+    }
+
+    public void importarXML() {
+        //Creamos las variables de la pregunta que vamos a importar
+        Pregunta p;
+        String titulo = "";
+        String categoria = "";
+        String foto = null;
+        String correcta = "";
+        String incorrecta = "";
+        String incorrecta2 = "";
+        String incorrecta3 = "";
+        //Recibimos el intent
+        Intent receivedIntent = getIntent();
+
+        //Si el intent es distinto de null
+        if (receivedIntent != null) {
+            //Recogemos la accion del intent
+            String receivedAction = receivedIntent.getAction();
+
+            //Si la accion del inten es igual a android.intent.action.SEND
+            //Se ejecutará la lectura del archivo
+            if (receivedAction == "android.intent.action.SEND") {
+
+                Uri data = receivedIntent.getParcelableExtra(Intent.EXTRA_STREAM);
+
+                try {
+
+                    InputStream fis = getContentResolver().openInputStream(data);
+                    XmlPullParserFactory xppf = XmlPullParserFactory.newInstance();
+                    xppf.setNamespaceAware(false);
+                    XmlPullParser xpp = xppf.newPullParser();
+                    xpp.setInput(fis, null);
+                    xpp.nextTag();
+                    xpp.require(XmlPullParser.START_TAG, null, "quiz");
+
+                    int act;
+                    String tag = "";
+                    int contador = 0;
+
+
+                    while ((act = xpp.next()) != XmlPullParser.END_DOCUMENT) {
+
+                        switch (act) {
+                            case XmlPullParser.START_TAG:
+
+                                tag = xpp.getName();
+                                if (tag.equals("file")) {
+                                    foto = xpp.getAttributeValue(null, "name");
+
+                                    System.out.println("Imagen: " + foto);
+
+                                }
+                                break;
+
+                            case XmlPullParser.TEXT:
+                                if (tag.equals("category")) {
+                                    categoria = xpp.getText();
+                                    System.out.println("Categoria: " + categoria);
+
+                                }
+                                if (tag.equals("name")) {
+                                    titulo = xpp.getText();
+                                    System.out.println("Enunciado: " + titulo);
+
+                                }
+
+                                if (tag.equals("answer")) {
+                                    //System.out.println("CONTADOR: "+ contadorRespuestas);
+
+                                    if (contador == 0) {
+                                        correcta = xpp.getText();
+                                        System.out.println("Correcta: " + correcta);
+                                        contador++;
+
+                                    } else if (contador == 1) {
+                                        incorrecta = xpp.getText();
+                                        System.out.println("Incorrecta1: " + incorrecta);
+                                        contador++;
+
+                                    } else if (contador == 2) {
+                                        incorrecta2 = xpp.getText();
+                                        System.out.println("Incorrecta2: " + incorrecta2);
+                                        contador++;
+
+                                    } else if (contador == 3) {
+                                        incorrecta3 = xpp.getText();
+                                        System.out.println("Incorrecta3: " + incorrecta3);
+                                        contador++;
+
+                                        //Como es el último dato que recuperamos de la pregunta la añadimos a la base de datos
+
+                                        if (foto == null){
+                                            Pregunta nuevaPregunta = new Pregunta(titulo, categoria, correcta, incorrecta, incorrecta2, incorrecta3);
+                                            Repositorio.insertar(nuevaPregunta, myContext);
+
+                                        }else{
+                                            Pregunta nuevaPregunta = new Pregunta(titulo, categoria, correcta, incorrecta, incorrecta2, incorrecta3, foto);
+                                            Repositorio.insertarF(nuevaPregunta, myContext);
+
+                                        }
+
+                                        System.out.println("Pregunta Añadida correctamente a la base de datos......................................");
+
+                                    } else {
+                                        System.out.println("Error al leer");
+                                    }
+
+
+                                }
+
+                                tag = "";
+                                break;
+
+                            case XmlPullParser.END_TAG:
+                                if (xpp.getName().equals("question")) {
+                                    //System.out.println("terminado");
+                                    contador = 0;
+                                    //System.out.println("cONTADOR EN TERMINADO: "+ contadorRespuestas);
+                                }
+                                break;
+                        }
+
+                    }
+                    fis.close();
+
+                } catch (XmlPullParserException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+
+        }
     }
 
 
