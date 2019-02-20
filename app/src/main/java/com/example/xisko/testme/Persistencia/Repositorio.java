@@ -355,7 +355,9 @@ public class Repositorio  {
             xmlSerializer.attribute("", "type", p.getCategoria());
 
             xmlSerializer.startTag("", "category");
+            xmlSerializer.startTag("", "text");
             xmlSerializer.text(p.getCategoria());
+            xmlSerializer.endTag("", "text");
             xmlSerializer.endTag("", "category");
 
             xmlSerializer.endTag("", "question");
@@ -366,16 +368,21 @@ public class Repositorio  {
             xmlSerializer.attribute("", "type", "multichoice");
 
             xmlSerializer.startTag("", "name");
+            xmlSerializer.startTag("", "text");
             xmlSerializer.text(p.getEnunciado());
+            xmlSerializer.endTag("", "text");
             xmlSerializer.endTag("", "name");
 
             xmlSerializer.startTag("","questiontext");
             xmlSerializer.attribute("", "format", "html");
-            xmlSerializer.text(p.getEnunciado());
+            xmlSerializer.startTag("", "text");
+            xmlSerializer.text("<![CDATA[ <p>"+p.getEnunciado()+"</p><p><img src='imagen.jpg' /></p>]]>");
+            xmlSerializer.endTag("", "text");
             xmlSerializer.startTag("","file");
-            xmlSerializer.attribute("", "name", p.getPhoto());
+            xmlSerializer.attribute("", "name","imagen.jpg");
             xmlSerializer.attribute("", "path", "/");
             xmlSerializer.attribute("", "encoding", "base64");
+            xmlSerializer.text( p.getPhoto());
             xmlSerializer.endTag("", "file");
             xmlSerializer.endTag("", "questiontext");
 
@@ -385,25 +392,33 @@ public class Repositorio  {
             xmlSerializer.startTag("","answer");
             xmlSerializer.attribute("","fraction", "100");
             xmlSerializer.attribute("", "format", "html");
+            xmlSerializer.startTag("", "text");
             xmlSerializer.text(p.getRespuestaCorrecta());
+            xmlSerializer.endTag("", "text");
             xmlSerializer.endTag("", "answer");
 
             xmlSerializer.startTag("","answer");
             xmlSerializer.attribute("","fraction", "0");
             xmlSerializer.attribute("", "format", "html");
+            xmlSerializer.startTag("", "text");
             xmlSerializer.text(p.getRespuestaIncorrecta1());
+            xmlSerializer.endTag("", "text");
             xmlSerializer.endTag("", "answer");
 
             xmlSerializer.startTag("","answer");
             xmlSerializer.attribute("","fraction", "0");
             xmlSerializer.attribute("", "format", "html");
+            xmlSerializer.startTag("", "text");
             xmlSerializer.text(p.getRespuestaIncorrecta2());
+            xmlSerializer.endTag("", "text");
             xmlSerializer.endTag("", "answer");
 
             xmlSerializer.startTag("","answer");
             xmlSerializer.attribute("","fraction", "0");
             xmlSerializer.attribute("", "format", "html");
+            xmlSerializer.startTag("", "text");
             xmlSerializer.text(p.getRespuestaIncorrecta3());
+            xmlSerializer.endTag("", "text");
             xmlSerializer.endTag("", "answer");
 
             xmlSerializer.endTag("","question");

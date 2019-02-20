@@ -17,6 +17,7 @@ public class Constantes {
     public static final String respuestaIncorrecta1="respuestaIncorrecta1";
     public static final String respuestaIncorrecta2="respuestaIncorrecta2";
     public static final String respuestaIncorrecta3="respuestaIncorrecta3";
+    public static final String NETWORK_SWITCH_FILTER = "com.devglan.broadcastreceiver.NETWORK_SWITCH_FILTER";
 
 
 

@@ -1,8 +1,9 @@
 package com.example.xisko.testme.Activity;
 import android.Manifest;
-import android.app.Activity;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
@@ -15,6 +16,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
+
 import com.example.xisko.testme.Log.MyLog;
 import com.example.xisko.testme.Persistencia.Repositorio;
 import com.example.xisko.testme.Pregunta.Pregunta;
@@ -25,25 +27,23 @@ import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.ObjectInputStream;
-import java.io.StringReader;
-import java.sql.SQLOutput;
 
 
 import static com.example.xisko.testme.Constantes.CODE_CAMERA_PERMISSION;
 import static com.example.xisko.testme.Constantes.CODE_WRITE_EXTERNAL_STORAGE_PERMISSION;
+import static com.example.xisko.testme.Constantes.NETWORK_SWITCH_FILTER;
 
 public class ResumenActivity extends AppCompatActivity {
 
     Context myContext;
     ConstraintLayout constraint;
-    Repositorio miRepo;
-    private String text;
-    private int contador = 0;
+    private BroadcastReceiver receiver;
+
+
+
 
 
     private static final String TAG = "ResumenActivity";
@@ -79,7 +79,7 @@ public class ResumenActivity extends AppCompatActivity {
             case R.id.action_acercade:
                 MyLog.i("ActionBar", "Acerca de");
 
-                 myIntent = new Intent(ResumenActivity.this, AcercaDeActivity.class);
+                myIntent = new Intent(ResumenActivity.this, AcercaDeActivity.class);
                 ResumenActivity.this.startActivity(myIntent);
                 return true;
 
@@ -102,9 +102,6 @@ public class ResumenActivity extends AppCompatActivity {
     }
 
 
-
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -117,19 +114,15 @@ public class ResumenActivity extends AppCompatActivity {
         TextView compartido = findViewById(R.id.compartir);
         pregunta.setText("Hay un total de: " + Repositorio.getCantidadPreguntas(myContext) + " preguntas almacenadas en la base de datos.");
 
+
+
+
         this.importarXML();
 
 
+
+
     }
-
-
-
-
-
-
-
-
-
 
 
     @Override
@@ -143,11 +136,12 @@ public class ResumenActivity extends AppCompatActivity {
     protected void onResume() {
 
 
-
         MyLog.d(TAG, "Iniciando OnResume");
         super.onResume();
         TextView pregunta = findViewById(R.id.numero_preguntas);
-        pregunta.setText("Hay un total de: "+Repositorio.getCantidadPreguntas(myContext)+" preguntas almacenadas en la base de datos.");
+        pregunta.setText("Hay un total de: " + Repositorio.getCantidadPreguntas(myContext) + " preguntas almacenadas en la base de datos.");
+
+
         MyLog.d(TAG, "Finalizando OnResume");
     }
 
@@ -155,6 +149,7 @@ public class ResumenActivity extends AppCompatActivity {
     protected void onPause() {
         MyLog.d(TAG, "Iniciando OnPause");
         super.onPause();
+
         MyLog.d(TAG, "Finalizando OnPause");
     }
 
@@ -175,7 +170,10 @@ public class ResumenActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         MyLog.d(TAG, "Iniciando OnDestroy");
+
         super.onDestroy();
+
+
         MyLog.d(TAG, "Finalizando OnDestroy");
     }
 
@@ -189,25 +187,25 @@ public class ResumenActivity extends AppCompatActivity {
         MyLog.d("MainActivity", "WRITE_EXTERNAL_STORAGE Permission: " + WriteExternalStoragePermission);
 
 
-        if (WriteExternalStoragePermission != PackageManager.PERMISSION_GRANTED ) {
+        if (WriteExternalStoragePermission != PackageManager.PERMISSION_GRANTED) {
 
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
-                ActivityCompat.requestPermissions(ResumenActivity.this, new String[] {Manifest.permission.WRITE_EXTERNAL_STORAGE}, CODE_WRITE_EXTERNAL_STORAGE_PERMISSION);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                ActivityCompat.requestPermissions(ResumenActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, CODE_WRITE_EXTERNAL_STORAGE_PERMISSION);
 
 
             } else {
 
-                MyLog.e("Permisos: ","Rechazados");
+                MyLog.e("Permisos: ", "Rechazados");
 
             }
         } else {
 
-            MyLog.e("Permisos: ","Rechazados");
+            MyLog.e("Permisos: ", "Rechazados");
         }
     }
 
-    private void compruebaPermisosCamera(){
+    private void compruebaPermisosCamera() {
         int CameraPermission = ContextCompat.checkSelfPermission(myContext, Manifest.permission.CAMERA);
         MyLog.d("MainActivity", "WRITE_EXTERNAL_STORAGE Permission: " + CameraPermission);
 
@@ -215,24 +213,24 @@ public class ResumenActivity extends AppCompatActivity {
         if (CameraPermission != PackageManager.PERMISSION_GRANTED) {
 
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
 
-                ActivityCompat.requestPermissions(ResumenActivity.this, new String[] {Manifest.permission.CAMERA}, CODE_CAMERA_PERMISSION);
+                ActivityCompat.requestPermissions(ResumenActivity.this, new String[]{Manifest.permission.CAMERA}, CODE_CAMERA_PERMISSION);
 
             } else {
 
-                MyLog.e("Permisos: ","Rechazados");
+                MyLog.e("Permisos: ", "Rechazados");
 
             }
         } else {
 
-            MyLog.e("Permisos: ","Rechazados");
+            MyLog.e("Permisos: ", "Rechazados");
         }
 
     }
 
 
-//Maneja la respuesta del compruebaPermisos
+    //Maneja la respuesta del compruebaPermisos
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         switch (requestCode) {
@@ -240,10 +238,9 @@ public class ResumenActivity extends AppCompatActivity {
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 
 
-
                 } else {
 
-                    MyLog.e("Permisos: ","Rechazados");
+                    MyLog.e("Permisos: ", "Rechazados");
 
                 }
 
@@ -254,10 +251,9 @@ public class ResumenActivity extends AppCompatActivity {
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 
 
-
                 } else {
 
-                    MyLog.e("Permisos: ","Rechazados");
+                    MyLog.e("Permisos: ", "Rechazados");
 
                 }
 
@@ -268,26 +264,25 @@ public class ResumenActivity extends AppCompatActivity {
     }
 
 
-    private void exportarXML(){
+    private void exportarXML() {
         String root = Environment.getExternalStorageDirectory().toString();
         File myDir = new File(root + "/preguntasExportar");
         String fname = "preguntas.xml";
-        File file = new File (myDir, fname);
-        try
-        {
+        File file = new File(myDir, fname);
+        try {
 
 
             if (!myDir.exists()) {
                 myDir.mkdirs();
 
             }
-            if (file.exists ())
-                file.delete ();
+            if (file.exists())
+                file.delete();
 
 
-            FileWriter fw=new FileWriter(file);
+            FileWriter fw = new FileWriter(file);
             //Escribimos en el fichero un String
-            MyLog.d("aqui estoy",Repositorio.CreateXMLString() );
+            MyLog.d("aqui estoy", Repositorio.CreateXMLString());
             fw.write(Repositorio.CreateXMLString());
 
 
@@ -295,49 +290,48 @@ public class ResumenActivity extends AppCompatActivity {
             fw.close();
 
 
-
-        }
-        catch (Exception ex)
-        {
+        } catch (Exception ex) {
             MyLog.e("Ficheros", "Error al escribir fichero a memoria interna");
         }
 
 
-
-
-
-        String cadena = myDir.getAbsolutePath()+"/"+fname;
-        Uri path = Uri.parse("file://"+cadena);
+        String cadena = myDir.getAbsolutePath() + "/" + fname;
+        Uri path = Uri.parse("file://" + cadena);
 
         Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts(
-                "mailto","abc@gmail.com", null));
+                "mailto", "abc@gmail.com", null));
         emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Preguntas para Moodle");
         emailIntent.putExtra(Intent.EXTRA_TEXT, "Adjunto el archivo para importarlas a Moodle");
-        emailIntent .putExtra(Intent.EXTRA_STREAM, path);
+        emailIntent.putExtra(Intent.EXTRA_STREAM, path);
         startActivity(Intent.createChooser(emailIntent, "Send email..."));
     }
 
-    public void importarXML() {
+
+    public void importarXML(){
+
         //Creamos las variables de la pregunta que vamos a importar
         Pregunta p;
-        String titulo = "";
-        String categoria = "";
-        String foto = null;
-        String correcta = "";
-        String incorrecta = "";
-        String incorrecta2 = "";
-        String incorrecta3 = "";
+        String enunciado="";
+        String categoria="";
+        String correcta="";
+        String incorrecta="";
+        String incorrecta2="";
+        String incorrecta3="";
+        String foto=null;
+
+        int contador=0;
+
         //Recibimos el intent
         Intent receivedIntent = getIntent();
 
         //Si el intent es distinto de null
-        if (receivedIntent != null) {
+        if(receivedIntent != null) {
             //Recogemos la accion del intent
             String receivedAction = receivedIntent.getAction();
 
             //Si la accion del inten es igual a android.intent.action.SEND
             //Se ejecutará la lectura del archivo
-            if (receivedAction == "android.intent.action.SEND") {
+            if(receivedAction == "android.intent.action.SEND"){
 
                 Uri data = receivedIntent.getParcelableExtra(Intent.EXTRA_STREAM);
 
@@ -346,111 +340,131 @@ public class ResumenActivity extends AppCompatActivity {
                     InputStream fis = getContentResolver().openInputStream(data);
                     XmlPullParserFactory xppf = XmlPullParserFactory.newInstance();
                     xppf.setNamespaceAware(false);
-                    XmlPullParser xpp = xppf.newPullParser();
-                    xpp.setInput(fis, null);
-                    xpp.nextTag();
-                    xpp.require(XmlPullParser.START_TAG, null, "quiz");
+                    XmlPullParser parser = xppf.newPullParser();
+                    parser.setInput(fis, null);
+
+                    parser.nextTag();
+                    parser.require(XmlPullParser.START_TAG, null, "quiz");
+
+                    //Leyendo el documento
 
                     int act;
-                    String tag = "";
-                    int contador = 0;
+                    String tag="";
 
-
-                    while ((act = xpp.next()) != XmlPullParser.END_DOCUMENT) {
+                    while((act=parser.next()) != XmlPullParser.END_DOCUMENT) {
 
                         switch (act) {
                             case XmlPullParser.START_TAG:
 
-                                tag = xpp.getName();
-                                if (tag.equals("file")) {
-                                    foto = xpp.getAttributeValue(null, "name");
+                                tag = parser.getName();
 
-                                    System.out.println("Imagen: " + foto);
-
-                                }
                                 break;
 
                             case XmlPullParser.TEXT:
-                                if (tag.equals("category")) {
-                                    categoria = xpp.getText();
-                                    System.out.println("Categoria: " + categoria);
+                                if(tag.equals("text"))
+                                {
 
-                                }
-                                if (tag.equals("name")) {
-                                    titulo = xpp.getText();
-                                    System.out.println("Enunciado: " + titulo);
-
-                                }
-
-                                if (tag.equals("answer")) {
-                                    //System.out.println("CONTADOR: "+ contadorRespuestas);
-
-                                    if (contador == 0) {
-                                        correcta = xpp.getText();
-                                        System.out.println("Correcta: " + correcta);
+                                    if(contador==0){
+                                        categoria= parser.getText();
+                                        System.out.println("categoria: "+ categoria);
+                                        contador++;
+                                    }
+                                    else if(contador==1){
+                                        enunciado= parser.getText();
+                                        System.out.println("Enunciado: "+ enunciado);
                                         contador++;
 
-                                    } else if (contador == 1) {
-                                        incorrecta = xpp.getText();
-                                        System.out.println("Incorrecta1: " + incorrecta);
+                                    }
+                                    else if(contador==2){
+
+                                        contador++;
+                                    }
+
+                                    else if(contador==3){
+                                        correcta= parser.getText();
+                                        System.out.println("Correcta: "+ correcta);
                                         contador++;
 
-                                    } else if (contador == 2) {
-                                        incorrecta2 = xpp.getText();
-                                        System.out.println("Incorrecta2: " + incorrecta2);
+                                    }
+                                    else if(contador==4){
+                                        incorrecta= parser.getText();
+                                        System.out.println("Incorrecta1: "+ incorrecta);
                                         contador++;
 
-                                    } else if (contador == 3) {
-                                        incorrecta3 = xpp.getText();
-                                        System.out.println("Incorrecta3: " + incorrecta3);
+                                    }
+                                    else if(contador==5){
+                                        incorrecta2= parser.getText();
+                                        System.out.println("Incorrecta2: "+ incorrecta2);
+
+
                                         contador++;
+
+                                    }
+                                    else if(contador==6){
+                                        incorrecta3= parser.getText();
+                                        System.out.println("Incorrecta3: "+ incorrecta3);
+
 
                                         //Como es el último dato que recuperamos de la pregunta la añadimos a la base de datos
 
-                                        if (foto == null){
-                                            Pregunta nuevaPregunta = new Pregunta(titulo, categoria, correcta, incorrecta, incorrecta2, incorrecta3);
-                                            Repositorio.insertar(nuevaPregunta, myContext);
+                                        if(foto == null){
+
+                                            p= new Pregunta(enunciado,categoria,correcta,incorrecta,incorrecta2,incorrecta3);
+                                            Repositorio.insertar(p,myContext);
+                                            MyLog.w(TAG,"Insertado correctamente en BD");
 
                                         }else{
-                                            Pregunta nuevaPregunta = new Pregunta(titulo, categoria, correcta, incorrecta, incorrecta2, incorrecta3, foto);
-                                            Repositorio.insertarF(nuevaPregunta, myContext);
+                                            p= new Pregunta(enunciado,categoria,correcta,incorrecta,incorrecta2,incorrecta3, foto);
+                                            Repositorio.insertarF(p,myContext);
+                                            MyLog.w(TAG,"Insertado correctamente en BD");
 
                                         }
 
-                                        System.out.println("Pregunta Añadida correctamente a la base de datos......................................");
+                                        contador=0;
 
-                                    } else {
-                                        System.out.println("Error al leer");
                                     }
-
+                                    else{
+                                        MyLog.w(TAG,"Error insertando en BD");
+                                    }
 
                                 }
 
-                                tag = "";
+                                if(tag.equals("file"))
+                                {
+                                    foto= parser.getText();
+                                    System.out.println("Imagen: "+ foto);
+
+                                }
+
+
+                                tag="";
                                 break;
 
                             case XmlPullParser.END_TAG:
-                                if (xpp.getName().equals("question")) {
-                                    //System.out.println("terminado");
-                                    contador = 0;
-                                    //System.out.println("cONTADOR EN TERMINADO: "+ contadorRespuestas);
+                                if(parser.getName().equals("question"))
+                                {
+                                    MyLog.w(TAG,"Finalizado el archivo");
                                 }
                                 break;
                         }
 
                     }
-                    fis.close();
 
-                } catch (XmlPullParserException e) {
-                    e.printStackTrace();
+
+
+                    fis.close();
                 } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (XmlPullParserException e) {
                     e.printStackTrace();
                 }
             }
-
-
         }
+
+
     }
 
 
-}
+
+    }
+
