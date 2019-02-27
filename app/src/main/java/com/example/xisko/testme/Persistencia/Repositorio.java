@@ -3,22 +3,10 @@ package com.example.xisko.testme.Persistencia;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
-import android.support.annotation.NonNull;
-import android.util.Xml;
-
 import com.example.xisko.testme.Log.MyLog;
 import com.example.xisko.testme.Pregunta.Pregunta;
-
-import org.xmlpull.v1.XmlSerializer;
-
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.StringWriter;
-import java.io.Writer;
 import java.util.ArrayList;
-
 import static com.example.xisko.testme.Constantes.DB_VERSION;
 import static com.example.xisko.testme.Constantes.Preguntas;
 import static com.example.xisko.testme.Constantes.basedeDatos;
@@ -26,6 +14,9 @@ import static com.example.xisko.testme.Constantes.basedeDatos;
 
 public class Repositorio  {
 
+    /**
+     * Constructor de la clase
+     */
     public Repositorio() {
 
 
@@ -38,14 +29,12 @@ public class Repositorio  {
     private static ArrayList<String> misCategorias;
 
 
-
-
-
-
-
-
-
-    //Metodo que inserta registros en la BD sin imagen
+    /**
+     * Metodo que inserta registros en la BD sin imagen
+     * @param p tipo pregunta
+     * @param contexto
+     * @return boolean
+     */
     public static boolean insertar(Pregunta p, Context contexto) {
 
         boolean valor = true;
@@ -71,7 +60,12 @@ public class Repositorio  {
         return valor;
     }
 
-    //Metodo que inserta registros en la BD con imagen
+    /**
+     * Metodo que inserta registros en la BD con imagen
+     * @param p
+     * @param contexto
+     * @return
+     */
     public static boolean insertarF(Pregunta p, Context contexto) {
 
         boolean valor = true;
@@ -97,9 +91,11 @@ public class Repositorio  {
         return valor;
     }
 
-
-    //Metodo que saca unicamente las categorias que tenemos almacenadas en la BD.
-    //Luego seran cargadas en un spinner
+    /**
+     *Metodo que saca unicamente las categorias que tenemos almacenadas en la BD.
+     * Luego seran cargadas en un spinner
+     * @param context
+     */
     public static void cargarCategorias(Context context){
 
 
@@ -134,7 +130,10 @@ public class Repositorio  {
     }
 
 
-    //Metodo que guardaa las preguntas de la base de datos en un array
+    /**
+     * Metodo que guardaa las preguntas de la base de datos en un array
+     * @param contexto
+     */
     public  static void cargarPreguntas(Context contexto){
 
         misPreguntas = new ArrayList<Pregunta>();
@@ -180,7 +179,12 @@ public class Repositorio  {
 
     }
 
-    //Actualiza la pregunta seleccionada en el recyclerView
+    /**
+     * Actualiza la pregunta seleccionada en el recyclerView
+     * @param p
+     * @param contexto
+     * @return
+     */
     public static boolean actualizarPregunta(Pregunta p,Context contexto){
 
         boolean valor=true;
@@ -220,6 +224,11 @@ public class Repositorio  {
     }
 
 
+    /**
+     * Metodo encargado de eliminar registros de la base de datos
+     * @param p
+     * @param context
+     */
     public static void eliminaPregunta(Pregunta p, Context context){
 
         //Abrimos la basededatos en modo escritura
@@ -246,7 +255,12 @@ public class Repositorio  {
 
     }
 
-    //Nos devuelva la pregunta que quermos actualizar
+    /**
+     * Nos devuelva la pregunta que quermos actualizar
+     * @param codi
+     * @param context
+     * @return
+     */
     public static Pregunta buscarPregunta(int codi, Context context){
 
         Pregunta p = null;
@@ -285,23 +299,30 @@ public class Repositorio  {
     }
 
 
-
-
-
+    /**
+     * Metodo que devuelve un array de preguntas
+     * @return mispreguntas
+     */
     public static ArrayList<Pregunta> getMisPreguntas() {
-
-
 
         return misPreguntas;
     }
 
+    /**
+     * Metodo que devuelve un array de categorias
+     * @return misCategorias
+     */
     public static ArrayList<String>getMisCategorias(){
 
         return misCategorias;
     }
 
 
-    //Nos devuelve la cantidad de preguntas que tenemos almacenadas
+    /**
+     * Nos devuelve la cantidad de preguntas que tenemos almacenadas
+     * @param context
+     * @return
+     */
     public static String getCantidadPreguntas(Context context) {
 
 
@@ -325,125 +346,6 @@ public class Repositorio  {
 
         return cantidaP;
     }
-
-    @SuppressWarnings("null")
-    public static String CreateXMLString() throws IllegalArgumentException, IllegalStateException, IOException
-    {
-        ArrayList<Pregunta> preguntasXML = new ArrayList<Pregunta>();
-        preguntasXML= getMisPreguntas();
-
-
-        XmlSerializer xmlSerializer = Xml.newSerializer();
-        StringWriter writer = new StringWriter();
-
-        xmlSerializer.setOutput(writer);
-
-        //Start Document
-        xmlSerializer.startDocument("UTF-8", true);
-        xmlSerializer.setFeature("http://xmlpull.org/v1/doc/features.html#indent-output", true);
-
-
-
-
-        //Open Tag <file>
-        xmlSerializer.startTag("", "quiz");
-
-        for (Pregunta p: preguntasXML) {
-            //Categoria de cada pregunta
-
-            xmlSerializer.startTag("", "question");
-            xmlSerializer.attribute("", "type", p.getCategoria());
-
-            xmlSerializer.startTag("", "category");
-            xmlSerializer.startTag("", "text");
-            xmlSerializer.text(p.getCategoria());
-            xmlSerializer.endTag("", "text");
-            xmlSerializer.endTag("", "category");
-
-            xmlSerializer.endTag("", "question");
-
-            //Pregunta de eleccion multiple
-
-            xmlSerializer.startTag("", "question");
-            xmlSerializer.attribute("", "type", "multichoice");
-
-            xmlSerializer.startTag("", "name");
-            xmlSerializer.startTag("", "text");
-            xmlSerializer.text(p.getEnunciado());
-            xmlSerializer.endTag("", "text");
-            xmlSerializer.endTag("", "name");
-
-            xmlSerializer.startTag("","questiontext");
-            xmlSerializer.attribute("", "format", "html");
-            xmlSerializer.startTag("", "text");
-            xmlSerializer.text("<![CDATA[ <p>"+p.getEnunciado()+"</p><p><img src='imagen.jpg' /></p>]]>");
-            xmlSerializer.endTag("", "text");
-            xmlSerializer.startTag("","file");
-            xmlSerializer.attribute("", "name","imagen.jpg");
-            xmlSerializer.attribute("", "path", "/");
-            xmlSerializer.attribute("", "encoding", "base64");
-            xmlSerializer.text( p.getPhoto());
-            xmlSerializer.endTag("", "file");
-            xmlSerializer.endTag("", "questiontext");
-
-            xmlSerializer.startTag("","answernumbering");
-            xmlSerializer.endTag("", "answernumbering");
-
-            xmlSerializer.startTag("","answer");
-            xmlSerializer.attribute("","fraction", "100");
-            xmlSerializer.attribute("", "format", "html");
-            xmlSerializer.startTag("", "text");
-            xmlSerializer.text(p.getRespuestaCorrecta());
-            xmlSerializer.endTag("", "text");
-            xmlSerializer.endTag("", "answer");
-
-            xmlSerializer.startTag("","answer");
-            xmlSerializer.attribute("","fraction", "0");
-            xmlSerializer.attribute("", "format", "html");
-            xmlSerializer.startTag("", "text");
-            xmlSerializer.text(p.getRespuestaIncorrecta1());
-            xmlSerializer.endTag("", "text");
-            xmlSerializer.endTag("", "answer");
-
-            xmlSerializer.startTag("","answer");
-            xmlSerializer.attribute("","fraction", "0");
-            xmlSerializer.attribute("", "format", "html");
-            xmlSerializer.startTag("", "text");
-            xmlSerializer.text(p.getRespuestaIncorrecta2());
-            xmlSerializer.endTag("", "text");
-            xmlSerializer.endTag("", "answer");
-
-            xmlSerializer.startTag("","answer");
-            xmlSerializer.attribute("","fraction", "0");
-            xmlSerializer.attribute("", "format", "html");
-            xmlSerializer.startTag("", "text");
-            xmlSerializer.text(p.getRespuestaIncorrecta3());
-            xmlSerializer.endTag("", "text");
-            xmlSerializer.endTag("", "answer");
-
-            xmlSerializer.endTag("","question");
-        }
-
-        //end tag <file>
-        xmlSerializer.endTag("","quiz");
-
-
-
-        xmlSerializer.endDocument();
-
-        MyLog.d("XML", writer.toString());
-
-        return writer.toString();
-
-
-    }
-
-
-
-
-    ////////////////////////////////////PERMISOS///////////////////////////////
-
-
 
 
 

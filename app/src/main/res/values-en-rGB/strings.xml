@@ -33,4 +33,7 @@
     <string name="anadir_spinner">Need one category</string>
     <string name="choose_picture">Galery image</string>
     <string name="exportar">Export</string>
+    <string name="wifi_on">Wifi enable</string>
+    <string name="data_on">Data on</string>
+    <string name="internet_off">Internet disable</string>
 </resources>

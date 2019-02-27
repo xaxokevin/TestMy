@@ -8,6 +8,7 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
+import android.support.annotation.RequiresApi;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -21,6 +22,7 @@ import com.example.xisko.testme.Log.MyLog;
 import com.example.xisko.testme.Persistencia.Repositorio;
 import com.example.xisko.testme.Pregunta.Pregunta;
 import com.example.xisko.testme.R;
+import com.example.xisko.testme.RecycleCode;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
@@ -40,11 +42,6 @@ public class ResumenActivity extends AppCompatActivity {
 
     Context myContext;
     ConstraintLayout constraint;
-    private BroadcastReceiver receiver;
-
-
-
-
 
     private static final String TAG = "ResumenActivity";
 
@@ -91,7 +88,7 @@ public class ResumenActivity extends AppCompatActivity {
                 return true;
             case R.id.action_exportar:
                 Repositorio.cargarPreguntas(myContext);
-                exportarXML();
+                RecycleCode.exportarXML(myContext);
                 MyLog.i("ActionBar", "Exportar");
 
 
@@ -108,16 +105,13 @@ public class ResumenActivity extends AppCompatActivity {
         setContentView(R.layout.activity_resumen);
         myContext = this;
         constraint = findViewById(R.id.constraint);
-        compruebaPermisosEscritura();
-        compruebaPermisosCamera();
+        compruebaPermisos();
         TextView pregunta = findViewById(R.id.numero_preguntas);
         TextView compartido = findViewById(R.id.compartir);
         pregunta.setText("Hay un total de: " + Repositorio.getCantidadPreguntas(myContext) + " preguntas almacenadas en la base de datos.");
 
-
-
-
-        this.importarXML();
+        Intent myIntent = getIntent();
+        RecycleCode.importarXML(myContext, myIntent);
 
 
 
@@ -177,56 +171,30 @@ public class ResumenActivity extends AppCompatActivity {
         MyLog.d(TAG, "Finalizando OnDestroy");
     }
 
-    // A partir de Marshmallow (6.0) se pide aceptar o rechazar el permiso en tiempo de ejecución
-    // En las versiones anteriores no es posible hacerlo
-    // Una vez que se pide aceptar o rechazar el permiso se ejecuta el método "onRequestPermissionsResult" para manejar la respuesta
-    // Si el usuario marca "No preguntar más" no se volverá a mostrar este diálogo
-    private void compruebaPermisosEscritura() {
-        int WriteExternalStoragePermission = ContextCompat.checkSelfPermission(myContext, Manifest.permission.WRITE_EXTERNAL_STORAGE);
-
-        MyLog.d("MainActivity", "WRITE_EXTERNAL_STORAGE Permission: " + WriteExternalStoragePermission);
-
-
-        if (WriteExternalStoragePermission != PackageManager.PERMISSION_GRANTED) {
-
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                ActivityCompat.requestPermissions(ResumenActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, CODE_WRITE_EXTERNAL_STORAGE_PERMISSION);
-
-
-            } else {
-
-                MyLog.e("Permisos: ", "Rechazados");
-
-            }
-        } else {
-
-            MyLog.e("Permisos: ", "Rechazados");
+    /**
+     * A partir de Marshmallow (6.0) se pide aceptar o rechazar el permiso en tiempo de ejecución
+     * En las versiones anteriores no es posible hacerlo
+     * Una vez que se pide aceptar o rechazar el permiso se ejecuta el método "onRequestPermissionsResult" para manejar la respuesta
+     * Si el usuario marca "No preguntar más" no se volverá a mostrar este diálogo
+     */
+    private void compruebaPermisos (){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+            verifyPermission();
         }
     }
 
-    private void compruebaPermisosCamera() {
-        int CameraPermission = ContextCompat.checkSelfPermission(myContext, Manifest.permission.CAMERA);
-        MyLog.d("MainActivity", "WRITE_EXTERNAL_STORAGE Permission: " + CameraPermission);
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    public void verifyPermission() {
+        int permsRequestCode = 100;
+        String[] perms = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA};
+        int writePermission = checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        int cameraPermission = checkSelfPermission(Manifest.permission.CAMERA);
 
-
-        if (CameraPermission != PackageManager.PERMISSION_GRANTED) {
-
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-
-                ActivityCompat.requestPermissions(ResumenActivity.this, new String[]{Manifest.permission.CAMERA}, CODE_CAMERA_PERMISSION);
-
-            } else {
-
-                MyLog.e("Permisos: ", "Rechazados");
-
-            }
+        if (cameraPermission == PackageManager.PERMISSION_GRANTED && writePermission == PackageManager.PERMISSION_GRANTED) {
+            //se realiza metodo si es necesario...
         } else {
-
-            MyLog.e("Permisos: ", "Rechazados");
+            requestPermissions(perms, permsRequestCode);
         }
-
     }
 
 
@@ -234,7 +202,9 @@ public class ResumenActivity extends AppCompatActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         switch (requestCode) {
-            case CODE_WRITE_EXTERNAL_STORAGE_PERMISSION:
+
+            case 100:
+
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 
 
@@ -244,11 +214,7 @@ public class ResumenActivity extends AppCompatActivity {
 
                 }
 
-                break;
-
-
-            case CODE_CAMERA_PERMISSION:
-                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                if (grantResults.length > 0  &&  grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 
 
                 } else {
@@ -258,210 +224,7 @@ public class ResumenActivity extends AppCompatActivity {
                 }
 
                 break;
-            default:
-                super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         }
-    }
-
-
-    private void exportarXML() {
-        String root = Environment.getExternalStorageDirectory().toString();
-        File myDir = new File(root + "/preguntasExportar");
-        String fname = "preguntas.xml";
-        File file = new File(myDir, fname);
-        try {
-
-
-            if (!myDir.exists()) {
-                myDir.mkdirs();
-
-            }
-            if (file.exists())
-                file.delete();
-
-
-            FileWriter fw = new FileWriter(file);
-            //Escribimos en el fichero un String
-            MyLog.d("aqui estoy", Repositorio.CreateXMLString());
-            fw.write(Repositorio.CreateXMLString());
-
-
-            //Cierro el stream
-            fw.close();
-
-
-        } catch (Exception ex) {
-            MyLog.e("Ficheros", "Error al escribir fichero a memoria interna");
-        }
-
-
-        String cadena = myDir.getAbsolutePath() + "/" + fname;
-        Uri path = Uri.parse("file://" + cadena);
-
-        Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts(
-                "mailto", "abc@gmail.com", null));
-        emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Preguntas para Moodle");
-        emailIntent.putExtra(Intent.EXTRA_TEXT, "Adjunto el archivo para importarlas a Moodle");
-        emailIntent.putExtra(Intent.EXTRA_STREAM, path);
-        startActivity(Intent.createChooser(emailIntent, "Send email..."));
-    }
-
-
-    public void importarXML(){
-
-        //Creamos las variables de la pregunta que vamos a importar
-        Pregunta p;
-        String enunciado="";
-        String categoria="";
-        String correcta="";
-        String incorrecta="";
-        String incorrecta2="";
-        String incorrecta3="";
-        String foto=null;
-
-        int contador=0;
-
-        //Recibimos el intent
-        Intent receivedIntent = getIntent();
-
-        //Si el intent es distinto de null
-        if(receivedIntent != null) {
-            //Recogemos la accion del intent
-            String receivedAction = receivedIntent.getAction();
-
-            //Si la accion del inten es igual a android.intent.action.SEND
-            //Se ejecutará la lectura del archivo
-            if(receivedAction == "android.intent.action.SEND"){
-
-                Uri data = receivedIntent.getParcelableExtra(Intent.EXTRA_STREAM);
-
-                try {
-
-                    InputStream fis = getContentResolver().openInputStream(data);
-                    XmlPullParserFactory xppf = XmlPullParserFactory.newInstance();
-                    xppf.setNamespaceAware(false);
-                    XmlPullParser parser = xppf.newPullParser();
-                    parser.setInput(fis, null);
-
-                    parser.nextTag();
-                    parser.require(XmlPullParser.START_TAG, null, "quiz");
-
-                    //Leyendo el documento
-
-                    int act;
-                    String tag="";
-
-                    while((act=parser.next()) != XmlPullParser.END_DOCUMENT) {
-
-                        switch (act) {
-                            case XmlPullParser.START_TAG:
-
-                                tag = parser.getName();
-
-                                break;
-
-                            case XmlPullParser.TEXT:
-                                if(tag.equals("text"))
-                                {
-
-                                    if(contador==0){
-                                        categoria= parser.getText();
-                                        System.out.println("categoria: "+ categoria);
-                                        contador++;
-                                    }
-                                    else if(contador==1){
-                                        enunciado= parser.getText();
-                                        System.out.println("Enunciado: "+ enunciado);
-                                        contador++;
-
-                                    }
-                                    else if(contador==2){
-
-                                        contador++;
-                                    }
-
-                                    else if(contador==3){
-                                        correcta= parser.getText();
-                                        System.out.println("Correcta: "+ correcta);
-                                        contador++;
-
-                                    }
-                                    else if(contador==4){
-                                        incorrecta= parser.getText();
-                                        System.out.println("Incorrecta1: "+ incorrecta);
-                                        contador++;
-
-                                    }
-                                    else if(contador==5){
-                                        incorrecta2= parser.getText();
-                                        System.out.println("Incorrecta2: "+ incorrecta2);
-
-
-                                        contador++;
-
-                                    }
-                                    else if(contador==6){
-                                        incorrecta3= parser.getText();
-                                        System.out.println("Incorrecta3: "+ incorrecta3);
-
-
-                                        //Como es el último dato que recuperamos de la pregunta la añadimos a la base de datos
-
-                                        if(foto == null){
-
-                                            p= new Pregunta(enunciado,categoria,correcta,incorrecta,incorrecta2,incorrecta3);
-                                            Repositorio.insertar(p,myContext);
-                                            MyLog.w(TAG,"Insertado correctamente en BD");
-
-                                        }else{
-                                            p= new Pregunta(enunciado,categoria,correcta,incorrecta,incorrecta2,incorrecta3, foto);
-                                            Repositorio.insertarF(p,myContext);
-                                            MyLog.w(TAG,"Insertado correctamente en BD");
-
-                                        }
-
-                                        contador=0;
-
-                                    }
-                                    else{
-                                        MyLog.w(TAG,"Error insertando en BD");
-                                    }
-
-                                }
-
-                                if(tag.equals("file"))
-                                {
-                                    foto= parser.getText();
-                                    System.out.println("Imagen: "+ foto);
-
-                                }
-
-
-                                tag="";
-                                break;
-
-                            case XmlPullParser.END_TAG:
-                                if(parser.getName().equals("question"))
-                                {
-                                    MyLog.w(TAG,"Finalizado el archivo");
-                                }
-                                break;
-                        }
-
-                    }
-
-
-
-                    fis.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (XmlPullParserException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-
-
     }
 
 

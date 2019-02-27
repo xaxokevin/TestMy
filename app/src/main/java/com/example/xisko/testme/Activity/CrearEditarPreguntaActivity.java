@@ -41,6 +41,7 @@ import com.example.xisko.testme.Log.MyLog;
 import com.example.xisko.testme.Persistencia.Repositorio;
 import com.example.xisko.testme.Pregunta.Pregunta;
 import com.example.xisko.testme.R;
+import com.example.xisko.testme.RecycleCode;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -69,11 +70,18 @@ public class CrearEditarPreguntaActivity extends AppCompatActivity implements Vi
     private Bitmap bitmap;
 
 
-
+    /**
+     * Metodo que devuelve el codigo de la pregunta
+     * @return codigoPregunta
+     */
     public int getCodigoPregunta() {
         return codigoPregunta;
     }
 
+    /**
+     * Establece el valor del codigo de la pregunta
+     * @param codigoPregunta
+     */
     public void setCodigoPregunta(int codigoPregunta) {
         this.codigoPregunta = codigoPregunta;
     }
@@ -139,7 +147,7 @@ public class CrearEditarPreguntaActivity extends AppCompatActivity implements Vi
 
             MyLog.i("Codigo pregunta pasada: ",Integer.toString(codigoPregunta));
 
-            //Llamams a la funcion buscar pregunta, pasandole el codigo de la pregunta y el context
+            //Llamamso a la funcion buscar pregunta, pasandole el codigo de la pregunta y el context
             // al recuperarla rellenamos todos los campos mostrados en pantalla con los valores de la pregunta.
             Pregunta p= Repositorio.buscarPregunta(codigoPregunta,myContext);
             pregunta.setText(p.getEnunciado());
@@ -163,9 +171,20 @@ public class CrearEditarPreguntaActivity extends AppCompatActivity implements Vi
 
 
 
-    //Comprueba que todos los campos de la pregunta este relleno,
-    // no permite que guardes hasta que este todo completo
-    //rellena de rojo los campos que estan vacios si se pulsa guardar
+
+
+    /**
+     * Comprueba que todos los campos de la pregunta esten rellenos
+     * No permite que guardes hasta que todos los campos esten rellenos
+     * Rellena de rojo los campos que estan vacios si pulsas guardar
+     * @param v
+     * @param pregunta
+     * @param correcta
+     * @param incorrecta1
+     * @param incorrecta2
+     * @param incorrecta3
+     * @return
+     */
     private boolean compruebaPregunta(View v, EditText pregunta, EditText correcta, EditText incorrecta1, EditText incorrecta2, EditText incorrecta3) {
         if (pregunta.getText().toString().isEmpty()) {
             pregunta.setBackgroundColor(Color.rgb(255, 64, 64));
@@ -221,8 +240,10 @@ public class CrearEditarPreguntaActivity extends AppCompatActivity implements Vi
     }
 
 
-    //Administra los botones del crear / editar pregunta
-    //al pulsarlos hara la funcion especificada para cada uno de ellos
+    /**
+     * administra las pulsaciones de los botones
+     * @param v
+     */
     @Override
     public void onClick(View v) {
 
@@ -252,8 +273,6 @@ public class CrearEditarPreguntaActivity extends AppCompatActivity implements Vi
                 }
 
 
-                compruebaPermisosEscritura();
-                compruebaPermisosCamera();
 
                 if (compruebaPregunta(v, pregunta, correcta, incorrecta1, incorrecta2, incorrecta3) == true) {
 
@@ -273,7 +292,7 @@ public class CrearEditarPreguntaActivity extends AppCompatActivity implements Vi
                         }
 
                         Pregunta actualizaPregunta = new Pregunta(Integer.toString(getCodigoPregunta()),pregunta.getText().toString(), spinner, correcta.getText().toString(),
-                                incorrecta1.getText().toString(), incorrecta2.getText().toString(), incorrecta3.getText().toString(),conversoraImagen64(bitmap)
+                                incorrecta1.getText().toString(), incorrecta2.getText().toString(), incorrecta3.getText().toString(),RecycleCode.conversoraImagen64(bitmap)
                         );
 
                         Repositorio.actualizarPregunta(actualizaPregunta,myContext);
@@ -282,7 +301,7 @@ public class CrearEditarPreguntaActivity extends AppCompatActivity implements Vi
                     }else{
 
                         Pregunta mipregunta = new Pregunta(pregunta.getText().toString(), spinner, correcta.getText().toString(),
-                                incorrecta1.getText().toString(), incorrecta2.getText().toString(), incorrecta3.getText().toString(), conversoraImagen64(bitmap));
+                                incorrecta1.getText().toString(), incorrecta2.getText().toString(), incorrecta3.getText().toString(), RecycleCode.conversoraImagen64(bitmap));
 
                         mirepo.insertarF(mipregunta, myContext);
 
@@ -432,97 +451,11 @@ public class CrearEditarPreguntaActivity extends AppCompatActivity implements Vi
 
     }
 
-    // A partir de Marshmallow (6.0) se pide aceptar o rechazar el permiso en tiempo de ejecución
-    // En las versiones anteriores no es posible hacerlo
-    // Una vez que se pide aceptar o rechazar el permiso se ejecuta el método "onRequestPermissionsResult" para manejar la respuesta
-    // Si el usuario marca "No preguntar más" no se volverá a mostrar este diálogo
-    private void compruebaPermisosEscritura() {
-        int WriteExternalStoragePermission = ContextCompat.checkSelfPermission(myContext, Manifest.permission.WRITE_EXTERNAL_STORAGE);
 
-        MyLog.d("Crear editar", "WRITE_EXTERNAL_STORAGE Permission: " + WriteExternalStoragePermission);
-
-
-        if (WriteExternalStoragePermission != PackageManager.PERMISSION_GRANTED ) {
-
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
-                ActivityCompat.requestPermissions(CrearEditarPreguntaActivity.this, new String[] {Manifest.permission.WRITE_EXTERNAL_STORAGE}, CODE_WRITE_EXTERNAL_STORAGE_PERMISSION);
-
-
-            } else {
-
-                MyLog.e("Permisos: ","Rechazados");
-
-            }
-        } else {
-
-            MyLog.e("Permisos: ","Rechazados");
-        }
-    }
-
-    private void compruebaPermisosCamera(){
-        int CameraPermission = ContextCompat.checkSelfPermission(myContext, Manifest.permission.CAMERA);
-        MyLog.d("Crear editar", "WRITE_EXTERNAL_STORAGE Permission: " + CameraPermission);
-
-
-        if (CameraPermission != PackageManager.PERMISSION_GRANTED) {
-
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
-
-                ActivityCompat.requestPermissions(CrearEditarPreguntaActivity.this, new String[] {Manifest.permission.CAMERA}, CODE_CAMERA_PERMISSION);
-
-            } else {
-
-                MyLog.e("Permisos: ","Rechazados");
-
-            }
-        } else {
-
-            MyLog.e("Permisos: ","Rechazados");
-        }
-
-    }
-
-
-    //Maneja la respuesta del compruebaPermisos
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        switch (requestCode) {
-            case CODE_WRITE_EXTERNAL_STORAGE_PERMISSION:
-                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-
-
-
-                } else {
-
-                    MyLog.e("Permisos: ","Rechazados");
-
-                }
-
-                break;
-
-
-            case CODE_CAMERA_PERMISSION:
-                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-
-
-
-                } else {
-
-                    MyLog.e("Permisos: ","Rechazados");
-
-                }
-
-                break;
-            default:
-                super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        }
-    }
-
-
+    /**
+     * metodo que abrae la camara para tomar una foto
+     */
     private void takePicture() {
-        compruebaPermisosCamera();
         try {
 
             // Se crea el directorio para las fotografías
@@ -559,6 +492,9 @@ public class CrearEditarPreguntaActivity extends AppCompatActivity implements Vi
         }
     }
 
+    /**
+     * metodo que selecciona una imagen de la galerria
+     */
     private void selectPicture(){
         // Se le pide al sistema una imagen del dispositivo
         Intent intent = new Intent();
@@ -569,6 +505,10 @@ public class CrearEditarPreguntaActivity extends AppCompatActivity implements Vi
                 REQUEST_SELECT_IMAGE);
     }
 
+    /**
+     * metodo que establece un nombre a la imagen capturada con el metodo takepicture()
+     * @return el nombre de la foto
+     */
     private String getFileCode()
     {
         // Se crea un código a partir de la fecha y hora
@@ -636,20 +576,7 @@ public class CrearEditarPreguntaActivity extends AppCompatActivity implements Vi
         }
     }
 
-    public static String conversoraImagen64(Bitmap bm){
-        String encodedImage="";
-        if(bm!=null) {
-            Bitmap resized = Bitmap.createScaledBitmap(bm, 500, 500, true);
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            resized.compress(Bitmap.CompressFormat.JPEG, 100, baos);//bmisthebitmapobject
-            byte[] b = baos.toByteArray();
-            encodedImage = Base64.encodeToString(b, Base64.DEFAULT);
-            return encodedImage;
-        }else{
-            return encodedImage;
-        }
 
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

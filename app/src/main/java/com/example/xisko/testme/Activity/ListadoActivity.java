@@ -19,6 +19,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -59,6 +61,10 @@ public class ListadoActivity extends AppCompatActivity {
 
         //Añade un boton flotante
         FloatingActionButton mas = (FloatingActionButton) findViewById(R.id.mas);
+        //Creamos una animacion
+        Animation anim = AnimationUtils.loadAnimation(myContext,R.anim.lefttoright);
+        //Establecemos animacion
+        mas.setAnimation(anim);
         mas.setImageResource(R.drawable.ic_loupe_grey600_48dp);
         mas.setOnClickListener(new View.OnClickListener() {
             @Override

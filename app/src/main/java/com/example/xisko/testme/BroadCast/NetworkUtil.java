@@ -4,6 +4,8 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
+import com.example.xisko.testme.R;
+
 public class NetworkUtil {
 
     public static int TYPE_WIFI = 1;
@@ -11,6 +13,11 @@ public class NetworkUtil {
     public static int TYPE_NOT_CONNECTED = 0;
 
 
+    /**
+     * Metodo que manega la informacion de la conectividad a internet de nuestro dispositivo
+     * @param context
+     * @return el tipo de conectividad  que tenemos
+     */
     public static int getConnectivityStatus(Context context) {
         ConnectivityManager cm = (ConnectivityManager) context
                 .getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -26,15 +33,20 @@ public class NetworkUtil {
         return TYPE_NOT_CONNECTED;
     }
 
+    /**
+     * metodo que convierte a string la informacion de la conectividad de nuestro dispositivo
+     * @param context
+     * @return
+     */
     public static String getConnectivityStatusString(Context context) {
         int conn = NetworkUtil.getConnectivityStatus(context);
         String status = null;
         if (conn == NetworkUtil.TYPE_WIFI) {
-            status = "Wifi enabled";
+            status = context.getResources().getString(R.string.wifi_on);
         } else if (conn == NetworkUtil.TYPE_MOBILE) {
-            status = "Mobile data enabled";
+            status = context.getResources().getString(R.string.data_on);
         } else if (conn == NetworkUtil.TYPE_NOT_CONNECTED) {
-            status = "Not connected to Internet";
+            status = context.getResources().getString(R.string.internet_off);
         }
         return status;
     }

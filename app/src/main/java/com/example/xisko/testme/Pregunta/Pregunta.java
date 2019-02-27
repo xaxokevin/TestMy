@@ -15,7 +15,16 @@ public class Pregunta {
     private String photo;
 
 
-    //Se crean 3 Constructores uno para el insert sin imange, uno para el insert con imagen y uno para el select de la base de datos
+    /**
+     * Constructor que recibe todos los parametros de la pregunta menos el id
+     * @param enunciado
+     * @param categoria
+     * @param respuestaCorrecta
+     * @param RespuestaIncorrecta1
+     * @param RespuestaIncorrecta2
+     * @param RespuestaIncorrecta3
+     * @param photo
+     */
     public Pregunta(String enunciado, String categoria, String respuestaCorrecta, String RespuestaIncorrecta1, String RespuestaIncorrecta2, String RespuestaIncorrecta3, String photo) {
         this.enunciado = enunciado;
         this.categoria = categoria;
@@ -26,6 +35,18 @@ public class Pregunta {
         this.photo = photo;
 
     }
+
+    /**
+     * Constructor que recibe todos los parametros de la pregunta
+     * @param codigo
+     * @param enunciado
+     * @param categoria
+     * @param respuestaCorrecta
+     * @param RespuestaIncorrecta1
+     * @param RespuestaIncorrecta2
+     * @param RespuestaIncorrecta3
+     * @param photo
+     */
     public Pregunta(String codigo, String enunciado, String categoria, String respuestaCorrecta, String RespuestaIncorrecta1, String RespuestaIncorrecta2, String RespuestaIncorrecta3, String photo) {
         this.codigo = Integer.parseInt(codigo);
         this.enunciado = enunciado;
@@ -38,6 +59,15 @@ public class Pregunta {
     }
 
 
+    /**
+     * Constructor que recibe todos los parametros menos la foto y el id
+     * @param enunciado
+     * @param categoria
+     * @param respuestaCorrecta
+     * @param RespuestaIncorrecta1
+     * @param RespuestaIncorrecta2
+     * @param RespuestaIncorrecta3
+     */
     public Pregunta(String enunciado, String categoria, String respuestaCorrecta, String RespuestaIncorrecta1, String RespuestaIncorrecta2, String RespuestaIncorrecta3) {
         this.enunciado = enunciado;
         this.categoria = categoria;
@@ -49,52 +79,84 @@ public class Pregunta {
     }
 
 
-
-    //Metodos geters de la clase
+    /**
+     * Metodo que devuelve el codigo
+     * @return codigo
+     */
     public int getCodigo() {
         return codigo;
     }
 
 
 
+    /**
+     * Metodo que devuelve el enunciado
+     * @return enunciado
+     */
     public String getEnunciado() {
         return enunciado;
     }
 
 
 
+    /**
+     * Metodo que devuelve la categoria
+     * @return categoria
+     */
     public String getCategoria() {
         return categoria;
     }
 
 
-
+    /**
+     * Metodo que devuelve la respuesta correcta
+     * @return respuestaCorrecta
+     */
     public String getRespuestaCorrecta() {
         return respuestaCorrecta;
     }
 
 
 
+    /**
+     * Metodo que devuelve la respuesta icorrecta 1
+     * @return RespuestaIncorrecta1
+     */
     public String getRespuestaIncorrecta1() {
         return RespuestaIncorrecta1;
     }
 
 
-
+    /**
+     * Metodo que devuelve la respuesta icorrecta 2
+     * @return RespuestaIncorrecta2
+     */
     public String getRespuestaIncorrecta2() {
         return RespuestaIncorrecta2;
     }
 
 
 
+    /**
+     * Metodo que devuelve la respuesta icorrecta 2
+     * @return RespuestaIncorrecta2
+     */
     public String getRespuestaIncorrecta3() {
         return RespuestaIncorrecta3;
     }
 
+    /**
+     * Metodo que devuelve la foto
+     * @return photo
+     */
     public String getPhoto() {
         return photo;
     }
 
+    /**
+     * Metodo que establece la imagen
+     * @param photo
+     */
     public void setPhoto(String photo){
         this.photo=photo;
     }
