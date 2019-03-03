@@ -112,6 +112,8 @@ public class ResumenActivity extends AppCompatActivity {
         compruebaPermisos();
         TextView pregunta = findViewById(R.id.numero_preguntas);
         pregunta.setText("Hay un total de: " + Repositorio.getCantidadPreguntas(myContext) + " preguntas almacenadas en la base de datos.");
+        TextView preguntaC = findViewById(R.id.total_categoria);
+        preguntaC.setText("Hay un total de: " + Repositorio.getCantidadCategorias(myContext) + " categorias en la base de datos.");
 
         Intent myIntent = getIntent();
         RecycleCode.importarXML(myContext, myIntent);
@@ -146,6 +148,8 @@ public class ResumenActivity extends AppCompatActivity {
         super.onResume();
         TextView pregunta = findViewById(R.id.numero_preguntas);
         pregunta.setText("Hay un total de: " + Repositorio.getCantidadPreguntas(myContext) + " preguntas almacenadas en la base de datos.");
+        TextView preguntaC = findViewById(R.id.total_categoria);
+        preguntaC.setText("Hay un total de: " + Repositorio.getCantidadCategorias(myContext) + " categorias en la base de datos.");
         MyLog.d(TAG, "Finalizando OnResume");
     }
 

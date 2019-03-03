@@ -102,7 +102,7 @@ public class ListadoActivity extends AppCompatActivity {
         //Añade un boton flotante
         FloatingActionButton mas = (FloatingActionButton) findViewById(R.id.mas);
         //Creamos una animacion
-        Animation anim = AnimationUtils.loadAnimation(myContext,R.anim.lefttoright);
+        Animation anim = AnimationUtils.loadAnimation(myContext,R.anim.toguether);
         //Establecemos animacion
         mas.setAnimation(anim);
         mas.setImageResource(R.drawable.ic_loupe_grey600_48dp);

@@ -348,11 +348,34 @@ public class Repositorio  {
     }
 
 
-    public static String preferenceSave(String lang){
+    /**
+     * Nos devuelve la cantidad de preguntas que tenemos almacenadas
+     * @param context
+     * @return
+     */
+    public static String getCantidadCategorias(Context context) {
 
-        return lang;
+
+
+        BasedeDatos sdbh =
+                new BasedeDatos(context, basedeDatos, null, DB_VERSION);
+        SQLiteDatabase db= sdbh.getWritableDatabase();
+
+
+
+        Cursor c = db.rawQuery("SELECT count(distinct categoria) FROM '"+Preguntas+"';", null);
+        String cantidaP="";
+
+        if (c.moveToFirst()) {
+            cantidaP = c.getString(0);
+        }
+
+        c.close();
+
+        db.close();
+
+        return cantidaP;
     }
-
 
 
 }
