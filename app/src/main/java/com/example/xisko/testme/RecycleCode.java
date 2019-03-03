@@ -7,9 +7,13 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Environment;
+import android.support.design.widget.Snackbar;
 import android.util.Base64;
 import android.util.DisplayMetrics;
 import android.util.Xml;
+import android.view.View;
+import android.widget.Toast;
+
 import com.example.xisko.testme.Persistencia.Repositorio;
 import com.example.xisko.testme.Pregunta.Pregunta;
 import org.xmlpull.v1.XmlPullParser;
@@ -235,8 +239,11 @@ public class RecycleCode {
                 } catch (XmlPullParserException e) {
                     e.printStackTrace();
                 }
+
+                Toast.makeText(myContext, "Preguntas insertadas correctamante: "+cuentapreguntas, Toast.LENGTH_LONG).show();
             }
         }
+
 
 
     }
