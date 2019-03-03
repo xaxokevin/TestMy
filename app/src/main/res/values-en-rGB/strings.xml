@@ -36,4 +36,8 @@
     <string name="wifi_on">Wifi enable</string>
     <string name="data_on">Data on</string>
     <string name="internet_off">Internet disable</string>
+    <string name="todo">todo</string>
+    <string name="title_activity_settings">Settings</string>
+    <string name="pref_header_data_sync">Internationalization</string>
+    <string name="pref_title_sync_frequency">Language Change</string>
 </resources>

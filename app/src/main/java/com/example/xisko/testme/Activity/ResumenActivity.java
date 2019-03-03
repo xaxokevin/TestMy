@@ -32,6 +32,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Locale;
 
 
 import static com.example.xisko.testme.Constantes.CODE_CAMERA_PERMISSION;
@@ -68,6 +69,8 @@ public class ResumenActivity extends AppCompatActivity {
                 ResumenActivity.this.startActivity(myIntent);
                 return true;
             case R.id.action_settings:
+                myIntent = new Intent(ResumenActivity.this, SettingsActivity.class);
+                ResumenActivity.this.startActivity(myIntent);
 
 
                 MyLog.i("ActionBar", "Ajustes!");
@@ -107,15 +110,10 @@ public class ResumenActivity extends AppCompatActivity {
         constraint = findViewById(R.id.constraint);
         compruebaPermisos();
         TextView pregunta = findViewById(R.id.numero_preguntas);
-        TextView compartido = findViewById(R.id.compartir);
         pregunta.setText("Hay un total de: " + Repositorio.getCantidadPreguntas(myContext) + " preguntas almacenadas en la base de datos.");
 
         Intent myIntent = getIntent();
         RecycleCode.importarXML(myContext, myIntent);
-
-
-
-
     }
 
 
@@ -126,16 +124,27 @@ public class ResumenActivity extends AppCompatActivity {
         MyLog.d(TAG, "Finalizando OnStart");
     }
 
+
     @Override
     protected void onResume() {
-
-
+//        Locale current = getResources().getConfiguration().locale;
+//        String idioma = current.toString();
+//        Locale locale = new Locale(idioma);
+//        Locale.setDefault(locale);
+//        Configuration config = new Configuration();
+//        config.locale = locale;
+//        getBaseContext().getResources().updateConfiguration(config,
+//        getBaseContext().getResources().getDisplayMetrics());
+//        this.setContentView(R.layout.activity_resumen);
+       Locale current = getResources().getConfiguration().locale;
+        String idioma = current.toString();
+        MyLog.w("idioma", ""+current);
+        RecycleCode.setLocale2(idioma,this);
+        this.setContentView(R.layout.activity_resumen);
         MyLog.d(TAG, "Iniciando OnResume");
         super.onResume();
         TextView pregunta = findViewById(R.id.numero_preguntas);
         pregunta.setText("Hay un total de: " + Repositorio.getCantidadPreguntas(myContext) + " preguntas almacenadas en la base de datos.");
-
-
         MyLog.d(TAG, "Finalizando OnResume");
     }
 

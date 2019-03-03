@@ -4,8 +4,12 @@ import android.content.Context;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Configuration;
+import android.content.res.Resources;
+import android.os.Build;
 import android.os.Bundle;
 
+import android.support.annotation.RequiresApi;
 import android.support.design.widget.FloatingActionButton;
 
 import android.support.v7.app.AlertDialog;
@@ -14,6 +18,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -29,11 +34,13 @@ import com.example.xisko.testme.Persistencia.Repositorio;
 import com.example.xisko.testme.Pregunta.Pregunta;
 import com.example.xisko.testme.Pregunta.PreguntaAdapter;
 import com.example.xisko.testme.R;
+import com.example.xisko.testme.RecycleCode;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Locale;
 
 public class ListadoActivity extends AppCompatActivity {
 
@@ -45,10 +52,43 @@ public class ListadoActivity extends AppCompatActivity {
     private TextView textView;
 
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         myContext = ListadoActivity.this;
         super.onCreate(savedInstanceState);
+
+        setContentView(R.layout.activity_listado);
+        MyLog.d(TAG, "Finalizando OnCreate");
+
+
+    }
+
+
+
+    @Override
+    protected void onStart() {
+        MyLog.d(TAG, "Iniciando OnStart");
+        super.onStart();
+        MyLog.d(TAG, "Finalizando OnStart");
+    }
+
+    @Override
+    protected void onResume() {
+        MyLog.d(TAG, "Iniciando OnResume");
+//        Locale current = getResources().getConfiguration().locale;
+//        String idioma = current.toString();
+//        Locale locale = new Locale(idioma);
+//        Locale.setDefault(locale);
+//        Configuration config = new Configuration();
+//        config.locale = locale;
+//        getBaseContext().getResources().updateConfiguration(config,
+//        getBaseContext().getResources().getDisplayMetrics());
+//        this.setContentView(R.layout.activity_listado);
+        Locale current = getResources().getConfiguration().locale;
+        String idioma = current.toString();
+        RecycleCode.setLocale2(idioma,this);
+        MyLog.w("idioma", ""+current);
         setContentView(R.layout.activity_listado);
 
         textView =  findViewById(R.id.no_preguntas);
@@ -74,23 +114,6 @@ public class ListadoActivity extends AppCompatActivity {
             }
         });
 
-        MyLog.d(TAG, "Finalizando OnCreate");
-
-
-    }
-
-
-
-    @Override
-    protected void onStart() {
-        MyLog.d(TAG, "Iniciando OnStart");
-        super.onStart();
-        MyLog.d(TAG, "Finalizando OnStart");
-    }
-
-    @Override
-    protected void onResume() {
-        MyLog.d(TAG, "Iniciando OnResume");
         super.onResume();
 
         //Iniciamos el arraylist
@@ -227,10 +250,8 @@ public class ListadoActivity extends AppCompatActivity {
             textView.setVisibility(View.VISIBLE);
 
         }
+        MyLog.d(TAG, "Finalizando OnResume");
 
-        MyLog.d(
-
-                TAG, "Finalizando OnResume");
 
     }
 
@@ -308,6 +329,7 @@ public class ListadoActivity extends AppCompatActivity {
         finish();
         return true;
     }
+
 
 
 

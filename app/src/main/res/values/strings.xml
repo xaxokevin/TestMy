@@ -38,5 +38,37 @@
     <string name="data_on">Datos moviles activados</string>
     <string name="internet_off">Internet desctivado</string>
     <string name="todo">TODO</string>
+    <string name="title_activity_settings">Ajustes</string>
+
+    <!-- Strings related to Settings -->
+
+    <!-- Example settings for Data & Sync -->
+    <string name="pref_header_data_sync">Internacionalización</string>
+
+    <string name="pref_title_sync_frequency">Cambio de idioma</string>
+    <string-array name="pref_sync_frequency_titles">
+        <item>español</item>
+        <item>ingles</item>
+    </string-array>
+    <string-array name="pref_sync_frequency_values">
+        <item>es</item>
+        <item>en</item>
+
+    </string-array>
+
+    <string-array name="list_preference_entries">
+        <item>Entry 1</item>
+        <item>Entry 2</item>
+        <item>Entry 3</item>
+    </string-array>
+
+    <string-array name="list_preference_entry_values">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+    </string-array>
+
+    <string-array name="multi_select_list_preference_default_value" />
+
 
 </resources>

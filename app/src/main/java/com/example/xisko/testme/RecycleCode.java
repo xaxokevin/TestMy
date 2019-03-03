@@ -1,27 +1,21 @@
 package com.example.xisko.testme;
 
-import android.Manifest;
-import android.app.Activity;
+
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Environment;
-import android.support.annotation.RequiresApi;
 import android.util.Base64;
+import android.util.DisplayMetrics;
 import android.util.Xml;
-
-import com.example.xisko.testme.Activity.ResumenActivity;
 import com.example.xisko.testme.Persistencia.Repositorio;
 import com.example.xisko.testme.Pregunta.Pregunta;
-
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
 import org.xmlpull.v1.XmlSerializer;
-
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileWriter;
@@ -29,6 +23,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
 import java.util.ArrayList;
+import java.util.Locale;
 
 
 public class RecycleCode {
@@ -99,6 +94,7 @@ public class RecycleCode {
         String foto=null;
 
         int contador=0;
+        int cuentapreguntas =0;
 
         //Recibimos el intent
         //Intent receivedIntent = getIntent();
@@ -199,6 +195,7 @@ public class RecycleCode {
 
                                         }
 
+                                        cuentapreguntas++;
                                         contador=0;
 
                                     }
@@ -232,6 +229,7 @@ public class RecycleCode {
 
 
                     fis.close();
+
                 } catch (IOException e) {
                     e.printStackTrace();
                 } catch (XmlPullParserException e) {
@@ -380,7 +378,36 @@ public class RecycleCode {
     }
 
 
+  /*  public static void setLocale(Locale locale, Context context){
+        Resources resources = context.getResources();
+        Configuration configuration = resources.getConfiguration();
+        DisplayMetrics displayMetrics = resources.getDisplayMetrics();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1){
+            configuration.setLocale(locale);
+        } else{
+            configuration.locale=locale;
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N){
+            context.getApplicationContext().createConfigurationContext(configuration);
+        } else {
+            resources.updateConfiguration(configuration,displayMetrics);
+        }
 
+    }*/
+
+    /**
+     * Metodo que establece el idioma en el que se va a mostrar la apliación
+     * @param lng idioma
+     * @param context contexto de la actividad
+     */
+    public static void setLocale2(String lng, Context context){
+        Resources res = context.getResources();
+        // Change locale settings in the app.
+        DisplayMetrics dm = res.getDisplayMetrics();
+        android.content.res.Configuration conf = res.getConfiguration();
+        conf.setLocale(new Locale(lng)); // API 17+ only.
+        res.updateConfiguration(conf, dm);
+    }
 
 
 }

@@ -348,5 +348,11 @@ public class Repositorio  {
     }
 
 
+    public static String preferenceSave(String lang){
+
+        return lang;
+    }
+
+
 
 }

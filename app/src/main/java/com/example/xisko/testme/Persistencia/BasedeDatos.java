@@ -16,6 +16,8 @@ public class BasedeDatos extends SQLiteOpenHelper {
 
         String sqlCreate = "CREATE TABLE '"+Preguntas+"' (codigo INTEGER PRIMARY KEY AUTOINCREMENT, enunciado TEXT,categoria TEXT, respuestaCorrecta TEXT, respuestaIncorrecta1 TEXT, respuestaIncorrecta2 TEXT, respuestaIncorrecta3 TEXT, photo TEXT)";
 
+    String idiom = "CREATE TABLE 'idiom' (idioma TETX)";
+
     /**
      * Constructor de la clase
      * @param contexto
@@ -32,6 +34,7 @@ public class BasedeDatos extends SQLiteOpenHelper {
         public void onCreate (SQLiteDatabase db){
 
         db.execSQL(sqlCreate);
+        db.execSQL(idiom);
     }
 
         @Override

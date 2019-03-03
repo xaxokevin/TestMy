@@ -16,6 +16,7 @@ import android.os.Build;
 import android.os.Environment;
 import android.os.StrictMode;
 import android.provider.MediaStore;
+import android.support.annotation.RequiresApi;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -51,6 +52,7 @@ import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Locale;
 
 import static com.example.xisko.testme.Constantes.CODE_CAMERA_PERMISSION;
 import static com.example.xisko.testme.Constantes.CODE_WRITE_EXTERNAL_STORAGE_PERMISSION;
@@ -86,12 +88,26 @@ public class CrearEditarPreguntaActivity extends AppCompatActivity implements Vi
         this.codigoPregunta = codigoPregunta;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     protected void onCreate(Bundle savedInstanceState) {
+//        Locale current = getResources().getConfiguration().locale;
+//        String idioma = current.toString();
+//        Locale locale = new Locale(idioma);
+//        Locale.setDefault(locale);
+//        Configuration config = new Configuration();
+//        config.locale = locale;
+//        getBaseContext().getResources().updateConfiguration(config,
+//        getBaseContext().getResources().getDisplayMetrics());
+//        this.setContentView(R.layout.activity_listado);
+        Locale current = getResources().getConfiguration().locale;
+        String idioma = current.toString();
+        MyLog.w("idioma", ""+current);
+        RecycleCode.setLocale2(idioma,this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nueva_pregunta);
         myContext = this;
         constraint = findViewById(R.id.constraint);
-        //toolbar
+
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         final EditText pregunta = findViewById(R.id.titulo);
@@ -100,6 +116,9 @@ public class CrearEditarPreguntaActivity extends AppCompatActivity implements Vi
         final EditText incorrecta2 = findViewById(R.id.titulo4);
         final EditText incorrecta3 = findViewById(R.id.titulo5);
         final ImageView photo = (ImageView)findViewById(R.id.camara);
+
+
+
 
 
 
